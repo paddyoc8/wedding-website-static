@@ -1,7 +1,7 @@
 /* RSVP Page Styling */
 
 .rsvp-container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 2rem auto;
     padding: 1rem;
     background: var(--light1);
@@ -9,25 +9,21 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-
 .rsvp-container h1 {
     font-size: 2rem;
     text-align: center;
     color: var(--dark1);
     font-family: var(--titleFont);
 }
-
 .rsvp-container form {
     display: flex;
     flex-direction: column;
 }
-
 .rsvp-container label {
     margin: 0.5rem 0 0.2rem;
     font-size: 1rem;
     color: var(--dark1);
 }
-
 .rsvp-container input,
 .rsvp-container select,
 .rsvp-container button {
@@ -37,27 +33,27 @@
     border: 1px solid var(--dark2);
     border-radius: 5px;
 }
-
 .rsvp-container button {
     background-color: var(--accent1);
     color: var(--light1);
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
-
 .rsvp-container button:hover {
     background-color: var(--accent2);
 }
-
-.rsvp-list {
+.rsvp-table {
+    width: 100%;
+    border-collapse: collapse;
     margin-top: 2rem;
-    padding: 0;
-    list-style: none;
 }
-
-.rsvp-list li {
+.rsvp-table th,
+.rsvp-table td {
+    border: 1px solid var(--dark2);
     padding: 0.5rem;
-    background: var(--light2);
-    margin-bottom: 0.5rem;
-    border-radius: 5px;
+    text-align: left;
+}
+.rsvp-table th {
+    background-color: var(--accent1);
+    color: var(--light1);
 }

@@ -42,73 +42,128 @@
     
     <div class="rsvp-container">
         <h1>RSVP to Our Wedding</h1>
-        <form id="rsvpForm">
-            <label for="name">Name:</label>
-            <input type="text" id="name" placeholder="Enter your name" required>
+        <form id="searchForm">
+            <label for="search">Search for your name:</label>
+            <input type="text" id="search" placeholder="Enter your name" required>
+            <button type="submit">Search</button>
+        </form>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" placeholder="Enter your email" required>
-
+        <form id="rsvpForm" style="display: none;">
             <label for="attending">Will you attend?</label>
             <select id="attending">
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
             </select>
 
+            <label for="dietary">Dietary Requirements:</label>
+            <input type="text" id="dietary" placeholder="Enter dietary requirements">
+
             <button type="submit">Submit RSVP</button>
         </form>
 
         <h2>RSVP List</h2>
-        <ul id="rsvpList" class="rsvp-list"></ul>
+        <table class="rsvp-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Attending</th>
+                    <th>Dietary Requirements</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="rsvpList"></tbody>
+        </table>
     </div>
 
     <script>
-        // Your web app's Firebase configuration
+        // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
-            authDomain: "wedding-db-994da.firebaseapp.com",
-            projectId: "wedding-db-994da",
-            storageBucket: "wedding-db-994da.firebasestorage.app",
-            messagingSenderId: "102632882630",
-            appId: "1:102632882630:web:cd1c96ff206b42652832c7"
+        apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
+        authDomain: "wedding-db-994da.firebaseapp.com",
+        projectId: "wedding-db-994da",
+        storageBucket: "wedding-db-994da.firebasestorage.app",
+        messagingSenderId: "102632882630",
+        appId: "1:102632882630:web:cd1c96ff206b42652832c7"
         };
 
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Handle RSVP Form Submission
+        const searchForm = document.getElementById('searchForm');
         const rsvpForm = document.getElementById('rsvpForm');
-        rsvpForm.addEventListener('submit', async (event) => {
+        const rsvpList = document.getElementById('rsvpList');
+
+        let currentGuestKey = null;
+
+        // Search for a guest
+        searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
+            const searchValue = document.getElementById('search').value.toLowerCase();
 
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const attending = document.getElementById('attending').value;
-
-            // Save RSVP to Firebase Realtime Database
-            const newRSVPRef = db.ref('rsvps').push();
-            await newRSVPRef.set({
-                name: name,
-                email: email,
-                attending: attending
+            db.ref('rsvps').once('value').then(snapshot => {
+                let found = false;
+                snapshot.forEach(childSnapshot => {
+                    const guest = childSnapshot.val();
+                    if (guest.name.toLowerCase() === searchValue) {
+                        found = true;
+                        currentGuestKey = childSnapshot.key;
+                        rsvpForm.style.display = 'block';
+                        document.getElementById('attending').value = guest.attending || 'yes';
+                        document.getElementById('dietary').value = guest.dietary || '';
+                    }
+                });
+                if (!found) {
+                    alert('Guest not found.');
+                }
             });
+        });
 
-            alert('Thank you for your RSVP!');
-            rsvpForm.reset();
+        // Submit RSVP
+        rsvpForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const attending = document.getElementById('attending').value;
+            const dietary = document.getElementById('dietary').value;
+
+            if (currentGuestKey) {
+                db.ref(`rsvps/${currentGuestKey}`).update({
+                    attending: attending,
+                    dietary: dietary
+                }).then(() => {
+                    alert('Thank you for updating your RSVP!');
+                    rsvpForm.style.display = 'none';
+                });
+            }
         });
 
         // Display RSVP List
-        const rsvpList = document.getElementById('rsvpList');
         db.ref('rsvps').on('value', (snapshot) => {
             rsvpList.innerHTML = '';
             snapshot.forEach((childSnapshot) => {
                 const rsvp = childSnapshot.val();
-                const li = document.createElement('li');
-                li.textContent = `${rsvp.name} (${rsvp.email}) is ${rsvp.attending}`;
-                rsvpList.appendChild(li);
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${rsvp.name}</td>
+                    <td>${rsvp.attending || ''}</td>
+                    <td>${rsvp.dietary || ''}</td>
+                    <td><button onclick="editRSVP('${childSnapshot.key}')">Edit</button></td>
+                `;
+
+                rsvpList.appendChild(row);
             });
         });
+
+        // Edit RSVP
+        function editRSVP(key) {
+            db.ref(`rsvps/${key}`).once('value').then(snapshot => {
+                const guest = snapshot.val();
+                currentGuestKey = key;
+                rsvpForm.style.display = 'block';
+                document.getElementById('attending').value = guest.attending || 'yes';
+                document.getElementById('dietary').value = guest.dietary || '';
+            });
+        }
     </script>
 </body>
 </html>
