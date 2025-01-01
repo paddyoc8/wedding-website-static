@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emma & Patrick</title>
+    <title>RSVP - Emma & Patrick's Wedding</title>
     <link rel="stylesheet" href="../assets/css/core.css">
-    <script>
-        function toggleDrawer() {
-            const drawer = document.querySelector('.drawer');
-            drawer.classList.toggle('open');
-        }
-    </script>
+    <link rel="stylesheet" href="../assets/css/rsvp.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    
 </head>
 <body>
     <header>
@@ -25,7 +23,7 @@
                     <li><a href="registry.html">Registry</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <a href="select_guest.html" class="rsvp-button">RSVP</a>
+                <a href="rsvp.html" class="rsvp-button">RSVP</a>
             </div>
         </nav>
     
@@ -37,19 +35,80 @@
                 <li><a href="schedule.html">Schedule</a></li>
                 <li><a href="registry.html">Registry</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="select_guest.html" class="rsvp-button">RSVP</a></li>
+                <li><a href="rsvp.html" class="rsvp-button">RSVP</a></li>
             </ul>
         </div>
     </header>
+    
+    <div class="rsvp-container">
+        <h1>RSVP to Our Wedding</h1>
+        <form id="rsvpForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Enter your name" required>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>Emma & Patrick</h1>
-            <p>August 1st, 2025 · The Maynard, Grindleford</p>
-            <a href="select_guest.html" class="rsvp-button">RSVP</a>
-        </div>
-    </section>
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+
+            <label for="attending">Will you attend?</label>
+            <select id="attending">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <button type="submit">Submit RSVP</button>
+        </form>
+
+        <h2>RSVP List</h2>
+        <ul id="rsvpList" class="rsvp-list"></ul>
+    </div>
+
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
+            authDomain: "wedding-db-994da.firebaseapp.com",
+            projectId: "wedding-db-994da",
+            storageBucket: "wedding-db-994da.firebasestorage.app",
+            messagingSenderId: "102632882630",
+            appId: "1:102632882630:web:cd1c96ff206b42652832c7"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Handle RSVP Form Submission
+        const rsvpForm = document.getElementById('rsvpForm');
+        rsvpForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const attending = document.getElementById('attending').value;
+
+            // Save RSVP to Firebase Realtime Database
+            const newRSVPRef = db.ref('rsvps').push();
+            await newRSVPRef.set({
+                name: name,
+                email: email,
+                attending: attending
+            });
+
+            alert('Thank you for your RSVP!');
+            rsvpForm.reset();
+        });
+
+        // Display RSVP List
+        const rsvpList = document.getElementById('rsvpList');
+        db.ref('rsvps').on('value', (snapshot) => {
+            rsvpList.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                const rsvp = childSnapshot.val();
+                const li = document.createElement('li');
+                li.textContent = `${rsvp.name} (${rsvp.email}) is ${rsvp.attending}`;
+                rsvpList.appendChild(li);
+            });
+        });
+    </script>
 </body>
 </html>
