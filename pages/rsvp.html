@@ -118,6 +118,7 @@
                 if (found) {
                     populateGroupDetails(currentGroup);
                     rsvpForm.style.display = 'block';
+                    displayGroupInList(currentGroup);
                 } else {
                     alert('Guest not found.');
                 }
@@ -141,6 +142,21 @@
             });
         }
 
+        // Display group members in the RSVP list
+        function displayGroupInList(group) {
+            rsvpList.innerHTML = '';
+            group.forEach(member => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${member.Forename} ${member.Surname}</td>
+                    <td>${member.Attending || ''}</td>
+                    <td>${member.Dietary || ''}</td>
+                    <td><button onclick="editRSVP('${member.key}')">Edit</button></td>
+                `;
+                rsvpList.appendChild(row);
+            });
+        }
+
         // Submit RSVP for group
         rsvpForm.addEventListener('submit', (event) => {
             event.preventDefault();
@@ -160,24 +176,6 @@
 
             alert('Thank you for submitting your RSVP!');
             rsvpForm.style.display = 'none';
-        });
-
-        // Display RSVP List
-        db.ref('rsvps').on('value', (snapshot) => {
-            rsvpList.innerHTML = '';
-            snapshot.forEach((childSnapshot) => {
-                const rsvp = childSnapshot.val();
-                const row = document.createElement('tr');
-
-                row.innerHTML = `
-                    <td>${rsvp.Forename} ${rsvp.Surname}</td>
-                    <td>${rsvp.Attending || ''}</td>
-                    <td>${rsvp.Dietary || ''}</td>
-                    <td><button onclick="editRSVP('${childSnapshot.key}')">Edit</button></td>
-                `;
-
-                rsvpList.appendChild(row);
-            });
         });
 
         // Edit RSVP
