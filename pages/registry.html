@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emma & Patrick</title>
+    <link rel="stylesheet" href="../assets/css/core.css">
+    <link rel="stylesheet" href="../assets/css/construction.css">
+    <script>
+        function toggleDrawer() {
+            const drawer = document.querySelector('.drawer');
+            drawer.classList.toggle('open');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <!-- Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="names">Emma & Patrick</div>
+            <button class="drawer-toggle" onclick="toggleDrawer()">☰</button>
+            <div class="nav-right">
+                <ul class="nav-list">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="registry.html">Registry</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <a href="select_guest.html" class="rsvp-button">RSVP</a>
+            </div>
+        </nav>
+    
+        <!-- Drawer for Small Screens -->
+        <div class="drawer">
+            <span class="close-btn" onclick="toggleDrawer()">×</span>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="registry.html">Registry</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="select_guest.html" class="rsvp-button">RSVP</a></li>
+            </ul>
+        </div>
+    </header>
+
+
+    <section class="under-construction">
+        <div class="construction-content">
+            <img src="../assets/images/under-construction.jpg" alt="Under Construction">
+            <h2>Registry - Under Construction</h2>
+            <p>We’re working hard to bring you this page soon. Please check back later!</p>
+        </div>
+    </section>
+    
+</body>
+</html>
