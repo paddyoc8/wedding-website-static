@@ -57,7 +57,9 @@
 
         <div id="confirmationStep" class="hidden">
             <h2>Confirm your group</h2>
+            <p>Select the members you want to RSVP for:</p>
             <div id="groupDetails"></div>
+            <button id="confirmSelection">Confirm Selection</button>
         </div>
 
         <div id="rsvpForms" class="hidden">
@@ -97,12 +99,13 @@
     <script>
         // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
-            authDomain: "wedding-db-994da.firebaseapp.com",
-            projectId: "wedding-db-994da",
-            storageBucket: "wedding-db-994da.firebasestorage.app",
-            messagingSenderId: "102632882630",
-            appId: "1:102632882630:web:cd1c96ff206b42652832c7"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
         // Initialize Firebase
@@ -112,6 +115,7 @@
         const searchForm = document.getElementById('searchForm');
         const confirmationStep = document.getElementById('confirmationStep');
         const groupDetails = document.getElementById('groupDetails');
+        const confirmSelection = document.getElementById('confirmSelection');
         const rsvpForms = document.getElementById('rsvpForms');
         const individualRSVPForms = document.getElementById('individualRSVPForms');
         const submitAllRSVPs = document.getElementById('submitAllRSVPs');
@@ -121,7 +125,9 @@
         const submissionTableBody = document.getElementById('submissionTableBody');
 
         let currentGroup = [];
+        let selectedGroup = [];
 
+        // Search for guest group in Firebase
         searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
             const searchValue = document.getElementById('search').value.toLowerCase();
@@ -146,17 +152,37 @@
                 });
 
                 if (currentGroup.length > 0) {
-                    groupDetails.innerHTML = currentGroup.map(member => `<p>${member.Forename} ${member.Surname}</p>`).join('');
+                    groupDetails.innerHTML = currentGroup.map(member => `
+                        <label>
+                            <input type="checkbox" class="groupMember" value="${member.key}" checked>
+                            ${member.Forename} ${member.Surname}
+                        </label><br>
+                    `).join('');
                     confirmationStep.classList.remove('hidden');
-                    createRSVPForms();
                 } else {
                     alert('No matching guests found.');
                 }
             });
         });
+
+        // Confirm selected members
+        confirmSelection.addEventListener('click', () => {
+            const checkboxes = document.querySelectorAll('.groupMember:checked');
+            selectedGroup = Array.from(checkboxes).map(checkbox => {
+                return currentGroup.find(member => member.key === checkbox.value);
+            });
+
+            if (selectedGroup.length > 0) {
+                createRSVPForms();
+            } else {
+                alert('Please select at least one person to RSVP for.');
+            }
+        });
+
+        // Create individual RSVP forms for each selected member
         function createRSVPForms() {
             individualRSVPForms.innerHTML = '';
-            currentGroup.forEach(member => {
+            selectedGroup.forEach(member => {
                 const form = document.createElement('div');
                 form.classList.add('individual-rsvp');
                 form.innerHTML = `
@@ -168,29 +194,20 @@
                     </select>
 
                     <h4>Meal Choices</h4>
-                    <label>Starter:</label>
-                    <select data-key="${member.key}" class="starter">
-                        <option value="">Select</option>
-                        <option value="Soup">Soup</option>
-                        <option value="Salad">Salad</option>
-                        <option value="Pâté">Pâté</option>
-                    </select>
+                    <p>Starter:</p>
+                    <label><input type="radio" name="starter-${member.key}" value="Soup" required> Soup</label><br>
+                    <label><input type="radio" name="starter-${member.key}" value="Salad" required> Salad</label><br>
+                    <label><input type="radio" name="starter-${member.key}" value="Pâté" required> Pâté</label><br>
 
-                    <label>Main:</label>
-                    <select data-key="${member.key}" class="main">
-                        <option value="">Select</option>
-                        <option value="Chicken">Chicken</option>
-                        <option value="Beef">Beef</option>
-                        <option value="Vegetarian">Vegetarian</option>
-                    </select>
+                    <p>Main:</p>
+                    <label><input type="radio" name="main-${member.key}" value="Chicken" required> Chicken</label><br>
+                    <label><input type="radio" name="main-${member.key}" value="Beef" required> Beef</label><br>
+                    <label><input type="radio" name="main-${member.key}" value="Vegetarian" required> Vegetarian</label><br>
 
-                    <label>Dessert:</label>
-                    <select data-key="${member.key}" class="dessert">
-                        <option value="">Select</option>
-                        <option value="Cheesecake">Cheesecake</option>
-                        <option value="Fruit Salad">Fruit Salad</option>
-                        <option value="Chocolate Cake">Chocolate Cake</option>
-                    </select>
+                    <p>Dessert:</p>
+                    <label><input type="radio" name="dessert-${member.key}" value="Cheesecake" required> Cheesecake</label><br>
+                    <label><input type="radio" name="dessert-${member.key}" value="Fruit Salad" required> Fruit Salad</label><br>
+                    <label><input type="radio" name="dessert-${member.key}" value="Chocolate Cake" required> Chocolate Cake</label><br>
 
                     <h4>Dietary Requirements</h4>
                     <label><input type="checkbox" data-key="${member.key}" value="Vegetarian"> Vegetarian</label><br>
@@ -206,13 +223,14 @@
             rsvpForms.classList.remove('hidden');
         }
 
+        // Submit all RSVPs
         submitAllRSVPs.addEventListener('click', () => {
-            currentGroup.forEach(member => {
+            selectedGroup.forEach(member => {
                 const key = member.key;
                 const attending = document.querySelector(`.attending[data-key="${key}"]`).value;
-                const starter = document.querySelector(`.starter[data-key="${key}"]`).value;
-                const main = document.querySelector(`.main[data-key="${key}"]`).value;
-                const dessert = document.querySelector(`.dessert[data-key="${key}"]`).value;
+                const starter = document.querySelector(`input[name="starter-${key}"]:checked`)?.value || '';
+                const main = document.querySelector(`input[name="main-${key}"]:checked`)?.value || '';
+                const dessert = document.querySelector(`input[name="dessert-${key}"]:checked`)?.value || '';
                 const dietaryCheckboxes = document.querySelectorAll(`input[type="checkbox"][data-key="${key}"]:checked`);
                 const dietaryPreferences = Array.from(dietaryCheckboxes).map(checkbox => checkbox.value);
                 const otherDietaryText = document.querySelector(`.other-dietary-text[data-key="${key}"]`).value;
