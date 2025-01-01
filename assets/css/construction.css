@@ -1,0 +1,29 @@
+/* Under Construction Styling */
+.under-construction {
+    padding: 2rem;
+    background-color: var(--light2); /* Light background to distinguish the section */
+    text-align: center;
+    border: 2px dashed var(--accent2); /* Dashed border for a construction feel */
+    border-radius: 8px;
+    margin: 2rem auto;
+    max-width: 800px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.under-construction .construction-content img {
+    max-width: 150px;
+    margin-bottom: 1rem;
+}
+
+.under-construction .construction-content h2 {
+    font-size: 1.8rem;
+    font-family: var(--titleFont);
+    color: var(--dark1);
+    margin-bottom: 0.5rem;
+}
+
+.under-construction .construction-content p {
+    font-size: 1rem;
+    font-family: var(--bodyFont);
+    color: var(--dark2);
+}
