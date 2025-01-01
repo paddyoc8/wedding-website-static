@@ -1,6 +1,6 @@
 /* Under Construction Styling */
 .under-construction {
-    padding: 2rem;
+    padding: 2rem 1rem;
     background-color: var(--light2); /* Light background to distinguish the section */
     text-align: center;
     border: 2px dashed var(--accent2); /* Dashed border for a construction feel */
