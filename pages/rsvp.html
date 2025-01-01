@@ -58,51 +58,12 @@
         <div id="confirmationStep" class="hidden">
             <h2>Confirm your group</h2>
             <div id="groupDetails"></div>
-            <button id="confirmGroup">This is me</button>
         </div>
 
-        <div id="attendingStep" class="hidden">
-            <h2>Attendance</h2>
-            <label>Are you attending?</label>
-            <select id="attending">
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-            </select>
-            <button id="confirmAttendance">Next</button>
-        </div>
-
-        <div id="mealStep" class="hidden">
-            <h2>Meal Choices</h2>
-            <div id="mealChoices">
-                <h3>Starter</h3>
-                <label><input type="radio" name="starterChoice" value="Soup"> Soup</label><br>
-                <label><input type="radio" name="starterChoice" value="Salad"> Salad</label><br>
-                <label><input type="radio" name="starterChoice" value="Pâté"> Pâté</label><br>
-
-                <h3>Main</h3>
-                <label><input type="radio" name="mainChoice" value="Chicken"> Chicken</label><br>
-                <label><input type="radio" name="mainChoice" value="Beef"> Beef</label><br>
-                <label><input type="radio" name="mainChoice" value="Vegetarian"> Vegetarian</label><br>
-
-                <h3>Dessert</h3>
-                <label><input type="radio" name="dessertChoice" value="Cheesecake"> Cheesecake</label><br>
-                <label><input type="radio" name="dessertChoice" value="Fruit Salad"> Fruit Salad</label><br>
-                <label><input type="radio" name="dessertChoice" value="Chocolate Cake"> Chocolate Cake</label><br>
-            </div>
-            <button id="confirmMeal">Next</button>
-        </div>
-
-        <div id="dietaryStep" class="hidden">
-            <h2>Dietary Requirements</h2>
-            <div id="dietaryOptions">
-                <label><input type="checkbox" value="Vegetarian"> Vegetarian</label><br>
-                <label><input type="checkbox" value="Vegan"> Vegan</label><br>
-                <label><input type="checkbox" value="Gluten-Free"> Gluten-Free</label><br>
-                <label><input type="checkbox" value="Nut Allergy"> Nut Allergy</label><br>
-                <label><input type="checkbox" id="otherDietary"> Other</label><br>
-                <input type="text" id="otherDietaryText" class="hidden" placeholder="Please specify">
-            </div>
-            <button id="confirmDietary">Submit RSVP</button>
+        <div id="rsvpForms" class="hidden">
+            <h2>RSVP for Each Person</h2>
+            <div id="individualRSVPForms"></div>
+            <button id="submitAllRSVPs">Submit All RSVPs</button>
         </div>
 
         <div id="thankYouStepYes" class="hidden">
@@ -113,6 +74,23 @@
         <div id="thankYouStepNo" class="hidden">
             <h2>Thank you!</h2>
             <p>We're sorry you can't join us. We'll miss you on the big day!</p>
+        </div>
+
+        <div id="submissionTable" class="hidden">
+            <h2>RSVP Submissions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Attending</th>
+                        <th>Starter</th>
+                        <th>Main</th>
+                        <th>Dessert</th>
+                        <th>Dietary Requirements</th>
+                    </tr>
+                </thead>
+                <tbody id="submissionTableBody"></tbody>
+            </table>
         </div>
     </div>
 
@@ -134,24 +112,16 @@
         const searchForm = document.getElementById('searchForm');
         const confirmationStep = document.getElementById('confirmationStep');
         const groupDetails = document.getElementById('groupDetails');
-        const confirmGroup = document.getElementById('confirmGroup');
-        const attendingStep = document.getElementById('attendingStep');
-        const attending = document.getElementById('attending');
-        const confirmAttendance = document.getElementById('confirmAttendance');
-        const mealStep = document.getElementById('mealStep');
-        const mealChoices = document.getElementById('mealChoices');
-        const confirmMeal = document.getElementById('confirmMeal');
-        const dietaryStep = document.getElementById('dietaryStep');
-        const dietaryOptions = document.getElementById('dietaryOptions');
-        const otherDietary = document.getElementById('otherDietary');
-        const otherDietaryText = document.getElementById('otherDietaryText');
-        const confirmDietary = document.getElementById('confirmDietary');
+        const rsvpForms = document.getElementById('rsvpForms');
+        const individualRSVPForms = document.getElementById('individualRSVPForms');
+        const submitAllRSVPs = document.getElementById('submitAllRSVPs');
         const thankYouStepYes = document.getElementById('thankYouStepYes');
         const thankYouStepNo = document.getElementById('thankYouStepNo');
+        const submissionTable = document.getElementById('submissionTable');
+        const submissionTableBody = document.getElementById('submissionTableBody');
 
         let currentGroup = [];
 
-        // Updated Search for guest group in Firebase
         searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
             const searchValue = document.getElementById('search').value.toLowerCase();
@@ -160,7 +130,6 @@
                 currentGroup = [];
                 let groupID = null;
 
-                // Identify group by the searched guest
                 snapshot.forEach(childSnapshot => {
                     const guest = childSnapshot.val();
                     const fullName = `${guest.Forename} ${guest.Surname}`.toLowerCase();
@@ -169,7 +138,6 @@
                     }
                 });
 
-                // Retrieve all members in the same group
                 snapshot.forEach(childSnapshot => {
                     const guest = childSnapshot.val();
                     if (guest.GroupID === groupID) {
@@ -179,72 +147,103 @@
 
                 if (currentGroup.length > 0) {
                     groupDetails.innerHTML = currentGroup.map(member => `<p>${member.Forename} ${member.Surname}</p>`).join('');
-                    searchForm.classList.add('hidden');
                     confirmationStep.classList.remove('hidden');
+                    createRSVPForms();
                 } else {
                     alert('No matching guests found.');
                 }
             });
         });
-
-        // Confirm group
-        confirmGroup.addEventListener('click', () => {
-            confirmationStep.classList.add('hidden');
-            attendingStep.classList.remove('hidden');
-        });
-
-        // Confirm attendance
-        confirmAttendance.addEventListener('click', () => {
-            const isAttending = attending.value === 'yes';
-
+        function createRSVPForms() {
+            individualRSVPForms.innerHTML = '';
             currentGroup.forEach(member => {
-                db.ref(`rsvps/${member.key}`).update({ Attending: isAttending ? 'yes' : 'no' });
+                const form = document.createElement('div');
+                form.classList.add('individual-rsvp');
+                form.innerHTML = `
+                    <h3>${member.Forename} ${member.Surname}</h3>
+                    <label>Attending:</label>
+                    <select data-key="${member.key}" class="attending">
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+
+                    <h4>Meal Choices</h4>
+                    <label>Starter:</label>
+                    <select data-key="${member.key}" class="starter">
+                        <option value="">Select</option>
+                        <option value="Soup">Soup</option>
+                        <option value="Salad">Salad</option>
+                        <option value="Pâté">Pâté</option>
+                    </select>
+
+                    <label>Main:</label>
+                    <select data-key="${member.key}" class="main">
+                        <option value="">Select</option>
+                        <option value="Chicken">Chicken</option>
+                        <option value="Beef">Beef</option>
+                        <option value="Vegetarian">Vegetarian</option>
+                    </select>
+
+                    <label>Dessert:</label>
+                    <select data-key="${member.key}" class="dessert">
+                        <option value="">Select</option>
+                        <option value="Cheesecake">Cheesecake</option>
+                        <option value="Fruit Salad">Fruit Salad</option>
+                        <option value="Chocolate Cake">Chocolate Cake</option>
+                    </select>
+
+                    <h4>Dietary Requirements</h4>
+                    <label><input type="checkbox" data-key="${member.key}" value="Vegetarian"> Vegetarian</label><br>
+                    <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
+                    <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
+                    <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
+                    <label><input type="checkbox" data-key="${member.key}" class="other-dietary"> Other</label><br>
+                    <input type="text" data-key="${member.key}" class="other-dietary-text hidden" placeholder="Please specify">
+                `;
+                individualRSVPForms.appendChild(form);
             });
+            confirmationStep.classList.add('hidden');
+            rsvpForms.classList.remove('hidden');
+        }
 
-            attendingStep.classList.add('hidden');
-            if (isAttending) {
-                mealStep.classList.remove('hidden');
-            } else {
-                thankYouStepNo.classList.remove('hidden');
-            }
-        });
-
-        // Confirm meal choices
-        confirmMeal.addEventListener('click', () => {
-            mealStep.classList.add('hidden');
-            dietaryStep.classList.remove('hidden');
-        });
-
-        // Toggle other dietary input
-        otherDietary.addEventListener('change', () => {
-            otherDietaryText.classList.toggle('hidden', !otherDietary.checked);
-        });
-
-        // Confirm dietary requirements
-        confirmDietary.addEventListener('click', () => {
-            const starter = document.querySelector('input[name="starterChoice"]:checked')?.value || '';
-            const main = document.querySelector('input[name="mainChoice"]:checked')?.value || '';
-            const dessert = document.querySelector('input[name="dessertChoice"]:checked')?.value || '';
-
-            const dietaryPreferences = Array.from(dietaryOptions.querySelectorAll('input[type="checkbox"]:checked'))
-                .map(checkbox => checkbox.value);
-
-            if (otherDietary.checked && otherDietaryText.value) {
-                dietaryPreferences.push(otherDietaryText.value);
-            }
-
+        submitAllRSVPs.addEventListener('click', () => {
             currentGroup.forEach(member => {
-                db.ref(`rsvps/${member.key}`).update({
-                    Attending: 'yes',
+                const key = member.key;
+                const attending = document.querySelector(`.attending[data-key="${key}"]`).value;
+                const starter = document.querySelector(`.starter[data-key="${key}"]`).value;
+                const main = document.querySelector(`.main[data-key="${key}"]`).value;
+                const dessert = document.querySelector(`.dessert[data-key="${key}"]`).value;
+                const dietaryCheckboxes = document.querySelectorAll(`input[type="checkbox"][data-key="${key}"]:checked`);
+                const dietaryPreferences = Array.from(dietaryCheckboxes).map(checkbox => checkbox.value);
+                const otherDietaryText = document.querySelector(`.other-dietary-text[data-key="${key}"]`).value;
+
+                if (otherDietaryText) {
+                    dietaryPreferences.push(otherDietaryText);
+                }
+
+                db.ref(`rsvps/${key}`).update({
+                    Attending: attending,
                     Starter: starter,
                     Main: main,
                     Dessert: dessert,
                     Dietary: dietaryPreferences.join(', ')
                 });
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${member.Forename} ${member.Surname}</td>
+                    <td>${attending}</td>
+                    <td>${starter}</td>
+                    <td>${main}</td>
+                    <td>${dessert}</td>
+                    <td>${dietaryPreferences.join(', ')}</td>
+                `;
+                submissionTableBody.appendChild(row);
             });
 
-            dietaryStep.classList.add('hidden');
+            submissionTable.classList.remove('hidden');
             thankYouStepYes.classList.remove('hidden');
+            rsvpForms.classList.add('hidden');
         });
     </script>
 </body>
