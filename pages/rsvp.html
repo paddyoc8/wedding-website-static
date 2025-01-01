@@ -48,41 +48,63 @@
     
     <div class="rsvp-container">
         <h1>RSVP to Our Wedding</h1>
+
         <form id="searchForm">
             <label for="search">Search for your name:</label>
             <input type="text" id="search" placeholder="Enter your name" required>
             <button type="submit">Search</button>
         </form>
 
-        <form id="rsvpForm" style="display: none;">
-            <h2>RSVP Details for Group</h2>
+        <div id="confirmationStep" class="hidden">
+            <h2>Confirm your group</h2>
             <div id="groupDetails"></div>
-            <button type="submit">Submit RSVP</button>
-        </form>
+            <button id="confirmGroup">This is me</button>
+        </div>
 
-        <h2>RSVP List</h2>
-        <table class="rsvp-table">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Attending</th>
-                    <th>Dietary Requirements</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="rsvpList"></tbody>
-        </table>
+        <div id="attendingStep" class="hidden">
+            <h2>Attendance</h2>
+            <label>Are you attending?</label>
+            <select id="attending">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+            <button id="confirmAttendance">Next</button>
+        </div>
+
+        <div id="mealStep" class="hidden">
+            <h2>Meal Choices</h2>
+            <div id="mealChoices"></div>
+            <button id="confirmMeal">Next</button>
+        </div>
+
+        <div id="dietaryStep" class="hidden">
+            <h2>Dietary Requirements</h2>
+            <div id="dietaryOptions">
+                <label><input type="checkbox" value="Vegetarian"> Vegetarian</label>
+                <label><input type="checkbox" value="Vegan"> Vegan</label>
+                <label><input type="checkbox" value="Gluten-Free"> Gluten-Free</label>
+                <label><input type="checkbox" value="Nut Allergy"> Nut Allergy</label>
+                <label><input type="checkbox" id="otherDietary"> Other</label>
+                <input type="text" id="otherDietaryText" class="hidden" placeholder="Please specify">
+            </div>
+            <button id="confirmDietary">Submit RSVP</button>
+        </div>
+
+        <div id="thankYouStep" class="hidden">
+            <h2>Thank you!</h2>
+            <p>Your RSVP has been submitted. We're sorry you can't join us if you've declined. Otherwise, we're excited to see you on the big day!</p>
+        </div>
     </div>
 
     <script>
-        // Firebase configuration
+        // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
-            authDomain: "wedding-db-994da.firebaseapp.com",
-            projectId: "wedding-db-994da",
-            storageBucket: "wedding-db-994da.firebasestorage.app",
-            messagingSenderId: "102632882630",
-            appId: "1:102632882630:web:cd1c96ff206b42652832c7"
+        apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
+        authDomain: "wedding-db-994da.firebaseapp.com",
+        projectId: "wedding-db-994da",
+        storageBucket: "wedding-db-994da.firebasestorage.app",
+        messagingSenderId: "102632882630",
+        appId: "1:102632882630:web:cd1c96ff206b42652832c7"
         };
 
         // Initialize Firebase
@@ -90,109 +112,98 @@
         const db = firebase.database();
 
         const searchForm = document.getElementById('searchForm');
-        const rsvpForm = document.getElementById('rsvpForm');
+        const confirmationStep = document.getElementById('confirmationStep');
         const groupDetails = document.getElementById('groupDetails');
-        const rsvpList = document.getElementById('rsvpList');
+        const confirmGroup = document.getElementById('confirmGroup');
+        const attendingStep = document.getElementById('attendingStep');
+        const attending = document.getElementById('attending');
+        const confirmAttendance = document.getElementById('confirmAttendance');
+        const mealStep = document.getElementById('mealStep');
+        const mealChoices = document.getElementById('mealChoices');
+        const confirmMeal = document.getElementById('confirmMeal');
+        const dietaryStep = document.getElementById('dietaryStep');
+        const dietaryOptions = document.getElementById('dietaryOptions');
+        const otherDietary = document.getElementById('otherDietary');
+        const otherDietaryText = document.getElementById('otherDietaryText');
+        const confirmDietary = document.getElementById('confirmDietary');
+        const thankYouStep = document.getElementById('thankYouStep');
 
         let currentGroup = [];
 
-        // Search for a guest and their group
+        // Search for guest group in Firebase
         searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
             const searchValue = document.getElementById('search').value.toLowerCase();
 
             db.ref('rsvps').once('value').then(snapshot => {
-                let found = false;
                 currentGroup = [];
                 snapshot.forEach(childSnapshot => {
                     const guest = childSnapshot.val();
                     const fullName = `${guest.Forename} ${guest.Surname}`.toLowerCase();
-                    if (fullName === searchValue) {
-                        found = true;
-                        const groupID = guest.GroupID;
-
-                        // Find all group members
-                        snapshot.forEach(memberSnapshot => {
-                            const member = memberSnapshot.val();
-                            if (member.GroupID === groupID) {
-                                currentGroup.push({ key: memberSnapshot.key, ...member });
-                            }
-                        });
+                    if (fullName.includes(searchValue)) {
+                        currentGroup.push({ key: childSnapshot.key, ...guest });
                     }
                 });
 
-                if (found) {
-                    populateGroupDetails(currentGroup);
-                    rsvpForm.style.display = 'block';
-                    displayGroupInList(currentGroup);
+                if (currentGroup.length > 0) {
+                    groupDetails.innerHTML = currentGroup.map(member => `<p>${member.Forename} ${member.Surname}</p>`).join('');
+                    searchForm.classList.add('hidden');
+                    confirmationStep.classList.remove('hidden');
                 } else {
-                    alert('Guest not found.');
+                    alert('No matching guests found.');
                 }
             });
         });
 
-        // Populate group RSVP details
-        function populateGroupDetails(group) {
-            groupDetails.innerHTML = '';
-            group.forEach(member => {
-                const div = document.createElement('div');
-                div.innerHTML = `
-                    <label>${member.Forename} ${member.Surname}</label>
-                    <select data-key="${member.key}" class="attending">
-                        <option value="yes" ${member.Attending === 'yes' ? 'selected' : ''}>Yes</option>
-                        <option value="no" ${member.Attending === 'no' ? 'selected' : ''}>No</option>
-                    </select>
-                    <input type="text" data-key="${member.key}" class="dietary" placeholder="Dietary Requirements" value="${member.Dietary || ''}">
-                `;
-                groupDetails.appendChild(div);
-            });
-        }
+        confirmGroup.addEventListener('click', () => {
+            confirmationStep.classList.add('hidden');
+            attendingStep.classList.remove('hidden');
+        });
 
-        // Display group members in the RSVP list
-        function displayGroupInList(group) {
-            rsvpList.innerHTML = '';
-            group.forEach(member => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${member.Forename} ${member.Surname}</td>
-                    <td>${member.Attending || ''}</td>
-                    <td>${member.Dietary || ''}</td>
-                    <td><button onclick="editRSVP('${member.key}')">Edit</button></td>
-                `;
-                rsvpList.appendChild(row);
-            });
-        }
+        confirmAttendance.addEventListener('click', () => {
+            if (attending.value === 'no') {
+                // Update Firebase with "not attending"
+                currentGroup.forEach(member => {
+                    db.ref(`rsvps/${member.key}`).update({ Attending: 'no' });
+                });
+                attendingStep.classList.add('hidden');
+                thankYouStep.classList.remove('hidden');
+                return;
+            }
 
-        // Submit RSVP for group
-        rsvpForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const attendingElements = document.querySelectorAll('.attending');
-            const dietaryElements = document.querySelectorAll('.dietary');
+            attendingStep.classList.add('hidden');
+            mealStep.classList.remove('hidden');
+        });
 
-            attendingElements.forEach((element, index) => {
-                const key = element.getAttribute('data-key');
-                const attending = element.value;
-                const dietary = dietaryElements[index].value;
+        confirmMeal.addEventListener('click', () => {
+            // Collect and save meal choices if needed
+            mealStep.classList.add('hidden');
+            dietaryStep.classList.remove('hidden');
+        });
 
-                db.ref(`rsvps/${key}`).update({
-                    Attending: attending,
-                    Dietary: dietary
+        otherDietary.addEventListener('change', () => {
+            otherDietaryText.classList.toggle('hidden', !otherDietary.checked);
+        });
+
+        confirmDietary.addEventListener('click', () => {
+            // Update Firebase with dietary requirements
+            const dietaryPreferences = Array.from(dietaryOptions.querySelectorAll('input[type="checkbox"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (otherDietary.checked && otherDietaryText.value) {
+                dietaryPreferences.push(otherDietaryText.value);
+            }
+
+            currentGroup.forEach(member => {
+                db.ref(`rsvps/${member.key}`).update({
+                    Attending: 'yes',
+                    Dietary: dietaryPreferences.join(', ')
                 });
             });
 
-            alert('Thank you for submitting your RSVP!');
-            rsvpForm.style.display = 'none';
+            dietaryStep.classList.add('hidden');
+            thankYouStep.classList.remove('hidden');
         });
-
-        // Edit RSVP
-        function editRSVP(key) {
-            db.ref(`rsvps/${key}`).once('value').then(snapshot => {
-                const guest = snapshot.val();
-                currentGroup = [{ key, ...guest }];
-                populateGroupDetails(currentGroup);
-                rsvpForm.style.display = 'block';
-            });
-        }
     </script>
 </body>
 </html>

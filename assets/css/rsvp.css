@@ -42,18 +42,6 @@
 .rsvp-container button:hover {
     background-color: var(--accent2);
 }
-.rsvp-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 2rem;
-}
-.rsvp-table th,
-.rsvp-table td {
-    border: 1px solid var(--dark2);
-    padding: 0.5rem;
-    text-align: left;
-}
-.rsvp-table th {
-    background-color: var(--accent1);
-    color: var(--light1);
+.hidden {
+    display: none;
 }
