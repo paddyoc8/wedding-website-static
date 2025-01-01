@@ -73,7 +73,14 @@
 
         <div id="mealStep" class="hidden">
             <h2>Meal Choices</h2>
-            <div id="mealChoices"></div>
+            <div id="mealChoices">
+                <label><input type="radio" name="mealChoice" value="Chicken"> Chicken</label><br>
+                <label><input type="radio" name="mealChoice" value="Beef"> Beef</label><br>
+                <label><input type="radio" name="mealChoice" value="Fish"> Fish</label><br>
+                <label><input type="radio" name="mealChoice" value="Vegetarian Option 1"> Vegetarian Option 1</label><br>
+                <label><input type="radio" name="mealChoice" value="Vegetarian Option 2"> Vegetarian Option 2</label><br>
+                <label><input type="radio" name="mealChoice" value="Vegetarian Option 3"> Vegetarian Option 3</label>
+            </div>
             <button id="confirmMeal">Next</button>
         </div>
 
@@ -90,21 +97,26 @@
             <button id="confirmDietary">Submit RSVP</button>
         </div>
 
-        <div id="thankYouStep" class="hidden">
+        <div id="thankYouStepYes" class="hidden">
             <h2>Thank you!</h2>
-            <p>Your RSVP has been submitted. We're sorry you can't join us if you've declined. Otherwise, we're excited to see you on the big day!</p>
+            <p>We're so excited to see you on the big day!</p>
+        </div>
+
+        <div id="thankYouStepNo" class="hidden">
+            <h2>Thank you!</h2>
+            <p>We're sorry you can't join us. We'll miss you on the big day!</p>
         </div>
     </div>
 
     <script>
-        // Your web app's Firebase configuration
+        // Firebase configuration
         const firebaseConfig = {
-        apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
-        authDomain: "wedding-db-994da.firebaseapp.com",
-        projectId: "wedding-db-994da",
-        storageBucket: "wedding-db-994da.firebasestorage.app",
-        messagingSenderId: "102632882630",
-        appId: "1:102632882630:web:cd1c96ff206b42652832c7"
+            apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
+            authDomain: "wedding-db-994da.firebaseapp.com",
+            projectId: "wedding-db-994da",
+            storageBucket: "wedding-db-994da.firebasestorage.app",
+            messagingSenderId: "102632882630",
+            appId: "1:102632882630:web:cd1c96ff206b42652832c7"
         };
 
         // Initialize Firebase
@@ -126,7 +138,8 @@
         const otherDietary = document.getElementById('otherDietary');
         const otherDietaryText = document.getElementById('otherDietaryText');
         const confirmDietary = document.getElementById('confirmDietary');
-        const thankYouStep = document.getElementById('thankYouStep');
+        const thankYouStepYes = document.getElementById('thankYouStepYes');
+        const thankYouStepNo = document.getElementById('thankYouStepNo');
 
         let currentGroup = [];
 
@@ -137,26 +150,10 @@
 
             db.ref('rsvps').once('value').then(snapshot => {
                 currentGroup = [];
-                let groupID = null;
-
-                // Find the guest's GroupID
                 snapshot.forEach(childSnapshot => {
                     const guest = childSnapshot.val();
                     const fullName = `${guest.Forename} ${guest.Surname}`.toLowerCase();
                     if (fullName.includes(searchValue)) {
-                        groupID = guest.GroupID;
-                    }
-                });
-
-                if (!groupID) {
-                    alert('No matching guests found.');
-                    return;
-                }
-
-                // Retrieve all guests in the same GroupID
-                snapshot.forEach(childSnapshot => {
-                    const guest = childSnapshot.val();
-                    if (guest.GroupID === groupID) {
                         currentGroup.push({ key: childSnapshot.key, ...guest });
                     }
                 });
@@ -183,7 +180,7 @@
                     db.ref(`rsvps/${member.key}`).update({ Attending: 'no' });
                 });
                 attendingStep.classList.add('hidden');
-                thankYouStep.classList.remove('hidden');
+                thankYouStepNo.classList.remove('hidden');
                 return;
             }
 
@@ -218,7 +215,7 @@
             });
 
             dietaryStep.classList.add('hidden');
-            thankYouStep.classList.remove('hidden');
+            thankYouStepYes.classList.remove('hidden');
         });
     </script>
 </body>
