@@ -74,12 +74,20 @@
         <div id="mealStep" class="hidden">
             <h2>Meal Choices</h2>
             <div id="mealChoices">
-                <label><input type="radio" name="mealChoice" value="Chicken"> Chicken</label><br>
-                <label><input type="radio" name="mealChoice" value="Beef"> Beef</label><br>
-                <label><input type="radio" name="mealChoice" value="Fish"> Fish</label><br>
-                <label><input type="radio" name="mealChoice" value="Vegetarian Option 1"> Vegetarian Option 1</label><br>
-                <label><input type="radio" name="mealChoice" value="Vegetarian Option 2"> Vegetarian Option 2</label><br>
-                <label><input type="radio" name="mealChoice" value="Vegetarian Option 3"> Vegetarian Option 3</label>
+                <h3>Starter</h3>
+                <label><input type="radio" name="starterChoice" value="Soup"> Soup</label><br>
+                <label><input type="radio" name="starterChoice" value="Salad"> Salad</label><br>
+                <label><input type="radio" name="starterChoice" value="Pâté"> Pâté</label><br>
+
+                <h3>Main</h3>
+                <label><input type="radio" name="mainChoice" value="Chicken"> Chicken</label><br>
+                <label><input type="radio" name="mainChoice" value="Beef"> Beef</label><br>
+                <label><input type="radio" name="mainChoice" value="Vegetarian"> Vegetarian</label><br>
+
+                <h3>Dessert</h3>
+                <label><input type="radio" name="dessertChoice" value="Cheesecake"> Cheesecake</label><br>
+                <label><input type="radio" name="dessertChoice" value="Fruit Salad"> Fruit Salad</label><br>
+                <label><input type="radio" name="dessertChoice" value="Chocolate Cake"> Chocolate Cake</label><br>
             </div>
             <button id="confirmMeal">Next</button>
         </div>
@@ -87,11 +95,11 @@
         <div id="dietaryStep" class="hidden">
             <h2>Dietary Requirements</h2>
             <div id="dietaryOptions">
-                <label><input type="checkbox" value="Vegetarian"> Vegetarian</label>
-                <label><input type="checkbox" value="Vegan"> Vegan</label>
-                <label><input type="checkbox" value="Gluten-Free"> Gluten-Free</label>
-                <label><input type="checkbox" value="Nut Allergy"> Nut Allergy</label>
-                <label><input type="checkbox" id="otherDietary"> Other</label>
+                <label><input type="checkbox" value="Vegetarian"> Vegetarian</label><br>
+                <label><input type="checkbox" value="Vegan"> Vegan</label><br>
+                <label><input type="checkbox" value="Gluten-Free"> Gluten-Free</label><br>
+                <label><input type="checkbox" value="Nut Allergy"> Nut Allergy</label><br>
+                <label><input type="checkbox" id="otherDietary"> Other</label><br>
                 <input type="text" id="otherDietaryText" class="hidden" placeholder="Please specify">
             </div>
             <button id="confirmDietary">Submit RSVP</button>
@@ -143,17 +151,28 @@
 
         let currentGroup = [];
 
-        // Search for guest group in Firebase
+        // Updated Search for guest group in Firebase
         searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
             const searchValue = document.getElementById('search').value.toLowerCase();
 
             db.ref('rsvps').once('value').then(snapshot => {
                 currentGroup = [];
+                let groupID = null;
+
+                // Identify group by the searched guest
                 snapshot.forEach(childSnapshot => {
                     const guest = childSnapshot.val();
                     const fullName = `${guest.Forename} ${guest.Surname}`.toLowerCase();
                     if (fullName.includes(searchValue)) {
+                        groupID = guest.GroupID;
+                    }
+                });
+
+                // Retrieve all members in the same group
+                snapshot.forEach(childSnapshot => {
+                    const guest = childSnapshot.val();
+                    if (guest.GroupID === groupID) {
                         currentGroup.push({ key: childSnapshot.key, ...guest });
                     }
                 });
@@ -168,38 +187,45 @@
             });
         });
 
+        // Confirm group
         confirmGroup.addEventListener('click', () => {
             confirmationStep.classList.add('hidden');
             attendingStep.classList.remove('hidden');
         });
 
+        // Confirm attendance
         confirmAttendance.addEventListener('click', () => {
-            if (attending.value === 'no') {
-                // Update Firebase with "not attending"
-                currentGroup.forEach(member => {
-                    db.ref(`rsvps/${member.key}`).update({ Attending: 'no' });
-                });
-                attendingStep.classList.add('hidden');
-                thankYouStepNo.classList.remove('hidden');
-                return;
-            }
+            const isAttending = attending.value === 'yes';
+
+            currentGroup.forEach(member => {
+                db.ref(`rsvps/${member.key}`).update({ Attending: isAttending ? 'yes' : 'no' });
+            });
 
             attendingStep.classList.add('hidden');
-            mealStep.classList.remove('hidden');
+            if (isAttending) {
+                mealStep.classList.remove('hidden');
+            } else {
+                thankYouStepNo.classList.remove('hidden');
+            }
         });
 
+        // Confirm meal choices
         confirmMeal.addEventListener('click', () => {
-            // Collect and save meal choices if needed
             mealStep.classList.add('hidden');
             dietaryStep.classList.remove('hidden');
         });
 
+        // Toggle other dietary input
         otherDietary.addEventListener('change', () => {
             otherDietaryText.classList.toggle('hidden', !otherDietary.checked);
         });
 
+        // Confirm dietary requirements
         confirmDietary.addEventListener('click', () => {
-            // Update Firebase with dietary requirements
+            const starter = document.querySelector('input[name="starterChoice"]:checked')?.value || '';
+            const main = document.querySelector('input[name="mainChoice"]:checked')?.value || '';
+            const dessert = document.querySelector('input[name="dessertChoice"]:checked')?.value || '';
+
             const dietaryPreferences = Array.from(dietaryOptions.querySelectorAll('input[type="checkbox"]:checked'))
                 .map(checkbox => checkbox.value);
 
@@ -210,6 +236,9 @@
             currentGroup.forEach(member => {
                 db.ref(`rsvps/${member.key}`).update({
                     Attending: 'yes',
+                    Starter: starter,
+                    Main: main,
+                    Dessert: dessert,
                     Dietary: dietaryPreferences.join(', ')
                 });
             });
