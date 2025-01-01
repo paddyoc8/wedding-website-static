@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emma & Patrick</title>
+    <title>RSVP - Emma & Patrick's Wedding</title>
     <link rel="stylesheet" href="../assets/css/core.css">
+    <link rel="stylesheet" href="../assets/css/rsvp.css">
     <script>
         function toggleDrawer() {
             const drawer = document.querySelector('.drawer');
             drawer.classList.toggle('open');
         }
     </script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+
 </head>
 <body>
     <header>
@@ -25,7 +29,7 @@
                     <li><a href="registry.html">Registry</a></li>
                     <li><a href="contact.html">Contact</a></li>
                 </ul>
-                <a href="select_guest.html" class="rsvp-button">RSVP</a>
+                <a href="rsvp.html" class="rsvp-button">RSVP</a>
             </div>
         </nav>
     
@@ -37,19 +41,158 @@
                 <li><a href="schedule.html">Schedule</a></li>
                 <li><a href="registry.html">Registry</a></li>
                 <li><a href="contact.html">Contact</a></li>
-                <li><a href="select_guest.html" class="rsvp-button">RSVP</a></li>
+                <li><a href="rsvp.html" class="rsvp-button">RSVP</a></li>
             </ul>
         </div>
     </header>
+    
+    <div class="rsvp-container">
+        <h1>RSVP to Our Wedding</h1>
+        <form id="searchForm">
+            <label for="search">Search for your name:</label>
+            <input type="text" id="search" placeholder="Enter your name" required>
+            <button type="submit">Search</button>
+        </form>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1>Emma & Patrick</h1>
-            <p>August 1st, 2025 · The Maynard, Grindleford</p>
-            <a href="select_guest.html" class="rsvp-button">RSVP</a>
-        </div>
-    </section>
+        <form id="rsvpForm" style="display: none;">
+            <h2>RSVP Details for Group</h2>
+            <div id="groupDetails"></div>
+            <button type="submit">Submit RSVP</button>
+        </form>
+
+        <h2>RSVP List</h2>
+        <table class="rsvp-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Attending</th>
+                    <th>Dietary Requirements</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="rsvpList"></tbody>
+        </table>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
+            authDomain: "wedding-db-994da.firebaseapp.com",
+            projectId: "wedding-db-994da",
+            storageBucket: "wedding-db-994da.firebasestorage.app",
+            messagingSenderId: "102632882630",
+            appId: "1:102632882630:web:cd1c96ff206b42652832c7"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        const searchForm = document.getElementById('searchForm');
+        const rsvpForm = document.getElementById('rsvpForm');
+        const groupDetails = document.getElementById('groupDetails');
+        const rsvpList = document.getElementById('rsvpList');
+
+        let currentGroup = [];
+
+        // Search for a guest and their group
+        searchForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const searchValue = document.getElementById('search').value.toLowerCase();
+
+            db.ref('rsvps').once('value').then(snapshot => {
+                let found = false;
+                currentGroup = [];
+                snapshot.forEach(childSnapshot => {
+                    const guest = childSnapshot.val();
+                    const fullName = `${guest.Forename} ${guest.Surname}`.toLowerCase();
+                    if (fullName === searchValue) {
+                        found = true;
+                        const groupID = guest.GroupID;
+
+                        // Find all group members
+                        snapshot.forEach(memberSnapshot => {
+                            const member = memberSnapshot.val();
+                            if (member.GroupID === groupID) {
+                                currentGroup.push({ key: memberSnapshot.key, ...member });
+                            }
+                        });
+                    }
+                });
+
+                if (found) {
+                    populateGroupDetails(currentGroup);
+                    rsvpForm.style.display = 'block';
+                    displayGroupInList(currentGroup);
+                } else {
+                    alert('Guest not found.');
+                }
+            });
+        });
+
+        // Populate group RSVP details
+        function populateGroupDetails(group) {
+            groupDetails.innerHTML = '';
+            group.forEach(member => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label>${member.Forename} ${member.Surname}</label>
+                    <select data-key="${member.key}" class="attending">
+                        <option value="yes" ${member.Attending === 'yes' ? 'selected' : ''}>Yes</option>
+                        <option value="no" ${member.Attending === 'no' ? 'selected' : ''}>No</option>
+                    </select>
+                    <input type="text" data-key="${member.key}" class="dietary" placeholder="Dietary Requirements" value="${member.Dietary || ''}">
+                `;
+                groupDetails.appendChild(div);
+            });
+        }
+
+        // Display group members in the RSVP list
+        function displayGroupInList(group) {
+            rsvpList.innerHTML = '';
+            group.forEach(member => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${member.Forename} ${member.Surname}</td>
+                    <td>${member.Attending || ''}</td>
+                    <td>${member.Dietary || ''}</td>
+                    <td><button onclick="editRSVP('${member.key}')">Edit</button></td>
+                `;
+                rsvpList.appendChild(row);
+            });
+        }
+
+        // Submit RSVP for group
+        rsvpForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const attendingElements = document.querySelectorAll('.attending');
+            const dietaryElements = document.querySelectorAll('.dietary');
+
+            attendingElements.forEach((element, index) => {
+                const key = element.getAttribute('data-key');
+                const attending = element.value;
+                const dietary = dietaryElements[index].value;
+
+                db.ref(`rsvps/${key}`).update({
+                    Attending: attending,
+                    Dietary: dietary
+                });
+            });
+
+            alert('Thank you for submitting your RSVP!');
+            rsvpForm.style.display = 'none';
+        });
+
+        // Edit RSVP
+        function editRSVP(key) {
+            db.ref(`rsvps/${key}`).once('value').then(snapshot => {
+                const guest = snapshot.val();
+                currentGroup = [{ key, ...guest }];
+                populateGroupDetails(currentGroup);
+                rsvpForm.style.display = 'block';
+            });
+        }
+    </script>
 </body>
 </html>
