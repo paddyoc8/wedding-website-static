@@ -49,15 +49,8 @@
         </form>
 
         <form id="rsvpForm" style="display: none;">
-            <label for="attending">Will you attend?</label>
-            <select id="attending">
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-            </select>
-
-            <label for="dietary">Dietary Requirements:</label>
-            <input type="text" id="dietary" placeholder="Enter dietary requirements">
-
+            <h2>RSVP Details for Group</h2>
+            <div id="groupDetails"></div>
             <button type="submit">Submit RSVP</button>
         </form>
 
@@ -78,12 +71,12 @@
     <script>
         // Firebase configuration
         const firebaseConfig = {
-        apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
-        authDomain: "wedding-db-994da.firebaseapp.com",
-        projectId: "wedding-db-994da",
-        storageBucket: "wedding-db-994da.firebasestorage.app",
-        messagingSenderId: "102632882630",
-        appId: "1:102632882630:web:cd1c96ff206b42652832c7"
+            apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
+            authDomain: "wedding-db-994da.firebaseapp.com",
+            projectId: "wedding-db-994da",
+            storageBucket: "wedding-db-994da.firebasestorage.app",
+            messagingSenderId: "102632882630",
+            appId: "1:102632882630:web:cd1c96ff206b42652832c7"
         };
 
         // Initialize Firebase
@@ -92,48 +85,81 @@
 
         const searchForm = document.getElementById('searchForm');
         const rsvpForm = document.getElementById('rsvpForm');
+        const groupDetails = document.getElementById('groupDetails');
         const rsvpList = document.getElementById('rsvpList');
 
-        let currentGuestKey = null;
+        let currentGroup = [];
 
-        // Search for a guest
+        // Search for a guest and their group
         searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
             const searchValue = document.getElementById('search').value.toLowerCase();
 
             db.ref('rsvps').once('value').then(snapshot => {
                 let found = false;
+                currentGroup = [];
                 snapshot.forEach(childSnapshot => {
                     const guest = childSnapshot.val();
-                    if (guest.name.toLowerCase() === searchValue) {
+                    const fullName = `${guest.Forename} ${guest.Surname}`.toLowerCase();
+                    if (fullName === searchValue) {
                         found = true;
-                        currentGuestKey = childSnapshot.key;
-                        rsvpForm.style.display = 'block';
-                        document.getElementById('attending').value = guest.attending || 'yes';
-                        document.getElementById('dietary').value = guest.dietary || '';
+                        const groupID = guest.GroupID;
+
+                        // Find all group members
+                        snapshot.forEach(memberSnapshot => {
+                            const member = memberSnapshot.val();
+                            if (member.GroupID === groupID) {
+                                currentGroup.push({ key: memberSnapshot.key, ...member });
+                            }
+                        });
                     }
                 });
-                if (!found) {
+
+                if (found) {
+                    populateGroupDetails(currentGroup);
+                    rsvpForm.style.display = 'block';
+                } else {
                     alert('Guest not found.');
                 }
             });
         });
 
-        // Submit RSVP
+        // Populate group RSVP details
+        function populateGroupDetails(group) {
+            groupDetails.innerHTML = '';
+            group.forEach(member => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label>${member.Forename} ${member.Surname}</label>
+                    <select data-key="${member.key}" class="attending">
+                        <option value="yes" ${member.Attending === 'yes' ? 'selected' : ''}>Yes</option>
+                        <option value="no" ${member.Attending === 'no' ? 'selected' : ''}>No</option>
+                    </select>
+                    <input type="text" data-key="${member.key}" class="dietary" placeholder="Dietary Requirements" value="${member.Dietary || ''}">
+                `;
+                groupDetails.appendChild(div);
+            });
+        }
+
+        // Submit RSVP for group
         rsvpForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            const attending = document.getElementById('attending').value;
-            const dietary = document.getElementById('dietary').value;
+            const attendingElements = document.querySelectorAll('.attending');
+            const dietaryElements = document.querySelectorAll('.dietary');
 
-            if (currentGuestKey) {
-                db.ref(`rsvps/${currentGuestKey}`).update({
-                    attending: attending,
-                    dietary: dietary
-                }).then(() => {
-                    alert('Thank you for updating your RSVP!');
-                    rsvpForm.style.display = 'none';
+            attendingElements.forEach((element, index) => {
+                const key = element.getAttribute('data-key');
+                const attending = element.value;
+                const dietary = dietaryElements[index].value;
+
+                db.ref(`rsvps/${key}`).update({
+                    Attending: attending,
+                    Dietary: dietary
                 });
-            }
+            });
+
+            alert('Thank you for submitting your RSVP!');
+            rsvpForm.style.display = 'none';
         });
 
         // Display RSVP List
@@ -144,9 +170,9 @@
                 const row = document.createElement('tr');
 
                 row.innerHTML = `
-                    <td>${rsvp.name}</td>
-                    <td>${rsvp.attending || ''}</td>
-                    <td>${rsvp.dietary || ''}</td>
+                    <td>${rsvp.Forename} ${rsvp.Surname}</td>
+                    <td>${rsvp.Attending || ''}</td>
+                    <td>${rsvp.Dietary || ''}</td>
                     <td><button onclick="editRSVP('${childSnapshot.key}')">Edit</button></td>
                 `;
 
@@ -158,10 +184,9 @@
         function editRSVP(key) {
             db.ref(`rsvps/${key}`).once('value').then(snapshot => {
                 const guest = snapshot.val();
-                currentGuestKey = key;
+                currentGroup = [{ key, ...guest }];
+                populateGroupDetails(currentGroup);
                 rsvpForm.style.display = 'block';
-                document.getElementById('attending').value = guest.attending || 'yes';
-                document.getElementById('dietary').value = guest.dietary || '';
             });
         }
     </script>
