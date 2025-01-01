@@ -1,0 +1,144 @@
+/* Timeline Styling */
+
+.schedule {
+    padding: 2rem 1rem;
+    font-family: var(--bodyFont);
+    background-color: var(--light1);
+    text-align: center;
+    color: var(--dark1);
+}
+
+.schedule h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--dark1);
+    font-family: var(--titleFont);
+}
+
+.schedule p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: var(--dark1);
+}
+
+.schedule-timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.schedule-timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 100%;
+    background-color: var(--accent1);
+    z-index: 0;
+}
+
+.schedule-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.schedule-item.left .content {
+    order: 1;
+    text-align: right;
+}
+
+.schedule-item.right .content {
+    order: 2;
+    text-align: left;
+}
+
+.schedule-item .icon {
+    background: var(--light1);
+    border: 2px solid var(--accent1);
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    position: relative;
+    overflow: hidden; /* Ensures the image is clipped to the circle */
+}
+
+.schedule-item .icon img {
+    width: 100%; /* Make sure the image covers the circle */
+    height: 100%;
+    object-fit: cover; /* Ensures the image scales correctly within the circle */
+}
+
+.schedule-item.left .icon {
+    order: 2;
+    margin-left: 1rem;
+}
+
+.schedule-item.right .icon {
+    order: 1;
+    margin-right: 1rem;
+}
+
+.schedule-item .content {
+    background: var(--light1);
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 45%;
+}
+
+.schedule-item.left .content {
+    margin-right: 1rem;
+}
+
+.schedule-item.right .content {
+    margin-left: 1rem;
+}
+
+.schedule-item .content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark1);
+    font-family: var(--titleFont);
+}
+
+.schedule-item .content p {
+    font-size: 1rem;
+    color: var(--dark1);
+    margin: 0;
+}
+
+/* Responsive Design for Small Screens */
+@media screen and (max-width: 768px) {
+    .schedule-timeline::before {
+        left: 5%; /* Move the central line to the left side */
+        transform: none;
+    }
+
+    .schedule-item {
+        flex-direction: row; /* Stack items horizontally */
+        align-items: flex-start; /* Align content to the left */
+    }
+
+    .schedule-item .icon {
+        margin: 0 auto 1rem; /* Center the icon and add space below */
+        width: 80px; /* Slightly reduce the size for smaller screens */
+        height: 80px;
+        flex-shrink: 0;
+    }
+
+    .schedule-item .content {
+        max-width: 100%; /* Allow content to stretch fully */
+        text-align: left; /* Align text to the left */
+        margin: 0 auto 1rem; /* Center content with spacing */
+    }
+}

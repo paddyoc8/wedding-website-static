@@ -1,0 +1,64 @@
+<?php
+session_start();
+
+// If the user is not authenticated, redirect to the password page
+if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emma & Patrick</title>
+    <link rel="stylesheet" href="../assets/css/core.css">
+    <script>
+        function toggleDrawer() {
+            const drawer = document.querySelector('.drawer');
+            drawer.classList.toggle('open');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <!-- Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="names">Emma & Patrick</div>
+            <button class="drawer-toggle" onclick="toggleDrawer()">☰</button>
+            <div class="nav-right">
+                <ul class="nav-list">
+                    <li><a href="home.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="registry.html">Registry</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <a href="select_guest.html" class="rsvp-button">RSVP</a>
+            </div>
+        </nav>
+    
+        <!-- Drawer for Small Screens -->
+        <div class="drawer">
+            <span class="close-btn" onclick="toggleDrawer()">×</span>
+            <ul>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="registry.html">Registry</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="select_guest.html" class="rsvp-button">RSVP</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Emma & Patrick</h1>
+            <p>August 1st, 2025 · The Maynard, Grindleford</p>
+            <a href="select_guest.html" class="rsvp-button">RSVP</a>
+        </div>
+    </section>
+</body>
+</html>

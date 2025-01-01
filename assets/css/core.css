@@ -1,0 +1,219 @@
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@400;700&display=swap');
+
+/* Root variables for color scheme */
+:root {
+    --dark1: #496585;
+    --light1: #eff4fb;
+    --accent1: #de9ca8;
+    --accent2: #a7b788;
+    --titleFont: 'Playfair Display', serif;
+    --bodyFont: 'Inter', sans-serif;
+}
+
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--bodyFont);
+    background-color: var(--light1);
+    color: var(--dark1);
+}
+
+/* Navigation Bar */
+.nav-bar {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: var(--dark1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 2rem;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.nav-bar .names {
+    font-family: var(--titleFont);
+    font-size: 1.2rem;
+    color: var(--dark1);
+    margin-right: 1rem;
+}
+
+.nav-bar .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-bar .nav-list {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-bar .nav-list li a {
+    color: var(--dark1);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+.nav-bar .nav-list li a:hover {
+    color: var(--accent1); 
+    background-color: transparent;
+}
+
+.nav-bar .rsvp-button {
+    border: 2px solid var(--accent1);
+    color: var(--accent1);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-left: auto;
+    box-sizing: border-box;
+}
+
+.nav-bar .rsvp-button:hover {
+    background-color: var(--accent1);
+    color: var(--light1);
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: url('../images/header.jpg') no-repeat center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--light1);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+}
+
+.hero-content h1 {
+    font-family: var(--titleFont);
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.hero-content .rsvp-button {
+    border: 2px solid var(--light1);
+    color: var(--light1);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 2rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: inline-block;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.hero-content .rsvp-button:hover {
+    background-color: var(--light1);
+    color: var(--dark1);
+}
+
+/* Drawer for Small Screens */
+.drawer-toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--dark1);
+    padding: 0.5rem;
+}
+
+.drawer {
+    position: fixed;
+    top: 0;
+    right: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: var(--light1);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.drawer.open {
+    right: 0;
+}
+
+.drawer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.drawer ul li {
+    margin: 1rem 0;
+}
+
+.drawer ul li a {
+    text-decoration: none;
+    color: var(--dark1);
+    font-size: 1.2rem;
+}
+
+.drawer ul li a:hover {
+    color: var(--accent1);
+}
+
+.drawer .close-btn {
+    align-self: flex-end;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-bar {
+        justify-content: space-between;
+    }
+
+    .nav-bar .nav-right {
+        display: none;
+    }
+
+    .drawer-toggle {
+        display: block;
+    }
+}
