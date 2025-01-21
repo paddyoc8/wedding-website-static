@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emma & Patrick</title>
     <link rel="stylesheet" href="../assets/css/core.css">
-    <link rel="stylesheet" href="../assets/css/construction.css">
+    <link rel="stylesheet" href="../assets/css/faq.css">
     <script>
         function toggleDrawer() {
             const drawer = document.querySelector('.drawer');
@@ -49,14 +49,39 @@
         </div>
     </header>
 
-
-    <section class="under-construction">
-        <div class="construction-content">
-            <img src="../assets/images/under-construction.jpg" alt="Under Construction">
-            <h2>Contact - Under Construction</h2>
-            <p>We’re working hard to bring you this page soon. Please check back later!</p>
-        </div>
-    </section>
-    
+    <main class="faq-container">
+        <h1 class="faq-title">Frequently Asked Questions</h1>
+        <section class="faq">
+            <div class="faq-item">
+                <button class="faq-question">What is the purpose of this FAQ? <span class="arrow">&#9656;</span></button>
+                <div class="faq-answer">
+                    <p>This FAQ is designed to provide answers to the most common questions people have.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">How can I contact support? <span class="arrow">&#9656;</span></button>
+                <div class="faq-answer">
+                    <p>You can contact support via email at support@example.com or by calling (123) 456-7890.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Where can I find more information? <span class="arrow">&#9656;</span></button>
+                <div class="faq-answer">
+                    <p>Visit our website or check out our documentation for detailed information.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        // JavaScript for collapsible FAQ
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const arrow = button.querySelector('.arrow');
+                answer.classList.toggle('open');
+                arrow.textContent = answer.classList.contains('open') ? '▼' : '▶';
+            });
+        });
+    </script>
 </body>
 </html>
