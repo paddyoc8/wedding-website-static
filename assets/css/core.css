@@ -44,6 +44,19 @@ body {
     margin-right: 1rem;
 }
 
+/* Style for the names (Emma & Patrick) to match nav links */
+.names a {
+    text-decoration: none; /* Remove underline */
+    color: var(--dark1); /* Use the nav link color */
+    font-family: var(--titleFont); /* Use the same font as other links if desired */
+    font-size: 1.2rem; /* Match the size of other nav items */
+    transition: color 0.3s; /* Match hover transition effect */
+}
+
+.names a:hover {
+    color: var(--accent1); /* Use the hover color for nav links */
+}
+
 .nav-bar .nav-right {
     display: flex;
     align-items: center;
