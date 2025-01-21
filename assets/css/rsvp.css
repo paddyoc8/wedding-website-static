@@ -2,7 +2,7 @@
 
 .rsvp-container {
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 100px auto;
     padding: 1rem;
     background: var(--light1);
     border: 1px solid var(--accent2);
