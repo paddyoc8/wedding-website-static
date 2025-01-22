@@ -14,11 +14,15 @@
     </script>
     <script>
         document.querySelector('.scroll-down').addEventListener('click', function (e) {
-            e.preventDefault();
+            e.preventDefault(); // Prevent the default jump
             const target = document.querySelector(this.getAttribute('href'));
-            target.scrollIntoView({ behavior: 'smooth' });
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
         });
     </script>
+    
     
 </head>
 <body>
