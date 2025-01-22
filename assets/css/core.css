@@ -275,3 +275,9 @@ body {
     }
 }
 
+.scroll-down:hover svg {
+    transform: scale(1.2) translateY(-5px);
+    color: var(--accent1); /* Change color on hover (e.g., gold) */
+}
+
+
