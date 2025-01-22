@@ -255,7 +255,7 @@ body {
 .scroll-down svg {
     width: 40px; /* Adjust the size of the arrow */
     height: 40px;
-    fill: white; /* Adjust the color of the arrow */
+    fill: var(--light1); /* Adjust the color of the arrow */
 }
 
 /* Bounce Animation */
