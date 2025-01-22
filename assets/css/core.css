@@ -250,7 +250,7 @@ body {
 
 /* Scroll Down Button */
 .scroll-down {
-    position: absolute; /* Position relative to the hero */
+    position: relative; /* Position relative to the hero */
     bottom: 0px; /* Move the arrow closer to the bottom of the image */
     left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Perfect centering adjustment */
