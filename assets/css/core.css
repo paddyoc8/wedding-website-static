@@ -246,16 +246,20 @@ body {
 
 .scroll-down {
     position: absolute;
-    bottom: 20px; /* Adjust this as needed */
-    text-decoration: none;
+    bottom: 20px;
     animation: bounce 2s infinite;
-    display: inline-block;
+    text-decoration: none;
 }
 
 .scroll-down svg {
-    width: 40px; /* Adjust the size of the arrow */
-    height: 40px;
-    fill: var(--light1); /* Adjust the color of the arrow */
+    width: 60px; /* Make the arrow wider */
+    height: auto; /* Maintain aspect ratio */
+    color: var(--light1); /* Arrow color */
+    transition: transform 0.3s ease; /* Optional hover effect */
+}
+
+.scroll-down:hover svg {
+    transform: scale(1.2); /* Enlarge on hover */
 }
 
 /* Bounce Animation */
@@ -270,3 +274,4 @@ body {
         transform: translateY(-5px);
     }
 }
+
