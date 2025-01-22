@@ -257,6 +257,7 @@ body {
     height: auto; /* Maintain aspect ratio */
     color: var(--light1); /* Color of the chevron */
     transition: transform 0.3s ease; /* Optional hover effect */
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
 }
 
 /* Hover effect */
@@ -275,6 +276,15 @@ body {
     }
     60% {
         transform: translateY(-5px);
+    }
+}
+
+@media (max-width: 768px) {
+    .scroll-down {
+        bottom: 10%; /* Adjust for smaller screens */
+    }
+    .scroll-down svg {
+        width: 50px; /* Reduce arrow size on smaller screens */
     }
 }
 
