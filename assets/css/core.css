@@ -119,16 +119,20 @@ body {
 
 /* Hero Section */
 .hero-schedule {
-    position: relative;
+    position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
-    height: 100vh;
-    background: url('../images/maynardAbstract.jpg') no-repeat center/cover;
+    height: 100vh; /* Full viewport height */
+    background: url('../images/maynardAbstract.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: var(--light1);
+    overflow: hidden; /* Ensures child elements stay within the hero */
+    padding: 0; /* Removes any unwanted spacing */
+    margin: 0; /* Ensures no external margins affect positioning */
 }
+
 
 .hero-overlay {
     position: absolute;
