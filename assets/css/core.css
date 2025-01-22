@@ -246,27 +246,28 @@ body {
 
 /* Scroll Down Button */
 .scroll-down {
-    position: absolute; /* Position relative to the hero section */
-    bottom: 0%; /* 5% from the bottom of the hero */
+    position: absolute; /* Position relative to the hero */
+    bottom: 20px; /* Move the arrow closer to the bottom of the image */
     left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Center the element precisely */
+    transform: translateX(-50%); /* Perfect centering adjustment */
     text-decoration: none;
-    animation: bounce 2s infinite;
+    animation: bounce 2s infinite; /* Add the bounce effect */
     display: inline-block;
+    z-index: 2; /* Ensure it appears above any overlays */
 }
 
 .scroll-down svg {
-    width: 70px; /* Adjust the size */
-    height: auto; /* Maintain aspect ratio */
-    color: var(--light1); /* Chevron color */
-    transition: transform 0.3s ease; /* Hover effect */
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5)); /* Add subtle shadow */
+    width: 70px; /* Adjust the size of the arrow */
+    height: auto;
+    color: var(--light1); /* Match your light color scheme */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5)); /* Add subtle shadow for visibility */
 }
 
-/* Hover Effect */
+/* Hover effect */
 .scroll-down:hover svg {
     transform: scale(1.2); /* Enlarge slightly on hover */
-    color: var(--accent1); /* Gold color on hover */
+    color: var(--accent1); /* Gold on hover for visual feedback */
 }
 
 /* Bounce Animation */
@@ -285,10 +286,10 @@ body {
 /* Responsive Adjustments */
 @media (max-width: 768px) {
     .scroll-down {
-        bottom: 10%; /* Move up slightly for smaller screens */
+        bottom: 10%; /* Slightly higher for smaller screens */
     }
     .scroll-down svg {
-        width: 50px; /* Reduce arrow size on smaller screens */
+        width: 50px; /* Reduce arrow size for mobile */
     }
 }
 
