@@ -12,6 +12,14 @@
             drawer.classList.toggle('open');
         }
     </script>
+    <script>
+        document.querySelector('.scroll-down').addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            target.scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+    
 </head>
 <body>
     <header>
@@ -55,12 +63,17 @@
         <div class="hero-content">
             <h1>Schedule of the day</h1>
             <p>We are so excited to celebrate with all of you. Here we have set out the plan for the day:</p>
+            <a href="#next-section" class="scroll-down">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 16L6 10H18L12 16Z" fill="currentColor"/>
+                </svg>
+            </a>
         </div>
     </section>
 
     <!-- Schedule Section -->
     <section class="schedule">
-        <div class="container">
+        <div class="container", id="next-section">
             <!--<h1>Wedding Schedule</h1>
             <p>We are so excited to celebrate with all of you. Here we have set out the plan for the day:</p>-->
 
