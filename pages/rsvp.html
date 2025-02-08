@@ -226,8 +226,8 @@
                 
                 // Build the form HTML string with pre-filled values:
                 const formHTML = `
-                    ${prefillMessage}
                     <h3>${member.Forename} ${member.Surname}</h3>
+                    ${prefillMessage}
                     <label>Attending:</label>
                     <select data-key="${member.key}" class="attending">
                         <option value="yes" ${attendingYes}>Yes</option>
@@ -262,7 +262,7 @@
                     </div>
 
                     <div class="non-attending-message hidden" data-key="${member.key}">
-                        <p>We're sorry you can't join us.</p>
+                        <p>We're sorry you won't be able to celebrate with us.</p>
                     </div>
                     `;
                 return formHTML;
