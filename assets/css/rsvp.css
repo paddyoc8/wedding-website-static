@@ -46,42 +46,50 @@
     display: none;
 }
 
-/* Submission Table Styling */
+/* Updated Submission Table Styling */
 #submissionTable {
     margin-top: 2rem;
     width: 100%;
-    border-collapse: collapse;
-    font-family: var(--textFont, Arial, sans-serif);
+    font-family: var(--bodyFont); /* Match your site font */
 }
 
 #submissionTable h2 {
     text-align: center;
     font-size: 1.5rem;
     color: var(--dark1);
+    margin-bottom: 1rem;
 }
 
+/* Table Wrapper */
 #submissionTable table {
-    width: 100%;
+    margin: 0 auto;                /* Center the table */
+    width: 100%;                   /* Stretch to container width or you can use auto */
+    border-collapse: separate;     /* Allows border-radius to work */
+    border-spacing: 0;             /* Reset extra spacing from 'separate' */
     border: 1px solid var(--accent2);
+    border-radius: 8px;           /* Rounded corners */
+    overflow: hidden;             /* Ensures corners stay rounded */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
-#submissionTable th, #submissionTable td {
-    text-align: left;
-    padding: 0.5rem;
-    border: 1px solid var(--accent2);
-}
-
-#submissionTable th {
-    background-color: var(--accent1);
+#submissionTable thead {
+    background-color: var(--accent1); 
     color: var(--light1);
-    font-weight: bold;
 }
 
+#submissionTable th,
 #submissionTable td {
-    background-color: var(--light1);
-    color: var(--dark1);
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--accent2);
 }
 
+/* Make sure last row’s border looks consistent */
+#submissionTable tr:last-child td {
+    border-bottom: none;
+}
+
+/* Alternate row shading if desired */
 #submissionTable tr:nth-child(even) td {
-    background-color: var(--light2);
+    background-color: #f9f9fa; /* A very light shade; feel free to pick a new color */
 }
