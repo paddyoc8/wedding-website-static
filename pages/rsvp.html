@@ -295,23 +295,29 @@
                     individualRSVPForms.appendChild(formDiv);
                 });
             })).then(() => {
-                // Attach the event listener for the 'attending' select elements
+                // Attach change listeners for each 'attending' select element
                 document.querySelectorAll('.attending').forEach(select => {
                     select.addEventListener('change', (event) => {
                         const key = event.target.getAttribute('data-key');
                         const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
                         const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
+                        
                         if (event.target.value === "no") {
+                            // Hide meal selection and show "Sorry you can't attend" message
                             mealSection.classList.add('hidden');
                             nonAttendingMessage.classList.remove('hidden');
+
+                            // Clear previously selected meal choices
+                            document.querySelectorAll(`input[name="starter-${key}"]`).forEach(radio => radio.checked = false);
+                            document.querySelectorAll(`input[name="main-${key}"]`).forEach(radio => radio.checked = false);
+                            document.querySelectorAll(`input[name="dessert-${key}"]`).forEach(radio => radio.checked = false);
                         } else {
+                            // Show meal selection if attending is "Yes"
                             mealSection.classList.remove('hidden');
                             nonAttendingMessage.classList.add('hidden');
                         }
                     });
                 });
-                confirmationStep.classList.add('hidden');
-                rsvpForms.classList.remove('hidden');
             });
         }
 
@@ -371,15 +377,22 @@
                 const submissionDate = new Date().toISOString();
 
                 // Update Firebase with the latest RSVP data
-                db.ref(`rsvps/${key}`).update({
+                let rsvpData = {
                     Attending: attending,
-                    Starter: starter,
-                    Main: main,
-                    Dessert: dessert,
                     Dietary: dietaryPreferences.join(', '),
                     Submitted: true,
-                    SubmissionDate: submissionDate // Store submission date
-                });
+                    SubmissionDate: submissionDate
+                };
+
+                // If attending is "No", remove meal choices from Firebase
+                if (attending === "no") {
+                    rsvpData.Starter = null;
+                    rsvpData.Main = null;
+                    rsvpData.Dessert = null;
+                }
+
+                db.ref(`rsvps/${key}`).update(rsvpData);
+
             });
 
             // **🔹 Fetch only the selected guests from Firebase and update the table**
@@ -411,9 +424,9 @@
                     row.innerHTML = `
                         <td>${member.Forename} ${member.Surname}</td>
                         <td>${member.Attending}</td>
-                        <td>${member.Starter || '-'}</td>
-                        <td>${member.Main || '-'}</td>
-                        <td>${member.Dessert || '-'}</td>
+                        <td>${member.Attending === "no" ? '-' : member.Starter || '-'}</td>
+                        <td>${member.Attending === "no" ? '-' : member.Main || '-'}</td>
+                        <td>${member.Attending === "no" ? '-' : member.Dessert || '-'}</td>
                         <td>${member.Dietary || '-'}</td>
                     `;
                     submissionTableBody.appendChild(row);
