@@ -395,8 +395,12 @@
                     SubmissionDate: submissionDate
                 };
 
-                // If attending is "No", remove meal choices from Firebase
-                if (attending === "no") {
+                // If they're attending, set meal choices
+                if (attending === "yes") {
+                    rsvpData.Starter = starter;
+                    rsvpData.Main = main;
+                    rsvpData.Dessert = dessert;
+                } else {
                     rsvpData.Starter = "";
                     rsvpData.Main = "";
                     rsvpData.Dessert = "";
