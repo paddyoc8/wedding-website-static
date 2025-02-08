@@ -234,8 +234,8 @@
                     <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
                     <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
                     <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
-                    <label><input type="checkbox" data-key="${member.key}" class="other-dietary"> Other</label><br>
-                    <input type="text" data-key="${member.key}" class="other-dietary-text hidden" placeholder="Please specify">
+                    <label for="other-${member.key}">Other dietary requirements (if any):</label><br>
+                    <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
                 `;
                 individualRSVPForms.appendChild(form);
             });
