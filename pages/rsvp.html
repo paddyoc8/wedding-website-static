@@ -367,7 +367,7 @@
                     dietaryPreferences.push(otherDietaryText);
                 }
 
-                db.ref(`rsvps/${key}`).update({
+                db.ref(`rsvps/${key}`).set({
                     Attending: attending,
                     Starter: starter,
                     Main: main,
