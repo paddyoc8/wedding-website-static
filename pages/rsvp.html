@@ -90,8 +90,7 @@
         </div>
 
         <div id="thankYouStepYes" class="hidden">
-            <h2>Thank you!</h2>
-            <p>We're so excited to see you on the big day!</p>
+            <p>Thank you for submitting your RSVP. If you need to make any changes you have until DD/MM/YYYY.</p>
         </div>
 
         <div id="thankYouStepNo" class="hidden">
@@ -237,35 +236,35 @@
 
                     <!-- Meal choices and non-attending containers -->
                     <div class="meal-section" data-key="${member.key}">
-                    <h4>Meal Choices</h4>
-                    <p>Starter:</p>
-                    <label><input type="radio" name="starter-${member.key}" value="Soup" ${starterSoup} required> Soup</label><br>
-                    <label><input type="radio" name="starter-${member.key}" value="Salad" ${starterSalad} required> Salad</label><br>
-                    <label><input type="radio" name="starter-${member.key}" value="Pâté" ${starterPate} required> Pâté</label><br>
+                        <h4>Meal Choices</h4>
+                        <p>Starter:</p>
+                        <label><input type="radio" name="starter-${member.key}" value="Soup" ${starterSoup} required> Soup</label><br>
+                        <label><input type="radio" name="starter-${member.key}" value="Salad" ${starterSalad} required> Salad</label><br>
+                        <label><input type="radio" name="starter-${member.key}" value="Pâté" ${starterPate} required> Pâté</label><br>
 
-                    <p>Main:</p>
-                    <label><input type="radio" name="main-${member.key}" value="Chicken" ${mainChicken} required> Chicken</label><br>
-                    <label><input type="radio" name="main-${member.key}" value="Beef" ${mainBeef} required> Beef</label><br>
-                    <label><input type="radio" name="main-${member.key}" value="Vegetarian" ${mainVeg} required> Vegetarian</label><br>
+                        <p>Main:</p>
+                        <label><input type="radio" name="main-${member.key}" value="Chicken" ${mainChicken} required> Chicken</label><br>
+                        <label><input type="radio" name="main-${member.key}" value="Beef" ${mainBeef} required> Beef</label><br>
+                        <label><input type="radio" name="main-${member.key}" value="Vegetarian" ${mainVeg} required> Vegetarian</label><br>
 
-                    <p>Dessert:</p>
-                    <label><input type="radio" name="dessert-${member.key}" value="Cheesecake" ${dessertCheesecake} required> Cheesecake</label><br>
-                    <label><input type="radio" name="dessert-${member.key}" value="Fruit Salad" ${dessertFruitSalad} required> Fruit Salad</label><br>
-                    <label><input type="radio" name="dessert-${member.key}" value="Chocolate Cake" ${dessertChocCake} required> Chocolate Cake</label><br>
+                        <p>Dessert:</p>
+                        <label><input type="radio" name="dessert-${member.key}" value="Cheesecake" ${dessertCheesecake} required> Cheesecake</label><br>
+                        <label><input type="radio" name="dessert-${member.key}" value="Fruit Salad" ${dessertFruitSalad} required> Fruit Salad</label><br>
+                        <label><input type="radio" name="dessert-${member.key}" value="Chocolate Cake" ${dessertChocCake} required> Chocolate Cake</label><br>
+
+                        <h4>Dietary Requirements</h4>
+                        <label><input type="checkbox" data-key="${member.key}" value="Vegetarian"> Vegetarian</label><br>
+                        <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
+                        <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
+                        <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
+                        <label for="other-${member.key}">Other dietary requirements (if any):</label><br>
+                        <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
                     </div>
 
                     <div class="non-attending-message hidden" data-key="${member.key}">
-                    <p>We're sorry you can't join us.</p>
+                        <p>We're sorry you can't join us.</p>
                     </div>
-
-                    <h4>Dietary Requirements</h4>
-                    <label><input type="checkbox" data-key="${member.key}" value="Vegetarian"> Vegetarian</label><br>
-                    <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
-                    <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
-                    <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
-                    <label for="other-${member.key}">Other dietary requirements (if any):</label><br>
-                    <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
-                `;
+                    `;
                 return formHTML;
             });
         }
