@@ -93,3 +93,23 @@
 #submissionTable tr:nth-child(even) td {
     background-color: #f9f9fa; /* A very light shade; feel free to pick a new color */
 }
+
+/* 
+   Make the table scroll horizontally on smaller screens 
+   by wrapping the <table> in a container that can scroll
+*/
+@media (max-width: 768px) {
+    #submissionTable table {
+        display: block;          /* Turn into a block for scrolling */
+        overflow-x: auto;        /* Horizontal scrolling if needed */
+        min-width: 600px;        /* Prevent columns from squishing too much */
+        margin-bottom: 1rem;
+    }
+
+    #submissionTable th,
+    #submissionTable td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        white-space: nowrap;     /* Keep table cells from wrapping awkwardly */
+    }
+}
