@@ -391,23 +391,31 @@
                             }
                         });
 
-                        // Sort RSVPs by SubmissionDate (latest first)
+                        // Sort RSVP data by SubmissionDate (latest first)
                         rsvpData.sort((a, b) => new Date(b.SubmissionDate) - new Date(a.SubmissionDate));
 
                         // Keep only the latest RSVP per guest
                         let latestRSVPs = {};
+
                         rsvpData.forEach(guest => {
                             const fullName = `${guest.Forename} ${guest.Surname}`;
                             if (!latestRSVPs[fullName]) {
-                                latestRSVPs[fullName] = guest; // Store the latest RSVP per guest
+                                latestRSVPs[fullName] = guest;
                             }
                         });
+
+                        // **🛑 Filter out guests that were NOT selected for RSVP**
+                        let selectedGuestNames = selectedGroup.map(member => `${member.Forename} ${member.Surname}`);
+
+                        let filteredRSVPs = Object.values(latestRSVPs).filter(member =>
+                            selectedGuestNames.includes(`${member.Forename} ${member.Surname}`)
+                        );
 
                         // Clear the existing table before adding updated rows
                         submissionTableBody.innerHTML = "";
 
-                        // Populate the table with the latest RSVPs
-                        Object.values(latestRSVPs).forEach(member => {
+                        // Populate the table with only the selected guests' RSVPs
+                        filteredRSVPs.forEach(member => {
                             const row = document.createElement('tr');
                             row.innerHTML = `
                                 <td>${member.Forename} ${member.Surname}</td>
