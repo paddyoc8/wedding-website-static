@@ -158,9 +158,9 @@
                 snapshot.forEach(childSnapshot => {
                     const guest = childSnapshot.val();
                     const fullName = `${guest.Forename || ''} ${guest.Surname || ''}`.toLowerCase().trim();
-                    if (fullName.includes(searchValue)) {
-                        groupID = guest.GroupID || null;
-                    }
+                        if (fullName.includes(searchValue)) {
+                            groupID = guest.GroupID || null;
+                        }
                 });
 
                 snapshot.forEach(childSnapshot => {
@@ -386,9 +386,9 @@
 
                 // If attending is "No", remove meal choices from Firebase
                 if (attending === "no") {
-                    rsvpData.Starter = null;
-                    rsvpData.Main = null;
-                    rsvpData.Dessert = null;
+                    rsvpData.Starter = "";
+                    rsvpData.Main = "";
+                    rsvpData.Dessert = "";
                 }
 
                 db.ref(`rsvps/${key}`).update(rsvpData);
