@@ -157,9 +157,9 @@
 
                 snapshot.forEach(childSnapshot => {
                     const guest = childSnapshot.val();
-                    const fullName = `${guest.Forename} ${guest.Surname}`.toLowerCase();
+                    const fullName = `${guest.Forename || ''} ${guest.Surname || ''}`.toLowerCase().trim();
                     if (fullName.includes(searchValue)) {
-                        groupID = guest.GroupID;
+                        groupID = guest.GroupID || null;
                     }
                 });
 
