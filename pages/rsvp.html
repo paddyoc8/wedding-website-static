@@ -367,25 +367,62 @@
                     dietaryPreferences.push(otherDietaryText);
                 }
 
+                // Get the current timestamp
+                const submissionDate = new Date().toISOString();
+
+                // Update Firebase with the latest RSVP data
                 db.ref(`rsvps/${key}`).update({
                     Attending: attending,
                     Starter: starter,
                     Main: main,
                     Dessert: dessert,
                     Dietary: dietaryPreferences.join(', '),
-                    Submitted: true
-                });
+                    Submitted: true,
+                    SubmissionDate: submissionDate // Store submission date
+                }).then(() => {
+                    // After updating, retrieve all RSVPs and update the table
+                    db.ref('rsvps').once('value').then(snapshot => {
+                        let rsvpData = [];
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${member.Forename} ${member.Surname}</td>
-                    <td>${attending}</td>
-                    <td>${starter}</td>
-                    <td>${main}</td>
-                    <td>${dessert}</td>
-                    <td>${dietaryPreferences.join(', ')}</td>
-                `;
-                submissionTableBody.appendChild(row);
+                        snapshot.forEach(childSnapshot => {
+                            const guest = childSnapshot.val();
+                            if (guest.Forename && guest.Surname) {
+                                rsvpData.push({ key: childSnapshot.key, ...guest });
+                            }
+                        });
+
+                        // Sort RSVPs by SubmissionDate (latest first)
+                        rsvpData.sort((a, b) => new Date(b.SubmissionDate) - new Date(a.SubmissionDate));
+
+                        // Keep only the latest RSVP per guest
+                        let latestRSVPs = {};
+                        rsvpData.forEach(guest => {
+                            const fullName = `${guest.Forename} ${guest.Surname}`;
+                            if (!latestRSVPs[fullName]) {
+                                latestRSVPs[fullName] = guest; // Store the latest RSVP per guest
+                            }
+                        });
+
+                        // Clear the existing table before adding updated rows
+                        submissionTableBody.innerHTML = "";
+
+                        // Populate the table with the latest RSVPs
+                        Object.values(latestRSVPs).forEach(member => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td>${member.Forename} ${member.Surname}</td>
+                                <td>${member.Attending}</td>
+                                <td>${member.Starter || '-'}</td>
+                                <td>${member.Main || '-'}</td>
+                                <td>${member.Dessert || '-'}</td>
+                                <td>${member.Dietary || '-'}</td>
+                            `;
+                            submissionTableBody.appendChild(row);
+                        });
+
+                        submissionTable.classList.remove('hidden');
+                    });
+                });
             });
 
         submissionTable.classList.remove('hidden');
