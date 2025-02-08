@@ -201,7 +201,7 @@
                 let dessertFruitSalad = '';
                 let dessertChocCake = '';
                 // If data exists, set defaults accordingly
-                if (previous) {
+                if (previous && previous.Submitted) {
                     prefillMessage = `<p class="prefill-message">You have previously submitted an RSVP for ${member.Forename} ${member.Surname}. Submitting again will overwrite your previous selections.</p>`;
                     if (previous.Attending === "yes") {
                         attendingYes = 'selected';
@@ -257,7 +257,7 @@
                         <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
                         <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
                         <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
-                        <label for="other-${member.key}">Other dietary requirements (if any):</label><br>
+                        <label for="other-${member.key}">Other dietary requirements (if any):</label>
                         <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
                     </div>
 
@@ -372,7 +372,8 @@
                     Starter: starter,
                     Main: main,
                     Dessert: dessert,
-                    Dietary: dietaryPreferences.join(', ')
+                    Dietary: dietaryPreferences.join(', '),
+                    Submitted: true
                 });
 
                 const row = document.createElement('tr');
