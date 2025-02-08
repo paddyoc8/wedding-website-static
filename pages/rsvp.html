@@ -272,15 +272,23 @@
         // Confirm selected members
         confirmSelection.addEventListener('click', () => {
             const checkboxes = document.querySelectorAll('.groupMember:checked');
-            selectedGroup = Array.from(checkboxes).map(checkbox => {
-                return currentGroup.find(member => member.key === checkbox.value);
+
+            selectedGroup = [];
+
+            checkboxes.forEach(checkbox => {
+                let selectedMember = currentGroup.find(member => member.key === checkbox.value);
+                if (selectedMember) {
+                    selectedGroup.push(selectedMember);
+                }
             });
 
-            if (selectedGroup.length > 0) {
-                createRSVPForms();
-            } else {
+            if (selectedGroup.length === 0) {
                 alert('Please select at least one person to RSVP for.');
+                return;
             }
+
+            console.log("Selected Group:", selectedGroup); // Debugging: Check if selected members are being added
+            createRSVPForms();
         });
 
         // Create individual RSVP forms for each selected member
