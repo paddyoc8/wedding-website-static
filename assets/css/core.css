@@ -9,7 +9,7 @@ html {
 /* Root variables for color scheme */
 :root {
     --dark1: #496585;
-    --light1: #fdfcf8;
+    --light1: #ffffff;
     --accent1: #de9ca8;
     --accent2: #a7b788;
     --titleFont: 'Playfair Display', serif;
