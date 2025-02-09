@@ -67,7 +67,7 @@
         </div>
     </section>
     
-    <div class="rsvp-container", id="next-section">
+    <div class="rsvp-container" id="next-section">
         <h1>RSVP to Our Wedding</h1>
 
         <form id="searchForm">
@@ -90,8 +90,7 @@
         </div>
 
         <div id="thankYouStepYes" class="hidden">
-            <h2>Thank you!</h2>
-            <p>We're so excited to see you on the big day!</p>
+            <p>Thank you for submitting your RSVP. If you need to make any changes you have until DD/MM/YYYY.</p>
         </div>
 
         <div id="thankYouStepNo" class="hidden">
@@ -158,10 +157,10 @@
 
                 snapshot.forEach(childSnapshot => {
                     const guest = childSnapshot.val();
-                    const fullName = `${guest.Forename} ${guest.Surname}`.toLowerCase();
-                    if (fullName.includes(searchValue)) {
-                        groupID = guest.GroupID;
-                    }
+                    const fullName = `${guest.Forename || ''} ${guest.Surname || ''}`.toLowerCase().trim();
+                        if (fullName.includes(searchValue)) {
+                            groupID = guest.GroupID || null;
+                        }
                 });
 
                 snapshot.forEach(childSnapshot => {
@@ -185,66 +184,192 @@
             });
         });
 
+        function createIndividualForm(member) {
+            return db.ref(`rsvps/${member.key}`).once('value').then(snapshot => {
+                const previous = snapshot.val();
+                let prefillMessage = '';
+                // Default values
+                let attendingYes = '';
+                let attendingNo = '';
+                let starterSoup = '';
+                let starterSalad = '';
+                let starterPate = '';
+                let mainChicken = '';
+                let mainBeef = '';
+                let mainVeg = '';
+                let dessertCheesecake = '';
+                let dessertFruitSalad = '';
+                let dessertChocCake = '';
+                // If data exists, set defaults accordingly
+                if (previous && previous.Submitted) {
+                    prefillMessage = `<p class="prefill-message">You have previously submitted an RSVP for ${member.Forename} ${member.Surname}. Submitting again will overwrite your previous selections.</p>`;
+                    if (previous.Attending === "yes") {
+                        attendingYes = 'selected';
+                    } else {
+                        attendingNo = 'selected';
+                    }
+                    // For radio buttons, compare previous selections (assumes values exactly match)
+                    if (previous.Starter === "Soup") starterSoup = 'checked';
+                    if (previous.Starter === "Salad") starterSalad = 'checked';
+                    if (previous.Starter === "Pâté") starterPate = 'checked';
+
+                    if (previous.Main === "Chicken") mainChicken = 'checked';
+                    if (previous.Main === "Beef") mainBeef = 'checked';
+                    if (previous.Main === "Vegetarian") mainVeg = 'checked';
+
+                    if (previous.Dessert === "Cheesecake") dessertCheesecake = 'checked';
+                    if (previous.Dessert === "Fruit Salad") dessertFruitSalad = 'checked';
+                    if (previous.Dessert === "Chocolate Cake") dessertChocCake = 'checked';
+                } else {
+                    attendingYes = 'selected'; // default to "yes"
+                }
+                
+                // Build the form HTML string with pre-filled values:
+                const formHTML = `
+                    <h3>${member.Forename} ${member.Surname}</h3>
+                    ${prefillMessage}
+                    <label>Attending:</label>
+                    <select data-key="${member.key}" class="attending">
+                        <option value="yes" ${attendingYes}>Yes</option>
+                        <option value="no" ${attendingNo}>No</option>
+                    </select>
+
+                    <!-- Meal choices and non-attending containers -->
+                    <div class="meal-section" data-key="${member.key}">
+                        <h4>Meal Choices</h4>
+                        <p>Starter:</p>
+                        <label><input type="radio" name="starter-${member.key}" value="Soup" ${starterSoup} required> Soup</label><br>
+                        <label><input type="radio" name="starter-${member.key}" value="Salad" ${starterSalad} required> Salad</label><br>
+                        <label><input type="radio" name="starter-${member.key}" value="Pâté" ${starterPate} required> Pâté</label><br>
+
+                        <p>Main:</p>
+                        <label><input type="radio" name="main-${member.key}" value="Chicken" ${mainChicken} required> Chicken</label><br>
+                        <label><input type="radio" name="main-${member.key}" value="Beef" ${mainBeef} required> Beef</label><br>
+                        <label><input type="radio" name="main-${member.key}" value="Vegetarian" ${mainVeg} required> Vegetarian</label><br>
+
+                        <p>Dessert:</p>
+                        <label><input type="radio" name="dessert-${member.key}" value="Cheesecake" ${dessertCheesecake} required> Cheesecake</label><br>
+                        <label><input type="radio" name="dessert-${member.key}" value="Fruit Salad" ${dessertFruitSalad} required> Fruit Salad</label><br>
+                        <label><input type="radio" name="dessert-${member.key}" value="Chocolate Cake" ${dessertChocCake} required> Chocolate Cake</label><br>
+
+                        <h4>Dietary Requirements</h4>
+                        <label><input type="checkbox" data-key="${member.key}" value="Vegetarian"> Vegetarian</label><br>
+                        <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
+                        <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
+                        <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
+                        <label for="other-${member.key}">Other dietary requirements (if any):</label>
+                        <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
+                    </div>
+
+                    <div class="non-attending-message hidden" data-key="${member.key}">
+                        <p>We're sorry you won't be able to celebrate with us.</p>
+                    </div>
+                    `;
+                return formHTML;
+            });
+        }
+
         // Confirm selected members
         confirmSelection.addEventListener('click', () => {
             const checkboxes = document.querySelectorAll('.groupMember:checked');
-            selectedGroup = Array.from(checkboxes).map(checkbox => {
-                return currentGroup.find(member => member.key === checkbox.value);
+
+            selectedGroup = [];
+
+            checkboxes.forEach(checkbox => {
+                let selectedMember = currentGroup.find(member => member.key === checkbox.value);
+                if (selectedMember) {
+                    selectedGroup.push(selectedMember);
+                }
             });
 
-            if (selectedGroup.length > 0) {
-                createRSVPForms();
-            } else {
+            if (selectedGroup.length === 0) {
                 alert('Please select at least one person to RSVP for.');
+                return;
             }
+
+            console.log("Selected Group:", selectedGroup); // Debugging: Check if selected members are being added
+            createRSVPForms();
+
+             // **Show the RSVP forms now that you've built them**
+            rsvpForms.classList.remove('hidden');
         });
 
         // Create individual RSVP forms for each selected member
         function createRSVPForms() {
             individualRSVPForms.innerHTML = '';
-            selectedGroup.forEach(member => {
-                const form = document.createElement('div');
-                form.classList.add('individual-rsvp');
-                form.innerHTML = `
-                    <h3>${member.Forename} ${member.Surname}</h3>
-                    <label>Attending:</label>
-                    <select data-key="${member.key}" class="attending">
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select>
+            // Use Promise.all so that all forms are generated before moving on
+            Promise.all(selectedGroup.map(member => {
+                return createIndividualForm(member).then(formHTML => {
+                    const formDiv = document.createElement('div');
+                    formDiv.classList.add('individual-rsvp');
+                    formDiv.innerHTML = formHTML;
+                    individualRSVPForms.appendChild(formDiv);
+                });
+            })).then(() => {
+                // Attach change listeners for each 'attending' select element
+                document.querySelectorAll('.attending').forEach(select => {
+                    select.addEventListener('change', (event) => {
+                        const key = event.target.getAttribute('data-key');
+                        const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
+                        const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
+                        
+                        if (event.target.value === "no") {
+                            // Hide meal selection and show "Sorry you can't attend" message
+                            mealSection.classList.add('hidden');
+                            nonAttendingMessage.classList.remove('hidden');
 
-                    <h4>Meal Choices</h4>
-                    <p>Starter:</p>
-                    <label><input type="radio" name="starter-${member.key}" value="Soup" required> Soup</label><br>
-                    <label><input type="radio" name="starter-${member.key}" value="Salad" required> Salad</label><br>
-                    <label><input type="radio" name="starter-${member.key}" value="Pâté" required> Pâté</label><br>
-
-                    <p>Main:</p>
-                    <label><input type="radio" name="main-${member.key}" value="Chicken" required> Chicken</label><br>
-                    <label><input type="radio" name="main-${member.key}" value="Beef" required> Beef</label><br>
-                    <label><input type="radio" name="main-${member.key}" value="Vegetarian" required> Vegetarian</label><br>
-
-                    <p>Dessert:</p>
-                    <label><input type="radio" name="dessert-${member.key}" value="Cheesecake" required> Cheesecake</label><br>
-                    <label><input type="radio" name="dessert-${member.key}" value="Fruit Salad" required> Fruit Salad</label><br>
-                    <label><input type="radio" name="dessert-${member.key}" value="Chocolate Cake" required> Chocolate Cake</label><br>
-
-                    <h4>Dietary Requirements</h4>
-                    <label><input type="checkbox" data-key="${member.key}" value="Vegetarian"> Vegetarian</label><br>
-                    <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
-                    <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
-                    <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
-                    <label><input type="checkbox" data-key="${member.key}" class="other-dietary"> Other</label><br>
-                    <input type="text" data-key="${member.key}" class="other-dietary-text hidden" placeholder="Please specify">
-                `;
-                individualRSVPForms.appendChild(form);
+                            // Clear previously selected meal choices
+                            document.querySelectorAll(`input[name="starter-${key}"]`).forEach(radio => radio.checked = false);
+                            document.querySelectorAll(`input[name="main-${key}"]`).forEach(radio => radio.checked = false);
+                            document.querySelectorAll(`input[name="dessert-${key}"]`).forEach(radio => radio.checked = false);
+                        } else {
+                            // Show meal selection if attending is "Yes"
+                            mealSection.classList.remove('hidden');
+                            nonAttendingMessage.classList.add('hidden');
+                        }
+                    });
+                });
             });
-            confirmationStep.classList.add('hidden');
-            rsvpForms.classList.remove('hidden');
         }
+
+
+        // Attach change listeners for each 'attending' select element
+        document.querySelectorAll('.attending').forEach(select => {
+            select.addEventListener('change', (event) => {
+                const key = event.target.getAttribute('data-key');
+                const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
+                const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
+                if (event.target.value === "no") {
+                    mealSection.classList.add('hidden');
+                    nonAttendingMessage.classList.remove('hidden');
+                } else {
+                    mealSection.classList.remove('hidden');
+                    nonAttendingMessage.classList.add('hidden');
+                }
+            });
+        });
 
         // Submit all RSVPs
         submitAllRSVPs.addEventListener('click', () => {
+            let valid = true;
+            // Validate each selected member's form
+            selectedGroup.forEach(member => {
+                const key = member.key;
+                const attending = document.querySelector(`.attending[data-key="${key}"]`).value;
+                if (attending === "yes") {
+                    // Check that a starter, main, and dessert have been selected
+                    const starter = document.querySelector(`input[name="starter-${key}"]:checked`);
+                    const main = document.querySelector(`input[name="main-${key}"]:checked`);
+                    const dessert = document.querySelector(`input[name="dessert-${key}"]:checked`);
+                    if (!starter || !main || !dessert) {
+                        valid = false;
+                        alert(`Please complete meal selections for ${member.Forename} ${member.Surname}.`);
+                    }
+                }
+            });
+            if (!valid) return; // Abort submission if validation fails
+
+            // Proceed with submission if all validations pass
             selectedGroup.forEach(member => {
                 const key = member.key;
                 const attending = document.querySelector(`.attending[data-key="${key}"]`).value;
@@ -253,36 +378,82 @@
                 const dessert = document.querySelector(`input[name="dessert-${key}"]:checked`)?.value || '';
                 const dietaryCheckboxes = document.querySelectorAll(`input[type="checkbox"][data-key="${key}"]:checked`);
                 const dietaryPreferences = Array.from(dietaryCheckboxes).map(checkbox => checkbox.value);
-                const otherDietaryText = document.querySelector(`.other-dietary-text[data-key="${key}"]`).value;
+                const otherDietaryText = document.querySelector(`.other-dietary-text[data-key="${key}"]`)?.value || '';
 
                 if (otherDietaryText) {
                     dietaryPreferences.push(otherDietaryText);
                 }
 
-                db.ref(`rsvps/${key}`).update({
-                    Attending: attending,
-                    Starter: starter,
-                    Main: main,
-                    Dessert: dessert,
-                    Dietary: dietaryPreferences.join(', ')
-                });
+                // Get the current timestamp
+                const submissionDate = new Date().toISOString();
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${member.Forename} ${member.Surname}</td>
-                    <td>${attending}</td>
-                    <td>${starter}</td>
-                    <td>${main}</td>
-                    <td>${dessert}</td>
-                    <td>${dietaryPreferences.join(', ')}</td>
-                `;
-                submissionTableBody.appendChild(row);
+                // Update Firebase with the latest RSVP data
+                let rsvpData = {
+                    Attending: attending,
+                    Dietary: dietaryPreferences.join(', '),
+                    Submitted: true,
+                    SubmissionDate: submissionDate
+                };
+
+                // If they're attending, set meal choices
+                if (attending === "yes") {
+                    rsvpData.Starter = starter;
+                    rsvpData.Main = main;
+                    rsvpData.Dessert = dessert;
+                } else {
+                    rsvpData.Starter = "";
+                    rsvpData.Main = "";
+                    rsvpData.Dessert = "";
+                }
+
+                db.ref(`rsvps/${key}`).update(rsvpData);
+
             });
 
-            submissionTable.classList.remove('hidden');
-            thankYouStepYes.classList.remove('hidden');
-            rsvpForms.classList.add('hidden');
-        });
+            // **🔹 Fetch only the selected guests from Firebase and update the table**
+            let selectedKeys = selectedGroup.map(member => member.key);
+
+            Promise.all(
+                selectedKeys.map(key => db.ref(`rsvps/${key}`).once('value'))
+            ).then(snapshots => {
+                let latestRSVPs = {};
+
+                snapshots.forEach(snapshot => {
+                    if (snapshot.exists()) {
+                        let guest = snapshot.val();
+                        let fullName = `${guest.Forename} ${guest.Surname}`;
+
+                        // Store only the most recent submission per guest
+                        if (!latestRSVPs[fullName] || new Date(guest.SubmissionDate) > new Date(latestRSVPs[fullName].SubmissionDate)) {
+                            latestRSVPs[fullName] = guest;
+                        }
+                    }
+                });
+
+                // Clear the existing table before adding updated rows
+                submissionTableBody.innerHTML = "";
+
+                // Populate the table with the selected guests' latest RSVPs
+                Object.values(latestRSVPs).forEach(member => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${member.Forename} ${member.Surname}</td>
+                        <td>${member.Attending}</td>
+                        <td>${member.Attending === "no" ? '-' : member.Starter || '-'}</td>
+                        <td>${member.Attending === "no" ? '-' : member.Main || '-'}</td>
+                        <td>${member.Attending === "no" ? '-' : member.Dessert || '-'}</td>
+                        <td>${member.Dietary || '-'}</td>
+                    `;
+                    submissionTableBody.appendChild(row);
+                });
+
+                submissionTable.classList.remove('hidden');
+            });
+
+        submissionTable.classList.remove('hidden');
+        thankYouStepYes.classList.remove('hidden');
+        rsvpForms.classList.add('hidden');
+    });
     </script>
 </body>
 </html>

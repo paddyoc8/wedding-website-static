@@ -165,19 +165,6 @@ body {
     margin: 0; /* Ensures no external margins affect positioning */
 }
 
-/* Hero Section */
-.hero-rsvp {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    background: url('../images/maynardEntrance.jpg') no-repeat center/cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: var(--light1);
-}
-
 .hero-overlay {
     position: absolute;
     top: 0;
