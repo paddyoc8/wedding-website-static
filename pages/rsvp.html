@@ -194,8 +194,7 @@
                 let starterSoup = '';
                 let starterSalad = '';
                 let starterPate = '';
-                let mainChicken = '';
-                let mainBeef = '';
+                let mainMeat = '';
                 let mainVeg = '';
                 let dessertCheesecake = '';
                 let dessertFruitSalad = '';
@@ -213,8 +212,7 @@
                     if (previous.Starter === "Salad") starterSalad = 'checked';
                     if (previous.Starter === "Pâté") starterPate = 'checked';
 
-                    if (previous.Main === "Chicken") mainChicken = 'checked';
-                    if (previous.Main === "Beef") mainBeef = 'checked';
+                    if (previous.Main === "Meat") mainMeat = 'checked';
                     if (previous.Main === "Vegetarian") mainVeg = 'checked';
 
                     if (previous.Dessert === "Cheesecake") dessertCheesecake = 'checked';
@@ -243,8 +241,7 @@
                         <label><input type="radio" name="starter-${member.key}" value="Pâté" ${starterPate} required> Pâté</label><br>
 
                         <p>Main:</p>
-                        <label><input type="radio" name="main-${member.key}" value="Chicken" ${mainChicken} required> Chicken</label><br>
-                        <label><input type="radio" name="main-${member.key}" value="Beef" ${mainBeef} required> Beef</label><br>
+                        <label><input type="radio" name="main-${member.key}" value="Meat" ${mainMeat} required> Lamb shanks with fondant potato, slow roasted Mediterranean vegetables and red wine jus (GF)</label><br>
                         <label><input type="radio" name="main-${member.key}" value="Vegetarian" ${mainVeg} required> Vegetarian</label><br>
 
                         <p>Dessert:</p>
