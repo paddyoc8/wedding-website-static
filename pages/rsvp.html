@@ -90,7 +90,7 @@
             <button id="submitAllRSVPs">Submit All RSVPs</button>
         </div>
 
-        <div class="faq-item" id = "standard-menu" class = "hidden">
+        <div class="faq-item" id="standard-menu" class="hidden">
             <button class="faq-question">Standard menu <span class="arrow">&#9656;</span></button>
             <div class="faq-answer">
                 <p>Chicken liver parfait, red wine poached pear, red onion marmalade and toasted sourdough (GFa)</p>
@@ -98,7 +98,7 @@
                 <p>Traditional bread & butter pudding, with crème anglaise and vanilla ice cream (V)</p>
             </div>
         </div>
-        <div class="faq-item" id = "vegetarian-menu" class = "hidden">
+        <div class="faq-item" id="vegetarian-menu" class="hidden">
             <button class="faq-question">Vegetarian menu <span class="arrow">&#9656;</span></button>
             <div class="faq-answer">
                 <p>Roasted tomato & roasted red pepper soup (GF)(VE)</p>
@@ -106,7 +106,7 @@
                 <p>Traditional bread & butter pudding, with crème anglaise and vanilla ice cream (V)</p>
             </div>
         </div>
-        <div class="faq-item" id = "kids-menu" class = "hidden">
+        <div class="faq-item" id = "kids-menu" class="hidden">
             <button class="faq-question">Childrens menu <span class="arrow">&#9656;</span></button>
             <div class="faq-answer">
                 <p>Halloumi sticks and tomato dipping sauce</p>
@@ -479,6 +479,17 @@
         thankYouStepYes.classList.remove('hidden');
         rsvpForms.classList.add('hidden');
     });
+    </script>
+    <script>
+        // JavaScript for collapsible FAQ
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const arrow = button.querySelector('.arrow');
+                answer.classList.toggle('open');
+                arrow.textContent = answer.classList.contains('open') ? '▼' : '▶';
+            });
+        });
     </script>
 </body>
 </html>
