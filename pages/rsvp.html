@@ -6,6 +6,7 @@
     <title>RSVP - Emma & Patrick's Wedding</title>
     <link rel="stylesheet" href="../assets/css/core.css">
     <link rel="stylesheet" href="../assets/css/rsvp.css">
+    <link rel="stylesheet" href="../assets/css/faq.css">
     <script>
         function toggleDrawer() {
             const drawer = document.querySelector('.drawer');
@@ -89,6 +90,31 @@
             <button id="submitAllRSVPs">Submit All RSVPs</button>
         </div>
 
+        <div class="faq-item" id = "standard-menu" class = "hidden">
+            <button class="faq-question">Standard menu <span class="arrow">&#9656;</span></button>
+            <div class="faq-answer">
+                <p>Chicken liver parfait, red wine poached pear, red onion marmalade and toasted sourdough (GFa)</p>
+                <p>Lamb shanks with fondant potato, slow roasted Mediterranean vegetables and red wine jus (GF)</p>
+                <p>Traditional bread & butter pudding, with crème anglaise and vanilla ice cream (V)</p>
+            </div>
+        </div>
+        <div class="faq-item" id = "vegetarian-menu" class = "hidden">
+            <button class="faq-question">Vegetarian menu <span class="arrow">&#9656;</span></button>
+            <div class="faq-answer">
+                <p>Roasted tomato & roasted red pepper soup (GF)(VE)</p>
+                <p>Root vegetable & mushroom cottage pie served with green beans (VE)(GF)</p>
+                <p>Traditional bread & butter pudding, with crème anglaise and vanilla ice cream (V)</p>
+            </div>
+        </div>
+        <div class="faq-item" id = "kids-menu" class = "hidden">
+            <button class="faq-question">Childrens menu <span class="arrow">&#9656;</span></button>
+            <div class="faq-answer">
+                <p>Halloumi sticks and tomato dipping sauce</p>
+                <p>Kid’s beef burger with chips</p>
+                <p></p>Warm chocolate brownie with vanilla ice cream (V)(GF)</p>
+            </div>
+        </div>
+
         <div id="thankYouStepYes" class="hidden">
             <p>Thank you for submitting your RSVP. If you need to make any changes you have until DD/MM/YYYY.</p>
         </div>
@@ -138,6 +164,7 @@
         const rsvpForms = document.getElementById('rsvpForms');
         const individualRSVPForms = document.getElementById('individualRSVPForms');
         const submitAllRSVPs = document.getElementById('submitAllRSVPs');
+        const menus = document.getElementById('menus');
         const thankYouStepYes = document.getElementById('thankYouStepYes');
         const thankYouStepNo = document.getElementById('thankYouStepNo');
         const submissionTable = document.getElementById('submissionTable');
@@ -194,7 +221,7 @@
                 let starterSoup = '';
                 let starterSalad = '';
                 let starterPate = '';
-                let mainMeat = '';
+                let mainStandard = '';
                 let mainVeg = '';
                 let dessertCheesecake = '';
                 let dessertFruitSalad = '';
@@ -212,7 +239,7 @@
                     if (previous.Starter === "Salad") starterSalad = 'checked';
                     if (previous.Starter === "Pâté") starterPate = 'checked';
 
-                    if (previous.Main === "Meat") mainMeat = 'checked';
+                    if (previous.Main === "Standard") mainStandard = 'checked';
                     if (previous.Main === "Vegetarian") mainVeg = 'checked';
 
                     if (previous.Dessert === "Cheesecake") dessertCheesecake = 'checked';
@@ -241,7 +268,7 @@
                         <label><input type="radio" name="starter-${member.key}" value="Pâté" ${starterPate} required> Pâté</label><br>
 
                         <p>Main:</p>
-                        <label><input type="radio" name="main-${member.key}" value="Meat" ${mainMeat} required> Lamb shanks with fondant potato, slow roasted Mediterranean vegetables and red wine jus (GF)</label><br>
+                        <label><input type="radio" name="main-${member.key}" value="Standard" ${mainStandard} required> Lamb shanks with fondant potato, slow roasted Mediterranean vegetables and red wine jus (GF)</label><br>
                         <label><input type="radio" name="main-${member.key}" value="Vegetarian" ${mainVeg} required> Vegetarian</label><br>
 
                         <p>Dessert:</p>
@@ -447,6 +474,7 @@
                 submissionTable.classList.remove('hidden');
             });
 
+        menus.classList.remove('hidden');
         submissionTable.classList.remove('hidden');
         thankYouStepYes.classList.remove('hidden');
         rsvpForms.classList.add('hidden');
