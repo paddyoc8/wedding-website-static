@@ -3,7 +3,7 @@
 .contacts {
     display: flex;
     flex-wrap: wrap; /* So they stack on small screens */
-    justify-content: space-evenly;
+    justify-content: center;
     gap: 2rem;
     margin-top: 2rem;
 }
