@@ -80,13 +80,13 @@
             <h2>Confirm your group</h2>
             <p>Select the members you want to RSVP for:</p>
             <div id="groupDetails"></div>
-            <button id="confirmSelection">Confirm Selection</button>
+            <button id="confirmSelection">Confirm selection</button>
         </div>
 
         <div id="rsvpForms" class="hidden">
-            <h2>RSVP for Each Person</h2>
+            <h2>Please complete each RSVP form below.</h2>
             <div id="individualRSVPForms"></div>
-            <button id="submitAllRSVPs">Submit All RSVPs</button>
+            <button id="submitAllRSVPs">Submit all RSVPs</button>
         </div>
 
         <div id="thankYouStepYes" class="hidden">
@@ -105,14 +105,41 @@
                     <tr>
                         <th>Name</th>
                         <th>Attending</th>
-                        <th>Starter</th>
-                        <th>Main</th>
-                        <th>Dessert</th>
-                        <th>Dietary Requirements</th>
+                        <th>Menu</th>
+                        <th>Dietary requirements</th>
+                        <th>Alcohol free</th>
                     </tr>
                 </thead>
                 <tbody id="submissionTableBody"></tbody>
             </table>
+        </div>
+    </div>
+
+    <div class="menu-container" id="menus">
+        <h1>Please see menu options below.</h1>
+        <div class="menu-item" id="standard-menu" class="hidden">
+            <button class="menu-question">Standard menu <span class="arrow">&#9656;</span></button>
+            <div class="menu-answer">
+                <p>Chicken liver parfait, red wine poached pear, red onion marmalade and toasted sourdough (GFa)</p>
+                <p>Lamb shanks with fondant potato, slow roasted Mediterranean vegetables and red wine jus (GF)</p>
+                <p>Traditional bread & butter pudding, with crème anglaise and vanilla ice cream (V)</p>
+            </div>
+        </div>
+        <div class="menu-item" id="vegetarian-menu" class="hidden">
+            <button class="menu-question">Vegetarian menu <span class="arrow">&#9656;</span></button>
+            <div class="menu-answer">
+                <p>Roasted tomato & roasted red pepper soup (GF)(VE)</p>
+                <p>Root vegetable & mushroom cottage pie served with green beans (VE)(GF)</p>
+                <p>Traditional bread & butter pudding, with crème anglaise and vanilla ice cream (V)</p>
+            </div>
+        </div>
+        <div class="menu-item" id = "kids-menu" class="hidden">
+            <button class="menu-question">Childrens menu <span class="arrow">&#9656;</span></button>
+            <div class="menu-answer">
+                <p>Halloumi sticks and tomato dipping sauce</p>
+                <p>Kid’s beef burger with chips</p>
+                <p></p>Warm chocolate brownie with vanilla ice cream (V)(GF)</p>
+            </div>
         </div>
     </div>
 
@@ -138,6 +165,7 @@
         const rsvpForms = document.getElementById('rsvpForms');
         const individualRSVPForms = document.getElementById('individualRSVPForms');
         const submitAllRSVPs = document.getElementById('submitAllRSVPs');
+        const menus = document.getElementById('menus');
         const thankYouStepYes = document.getElementById('thankYouStepYes');
         const thankYouStepNo = document.getElementById('thankYouStepNo');
         const submissionTable = document.getElementById('submissionTable');
@@ -191,79 +219,60 @@
                 // Default values
                 let attendingYes = '';
                 let attendingNo = '';
-                let starterSoup = '';
-                let starterSalad = '';
-                let starterPate = '';
-                let mainChicken = '';
-                let mainBeef = '';
-                let mainVeg = '';
-                let dessertCheesecake = '';
-                let dessertFruitSalad = '';
-                let dessertChocCake = '';
+                let standard = '';
+                let vegetarian = '';
+                let child = '';
                 // If data exists, set defaults accordingly
                 if (previous && previous.Submitted) {
                     prefillMessage = `<p class="prefill-message">You have previously submitted an RSVP for ${member.Forename} ${member.Surname}. Submitting again will overwrite your previous selections.</p>`;
-                    if (previous.Attending === "yes") {
+                    if (previous.Attending === "Yes") {
                         attendingYes = 'selected';
                     } else {
                         attendingNo = 'selected';
                     }
                     // For radio buttons, compare previous selections (assumes values exactly match)
-                    if (previous.Starter === "Soup") starterSoup = 'checked';
-                    if (previous.Starter === "Salad") starterSalad = 'checked';
-                    if (previous.Starter === "Pâté") starterPate = 'checked';
-
-                    if (previous.Main === "Chicken") mainChicken = 'checked';
-                    if (previous.Main === "Beef") mainBeef = 'checked';
-                    if (previous.Main === "Vegetarian") mainVeg = 'checked';
-
-                    if (previous.Dessert === "Cheesecake") dessertCheesecake = 'checked';
-                    if (previous.Dessert === "Fruit Salad") dessertFruitSalad = 'checked';
-                    if (previous.Dessert === "Chocolate Cake") dessertChocCake = 'checked';
+                    if (previous.Menu === "Standard") standard = 'checked';
+                    if (previous.Menu === "Vegetarian") vegetarian = 'checked';
+                    if (previous.Menu === "Child") child = 'checked';
                 } else {
                     attendingYes = 'selected'; // default to "yes"
                 }
                 
                 // Build the form HTML string with pre-filled values:
                 const formHTML = `
-                    <h3>${member.Forename} ${member.Surname}</h3>
-                    ${prefillMessage}
-                    <label>Attending:</label>
-                    <select data-key="${member.key}" class="attending">
-                        <option value="yes" ${attendingYes}>Yes</option>
-                        <option value="no" ${attendingNo}>No</option>
-                    </select>
+                    <form class="individual-rsvp-form" data-key="${member.key}">
+                        <h3>${member.Forename} ${member.Surname}</h3>
+                        ${prefillMessage}
 
-                    <!-- Meal choices and non-attending containers -->
-                    <div class="meal-section" data-key="${member.key}">
-                        <h4>Meal Choices</h4>
-                        <p>Starter:</p>
-                        <label><input type="radio" name="starter-${member.key}" value="Soup" ${starterSoup} required> Soup</label><br>
-                        <label><input type="radio" name="starter-${member.key}" value="Salad" ${starterSalad} required> Salad</label><br>
-                        <label><input type="radio" name="starter-${member.key}" value="Pâté" ${starterPate} required> Pâté</label><br>
+                        <label>Attending:</label>
+                        <select data-key="${member.key}" class="attending">
+                            <option value="Yes" ${attendingYes}>Yes</option>
+                            <option value="No" ${attendingNo}>No</option>
+                        </select>
 
-                        <p>Main:</p>
-                        <label><input type="radio" name="main-${member.key}" value="Chicken" ${mainChicken} required> Chicken</label><br>
-                        <label><input type="radio" name="main-${member.key}" value="Beef" ${mainBeef} required> Beef</label><br>
-                        <label><input type="radio" name="main-${member.key}" value="Vegetarian" ${mainVeg} required> Vegetarian</label><br>
+                        <!-- Meal choices and non-attending containers -->
+                        <div class="meal-section" data-key="${member.key}">
+                            <h4>Menu choice</h4>
+                            <p>Please select your menu below. Full menus are set out at the bottom of the page.</p>
+                            <label><input type="radio" name="main-${member.key}" value="Standard" ${standard} required> Standard</label><br>
+                            <label><input type="radio" name="main-${member.key}" value="Vegetarian" ${vegetarian} required> Vegetarian</label><br>
+                            <label><input type="radio" name="main-${member.key}" value="Child" ${child} required> Childrens</label><br>
 
-                        <p>Dessert:</p>
-                        <label><input type="radio" name="dessert-${member.key}" value="Cheesecake" ${dessertCheesecake} required> Cheesecake</label><br>
-                        <label><input type="radio" name="dessert-${member.key}" value="Fruit Salad" ${dessertFruitSalad} required> Fruit Salad</label><br>
-                        <label><input type="radio" name="dessert-${member.key}" value="Chocolate Cake" ${dessertChocCake} required> Chocolate Cake</label><br>
+                            <h4>Specify any dietary requirements below</h4>
+                            <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
+                            <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
+                            <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
+                            <label for="other-${member.key}">Other dietary requirements (if any):</label>
+                            <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
 
-                        <h4>Dietary Requirements</h4>
-                        <label><input type="checkbox" data-key="${member.key}" value="Vegetarian"> Vegetarian</label><br>
-                        <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
-                        <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
-                        <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
-                        <label for="other-${member.key}">Other dietary requirements (if any):</label>
-                        <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
-                    </div>
+                            <h4>Please flag below if you would prefer the alcohol free package.</h4>
+                            <label><input type="checkbox" name="non-drinker-${member.key}" value="Yes"> Alcohol free</label><br>
+                        </div>
 
-                    <div class="non-attending-message hidden" data-key="${member.key}">
-                        <p>We're sorry you won't be able to celebrate with us.</p>
-                    </div>
+                        <div class="non-attending-message hidden" data-key="${member.key}">
+                            <p>We're sorry you won't be able to celebrate with us.</p>
+                        </div>
+                    </form>
                     `;
                 return formHTML;
             });
@@ -297,57 +306,35 @@
         // Create individual RSVP forms for each selected member
         function createRSVPForms() {
             individualRSVPForms.innerHTML = '';
-            // Use Promise.all so that all forms are generated before moving on
-            Promise.all(selectedGroup.map(member => {
+            Promise.all(
+                selectedGroup.map(member => {
                 return createIndividualForm(member).then(formHTML => {
-                    const formDiv = document.createElement('div');
-                    formDiv.classList.add('individual-rsvp');
-                    formDiv.innerHTML = formHTML;
-                    individualRSVPForms.appendChild(formDiv);
+                    // Insert the <form> HTML directly into #individualRSVPForms
+                    individualRSVPForms.insertAdjacentHTML('beforeend', formHTML);
                 });
-            })).then(() => {
-                // Attach change listeners for each 'attending' select element
-                document.querySelectorAll('.attending').forEach(select => {
-                    select.addEventListener('change', (event) => {
-                        const key = event.target.getAttribute('data-key');
-                        const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
-                        const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
-                        
-                        if (event.target.value === "no") {
-                            // Hide meal selection and show "Sorry you can't attend" message
-                            mealSection.classList.add('hidden');
-                            nonAttendingMessage.classList.remove('hidden');
-
-                            // Clear previously selected meal choices
-                            document.querySelectorAll(`input[name="starter-${key}"]`).forEach(radio => radio.checked = false);
-                            document.querySelectorAll(`input[name="main-${key}"]`).forEach(radio => radio.checked = false);
-                            document.querySelectorAll(`input[name="dessert-${key}"]`).forEach(radio => radio.checked = false);
-                        } else {
-                            // Show meal selection if attending is "Yes"
-                            mealSection.classList.remove('hidden');
-                            nonAttendingMessage.classList.add('hidden');
-                        }
-                    });
-                });
+                })
+            ).then(() => {
+                // After forms are created, attach listeners:
+                attachAttendingChangeListeners();
             });
-        }
+            }
 
-
-        // Attach change listeners for each 'attending' select element
-        document.querySelectorAll('.attending').forEach(select => {
-            select.addEventListener('change', (event) => {
+        function attachAttendingChangeListeners() {
+            document.querySelectorAll('.attending').forEach(select => {
+                select.addEventListener('change', event => {
                 const key = event.target.getAttribute('data-key');
                 const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
                 const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
-                if (event.target.value === "no") {
+                if (event.target.value === "No") {
                     mealSection.classList.add('hidden');
                     nonAttendingMessage.classList.remove('hidden');
                 } else {
                     mealSection.classList.remove('hidden');
                     nonAttendingMessage.classList.add('hidden');
                 }
+                });
             });
-        });
+            }
 
         // Submit all RSVPs
         submitAllRSVPs.addEventListener('click', () => {
@@ -356,12 +343,10 @@
             selectedGroup.forEach(member => {
                 const key = member.key;
                 const attending = document.querySelector(`.attending[data-key="${key}"]`).value;
-                if (attending === "yes") {
-                    // Check that a starter, main, and dessert have been selected
-                    const starter = document.querySelector(`input[name="starter-${key}"]:checked`);
-                    const main = document.querySelector(`input[name="main-${key}"]:checked`);
-                    const dessert = document.querySelector(`input[name="dessert-${key}"]:checked`);
-                    if (!starter || !main || !dessert) {
+                if (attending === "Yes") {
+                    // Check that a menu has been selected
+                    const menu = document.querySelector(`input[name="main-${key}"]:checked`);
+                    if (!menu) {
                         valid = false;
                         alert(`Please complete meal selections for ${member.Forename} ${member.Surname}.`);
                     }
@@ -373,12 +358,11 @@
             selectedGroup.forEach(member => {
                 const key = member.key;
                 const attending = document.querySelector(`.attending[data-key="${key}"]`).value;
-                const starter = document.querySelector(`input[name="starter-${key}"]:checked`)?.value || '';
-                const main = document.querySelector(`input[name="main-${key}"]:checked`)?.value || '';
-                const dessert = document.querySelector(`input[name="dessert-${key}"]:checked`)?.value || '';
+                const menu = document.querySelector(`input[name="main-${key}"]:checked`)?.value || '';
                 const dietaryCheckboxes = document.querySelectorAll(`input[type="checkbox"][data-key="${key}"]:checked`);
                 const dietaryPreferences = Array.from(dietaryCheckboxes).map(checkbox => checkbox.value);
                 const otherDietaryText = document.querySelector(`.other-dietary-text[data-key="${key}"]`)?.value || '';
+                const nonDrinker = document.querySelector(`input[name="non-drinker-${key}"]:checked`)?.value || '';
 
                 if (otherDietaryText) {
                     dietaryPreferences.push(otherDietaryText);
@@ -396,14 +380,12 @@
                 };
 
                 // If they're attending, set meal choices
-                if (attending === "yes") {
-                    rsvpData.Starter = starter;
-                    rsvpData.Main = main;
-                    rsvpData.Dessert = dessert;
+                if (attending === "Yes") {
+                    rsvpData.Menu = menu;
+                    rsvpData.NonDrinker = nonDrinker;
                 } else {
-                    rsvpData.Starter = "";
-                    rsvpData.Main = "";
-                    rsvpData.Dessert = "";
+                    rsvpData.Menu = "";
+                    rsvpData.NonDrinker = "";
                 }
 
                 db.ref(`rsvps/${key}`).update(rsvpData);
@@ -439,10 +421,9 @@
                     row.innerHTML = `
                         <td>${member.Forename} ${member.Surname}</td>
                         <td>${member.Attending}</td>
-                        <td>${member.Attending === "no" ? '-' : member.Starter || '-'}</td>
-                        <td>${member.Attending === "no" ? '-' : member.Main || '-'}</td>
-                        <td>${member.Attending === "no" ? '-' : member.Dessert || '-'}</td>
+                        <td>${member.Attending === "no" ? '-' : member.Menu || '-'}</td>
                         <td>${member.Dietary || '-'}</td>
+                        <td>${member.NonDrinker || '-'}</td>
                     `;
                     submissionTableBody.appendChild(row);
                 });
@@ -450,10 +431,22 @@
                 submissionTable.classList.remove('hidden');
             });
 
+        menus.classList.remove('hidden');
         submissionTable.classList.remove('hidden');
         thankYouStepYes.classList.remove('hidden');
         rsvpForms.classList.add('hidden');
     });
+    </script>
+    <script>
+        // JavaScript for collapsible FAQ
+        document.querySelectorAll('.menu-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const arrow = button.querySelector('.arrow');
+                answer.classList.toggle('open');
+                arrow.textContent = answer.classList.contains('open') ? '▼' : '▶';
+            });
+        });
     </script>
 </body>
 </html>
