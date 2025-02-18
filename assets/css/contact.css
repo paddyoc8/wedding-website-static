@@ -1,0 +1,46 @@
+ 
+/* Make the two cards display side by side on larger screens */
+.contacts {
+    display: flex;
+    flex-wrap: wrap; /* So they stack on small screens */
+    justify-content: space-evenly;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.contact-card {
+    background-color: rgba(255, 255, 255, 0.1); /* A semi-transparent overlay for style */
+    padding: 2rem;
+    border-radius: 8px;
+    flex: 1 1 250px;     /* Each card tries to be at least 300px wide */
+    text-align: left;    /* If you’d like left-aligned details */
+}
+
+.contact-card h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.contact-card p {
+    margin: 0.5rem 0;   
+}
+
+.contact-card a {
+    color: inherit;  /* So the links keep the text color; adjust if you prefer underlined/colored links */
+    text-decoration: none;
+}
+
+.contact-card a:hover {
+    text-decoration: underline;
+}
+  
+
+.icon {
+    display: inline-block;   /* Make sure the SVG acts like an inline element */
+    vertical-align: middle;  /* Vertically align with text */
+    margin-right: 0.5rem;    /* Spacing between icon and text */
+    /* Optionally adjust stroke-width or color if needed: */
+    stroke-width: 2;
+  }
