@@ -9,7 +9,7 @@ html {
 /* Root variables for color scheme */
 :root {
     --dark1: #496585;
-    --light1: #ffffff;
+    --light1: #eff4fb;
     --accent1: #de9ca8;
     --accent2: #a7b788;
     --titleFont: 'Playfair Display', serif;
@@ -150,6 +150,22 @@ body {
 }
 
 /* Hero Section */
+.hero-registry {
+    position: relative; /* Enables absolute positioning for child elements */
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    background: url('../images/maynardEntrance.jpg') no-repeat center/cover; /* Background image */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--light1);
+    overflow: hidden; /* Ensures child elements stay within the hero */
+    padding: 0; /* Removes any unwanted spacing */
+    margin: 0; /* Ensures no external margins affect positioning */
+}
+
+/* Hero Section */
 .hero-faq {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
@@ -179,6 +195,7 @@ body {
     position: relative;
     z-index: 2;
     padding: 2rem;
+    width: 50%;
 }
 
 .hero-content h1 {
