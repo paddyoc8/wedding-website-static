@@ -58,6 +58,28 @@
 }
 
 .arrow {
-    font-size: 18px;
-    transition: transform 0.3s ease;
+    display: inline-block; /* So transform rotates around the element */
+    transition: transform 0.2s ease;
+    transform: rotate(0deg); /* points right by default */
+  }
+  
+  .arrow.open {
+    transform: rotate(90deg); /* rotate to point down */
+  }
+  
+
+/* Optional: style the .faq-group heading differently */
+.faq-group h2 {
+    margin-top: 40px;
+    font-size: 20px;
+    color: var(--dark1);
+    font-family: var(--titleFont);
+}
+
+.icon {
+    display: inline-block;   /* Make sure the SVG acts like an inline element */
+    vertical-align: middle;  /* Vertically align with text */
+    margin-right: 0.5rem;    /* Spacing between icon and text */
+    /* Optionally adjust stroke-width or color if needed: */
+    stroke-width: 2;
 }
