@@ -22,7 +22,7 @@
     padding: 2rem;
     margin: 0 auto;
     max-width: 800px;
-    background: #de9ca88e;
+    background: fff;
   
     /* Make the bottom border thicker or more distinct if desired: */
     border-bottom: 2px solid var(--accent2);
