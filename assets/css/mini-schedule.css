@@ -22,7 +22,7 @@
     padding: 2rem;
     margin: 0 auto;
     max-width: 800px;
-    background: fff;
+    background: #fff;
   
     /* Make the bottom border thicker or more distinct if desired: */
     border-bottom: 2px solid var(--accent2);
@@ -170,36 +170,4 @@
       bottom: auto;
       top: 0;
     }
-  }
-
-  /* -----------------
-   WHAT, WHEN, WHERE
-  ----------------- */
-  .www-section {
-    padding: 4rem 2rem;
-    text-align: center;
-  }
-  .www-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  .www-box {
-    background: #FFF;
-    padding: 2rem;
-    min-width: 200px;
-    max-width: 250px;
-    border-radius: 8px;
-    border: 0px solid #DDD;
-  }
-  .www-box h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: #4c3f36;
-  }
-  .www-box p {
-    color: #555;
-    margin-bottom: 0.3rem;
   }

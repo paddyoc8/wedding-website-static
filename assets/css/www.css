@@ -19,7 +19,9 @@
   }
   .www-box {
     background: #FFF;
-    padding: 0rem;
+    padding: 2rem;
+    min-width: 200px;
+    max-width: 250px;
     border-radius: 8px;
     border: 0px solid #DDD;
   }

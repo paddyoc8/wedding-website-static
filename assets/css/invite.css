@@ -1,0 +1,35 @@
+/* Container for the invite section */
+#invite {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0;
+  }
+  
+  /* The invite card styling */
+  .invite-card {
+    background: url('../images/invite.png');
+    background-size: cover;        /* Scale the image to cover the container */
+    background-position: center;   /* Center the image */
+    background-repeat: no-repeat;  /* Prevent tiling */
+    padding: 2rem 3rem;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  
+  /* Typography */
+  .invite-card h1 {
+    font-family: var(--titleFont); /* elegant, classic look */
+    font-size: 2.5rem;
+    color: var(--dark1);
+  }
+  
+  .invite-card p {
+    font-family: var(--bodyFont); /* easy to read */
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+    color: var(--dark2);
+  }
+  
