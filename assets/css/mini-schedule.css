@@ -1,13 +1,17 @@
 /* RESET */
- 
+#schedule {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0;
+}
   /* Main section wrapper */
   .schedule {
     margin: 0 auto;
     text-align: center;
-    padding: 2rem 2rem;
-    background: url('../images/invite.png');
-    background-size: cover;
-    width: 100%;
+    padding: 2rem 0rem;
+    background: var(--light1);
+    width: 100%;  
   }
 
   .schedule h2 {
