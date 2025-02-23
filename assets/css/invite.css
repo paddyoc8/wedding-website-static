@@ -8,7 +8,7 @@
   
   /* The invite card styling */
   .invite-card {
-    background: url('../images/invite.png');
+    background: url('../images/heatherSlantingRock.jpg');
     background-size: cover;        /* Scale the image to cover the container */
     background-position: center;   /* Center the image */
     background-repeat: no-repeat;  /* Prevent tiling */
