@@ -239,7 +239,7 @@
         document.addEventListener("DOMContentLoaded", function() {
           const lastShown = localStorage.getItem("bannerLastShown");
           const now = new Date().getTime();
-          const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+          const oneDay = 1//24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
           // Show banner and overlay if not shown in the last 24 hours
           if (!lastShown || (now - lastShown) > oneDay) {
