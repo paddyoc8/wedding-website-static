@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="assets/css/home-rsvp.css"/>
     <link rel="stylesheet" href="assets/css/home-reg.css"/>
     <link rel="stylesheet" href="assets/css/invite.css"/>
+    <link rel="stylesheet" href="assets/css/popup.css"/>
     <script>
         function toggleDrawer() {
             const drawer = document.querySelector('.drawer');
@@ -68,6 +69,16 @@
             </a>
         </div>
     </section>
+
+    <!-- Overlay element -->
+  <div id="overlay"></div>
+
+  <!-- Pop-up banner -->
+  <div id="popup-banner">
+    <h2>Announcement</h2>
+    <p>If you wish to stay at The Maynard on the night of the wedding (Friday 1st August) we have X rooms available at £190 per room (including breakfast). Get in touch with us if you'd like to reserve a room.</p>
+    <button onclick="closeBanner()">Continue to website</button>
+  </div>
 
     <section id="invite">
       <div class="invite-card">
@@ -222,6 +233,26 @@
               }
           });
           });
+      </script>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const lastShown = localStorage.getItem("bannerLastShown");
+          const now = new Date().getTime();
+          const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+          // Show banner and overlay if not shown in the last 24 hours
+          if (!lastShown || (now - lastShown) > oneDay) {
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("popup-banner").style.display = "block";
+            localStorage.setItem("bannerLastShown", now);
+          }
+        });
+
+        function closeBanner() {
+          document.getElementById("popup-banner").style.display = "none";
+          document.getElementById("overlay").style.display = "none";
+        }
       </script>
 </body>
 </html>
