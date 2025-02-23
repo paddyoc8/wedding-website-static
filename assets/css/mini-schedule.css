@@ -1,0 +1,187 @@
+/* RESET */
+ 
+  /* Main section wrapper */
+  .schedule {
+    margin: 0 auto;
+    text-align: center;
+    padding: 2rem 2rem;
+    background: url('../images/invite.png');
+    background-size: cover;
+    width: 100%;
+  }
+
+  .schedule h2 {
+    font-family: var(--titleFont);
+    margin-bottom: 2rem;
+    color: var(--dark1);
+  }
+  
+  /* SCHEDULE CONTAINER */
+  .schedule-container {
+    position: relative;
+    border: 1px solid var(--accent2);
+    border-radius: 4px;
+    padding: 2rem;
+    margin: 0 auto;
+    max-width: 800px;
+    background: var(--light1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  
+    /* Make the bottom border thicker or more distinct if desired: */
+    border-bottom: 2px solid var(--accent2);
+    /* If you want the line to be darker: border-bottom-color: #333; */
+  }
+  
+  /* EVENT CONTENT (only the .active one is visible) */
+  .event-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in forwards;
+  }
+  .event-content.active {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 0rem; /* space above the timeline */
+  }
+  .event-info {
+    flex: 2;
+    text-align: left;
+  }
+  .event-info h3 {
+    margin-bottom: 1rem;
+    color: var(--dark1);
+  }
+  .event-info p {
+    margin-bottom: 1rem;
+    color: var(--dark1);
+  }
+  .event-details {
+    flex: 1;
+    text-align: left;
+  }
+  .event-details h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: var(--dark1);
+  }
+  .event-details p {
+    margin-bottom: 0.5rem;
+  }
+
+  .btn {
+    display: inline-block;
+    background-color: #333;
+    color: #fff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+  }
+  .attire {
+    font-size: 0.85rem;
+    font-style: italic;
+    color: #666;
+  }
+  
+  /* TIMELINE: absolutely pinned at the bottom edge of the container */
+  .timeline {
+    position: absolute;
+    bottom: -3.35rem;
+    left: 0;
+    right: 0;
+    height: 60px;  /* space for the circles & text */
+    display: flex;
+    justify-content: space-around;
+    align-items: top; /* circles at the container's bottom */
+  }
+  
+  /* Remove or comment out any timeline line if using the container's border as the line:
+  .timeline::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ccc;
+    z-index: 0;
+  }
+  */
+  
+  /* Each dot with text above it */
+  .event-dot {
+    position: relative;
+    text-align: center;
+    cursor: pointer;
+    z-index: 1; /* Above the line */
+    width: 120px;  /* Or whatever you prefer */
+    /* The dot is at top, so no extra top padding needed */
+  }
+  
+  /* The label text sits *below* the dot */
+  .event-dot p {
+    margin-top: 1.5rem; /* gap so the text isn’t too close to the circle */
+    font-size: 0.85rem;
+    color: var(--dark1);
+  }
+  
+  .event-dot p:hover {
+    font-weight: 600;
+    color: var(--dark1);
+  }
+  
+  /* Circle “dot” pinned near the top */
+  .event-dot::before {
+    content: "";
+    position: absolute;
+    top: 0; /* Dot at the top of .event-dot */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 14px;
+    background-color: #ccc;
+    border-radius: 50%;
+    transition: background 0.3s;
+  }
+  .event-dot:hover::before {
+    background-color: var(--dark1);
+  }
+  .event-dot.active::before {
+    background-color: var(--dark1);
+  }
+  .event-dot.active p {
+    font-weight: 600;
+    color: var(--dark1);
+  }
+
+  .event-dot.active p:hover{
+    color: var(--dark1);
+    font-weight: 600;
+  }
+  
+  /* Fade-in animation */
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(5px);}
+    to   {opacity: 1; transform: translateY(0);}
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .event-content.active {
+      flex-direction: column;
+    }
+    .timeline {
+      position: static; /* Let it flow normally if you'd like on mobile */
+      height: auto;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 2rem 0;
+    }
+    .event-dot {
+      margin-bottom: 1rem;
+    }
+    .event-dot::before {
+      bottom: auto;
+      top: 0;
+    }
+  }

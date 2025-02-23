@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Emma & Patrick</title>
     <link rel="stylesheet" href="assets/css/core.css">
+    <link rel="stylesheet" href="assets/css/mini-schedule.css"/>
+    <link rel="stylesheet" href="assets/css/www.css"/>
+    <link rel="stylesheet" href="assets/css/home-rsvp.css"/>
+    <link rel="stylesheet" href="assets/css/home-reg.css"/>
+    <link rel="stylesheet" href="assets/css/invite.css"/>
     <script>
         function toggleDrawer() {
             const drawer = document.querySelector('.drawer');
@@ -17,7 +22,9 @@
         <!-- Navigation Bar -->
         <nav class="nav-bar">
             <div class="names">
-                <a href="index.html" class="nav-list">Emma & Patrick</a>
+                <ul class="nav-list">
+                    <a href="index.html">Emma & Patrick</a>
+                </ul>
             </div>
             <button class="drawer-toggle" onclick="toggleDrawer()">☰</button>
             <div class="nav-right">
@@ -52,8 +59,169 @@
         <div class="hero-content">
             <h1>Emma & Patrick</h1>
             <p>August 1st, 2025 · The Maynard, Grindleford</p>
-            <a href="pages/rsvp.html" class="rsvp-button">RSVP</a>
+            <a href="pages/rsvp.html" class="rsvp-button">RSVP</a><br><br>
+            <a href="#next-section" class="scroll-down">
+                <svg width="60" height="30" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg" fill="none">
+                    <path d="M5 5C10 10 30 25 30 25C30 25 50 10 55 5" 
+                          stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
         </div>
     </section>
+
+    <section id="invite">
+      <div class="invite-card">
+        <h1>Emma & Patrick</h1>
+        <p>Invite you to celebrate</p>
+        <p>their marriage on</p><br>
+        <p><strong>Friday 1st August 2025</strong></p>
+        <p style="font-size: 1em;">at 1:30pm</p><br>
+        <p><strong>The Maynard</strong></p>
+        <p style="font-size: 1em;">Grindleford, Hope Valley</p><br>
+        <p>Reception to follow</p><br>
+      </div>
+    </section>    
+
+    <!-- WHAT, WHERE, WHEN -->
+    <section class="www-section">
+        <h2>When & Where</h2>
+        <div class="www-grid">
+            <div class="www-box">
+                <h3>Date</h3>
+                <p>Save the date! All key details for the day can be found on this website.</p>
+                <p>August 1st, 2025</p>
+            </div>
+            <div class="www-box">
+                <h3>Time</h3>
+                <p>You are able to arrive early at the venue. See full timings below.</p>
+                <p>12:30pm</p>
+            </div>
+            <div class="www-box">
+                <h3>Where</h3>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2384.3286959885363!2d-1.630488423475293!3d53.30155937807391!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4879ff62be00b953%3A0xd648bf691767ce0c!2sThe%20Maynard!5e0!3m2!1sen!2suk!4v1740084938580!5m2!1sen!2suk" 
+                        width="500" 
+                        height="500" 
+                        style="border:0;" 
+                        allowfullscreen=""
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                  </div>
+                <p>The Maynard, Main Rd,<br>Grindleford, Hope Valley S32 2HE</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="schedule">
+        <h2>Schedule</h2>
+      
+        <div class="schedule-container">
+          <!-- Active event content -->
+          <div class="event-content active" id="event1">
+            <div class="event-info">
+              <h3>Wedding Ceremony</h3>
+              <p>Guests are welcome to arrive at the venue from 12:30pm and may head to the main bar for a drink. You will be able to take your seats from 1:15pm ready for the ceremony to begin at 1:30pm.</p>
+            </div>
+            <div class="event-details">
+              <h4>THE MAYNARD</h4>
+              <p>Find travel and parking info with the <a href="pages/faq.html">FAQs.</a></p>
+            </div>
+          </div>
+      
+          <!-- Other event-content blocks (id="event2", "event3", "event4") -->
+          <div class="event-content" id="event2">
+            <div class="event-info">
+              <h3>Drinks Reception</h3>
+              <p>Drinks and canapés will be served in the garden, weather permitting. Enjoy a welcome drink on arrival, and the bar will remain open for refreshments.</p>
+            </div>
+            <div class="event-details">
+              
+            </div>
+          </div>
+      
+          <div class="event-content" id="event3">
+            <div class="event-info">
+              <h3>Wedding Breakfast</h3>
+              <p>We will return to the ceremony room for the wedding breakfast. Please make sure you have included any dietary requirements in your RSVP.</p>
+            </div>
+            <div class="event-details">
+              <h4>Chatsworth Suite</h4>
+              <a href="pages/rsvp.html" class="btn">See menu here</a>
+            </div>
+          </div>
+      
+          <div class="event-content" id="event4">
+            <div class="event-info">
+              <h3>Reception</h3>
+              <p>The reception will begin with the cake cutting, followed by an evening of music, dancing, and celebration.</p>
+            </div>
+            <div class="event-details">
+              <h4>Chatsworth Suite</h4>
+              <p><strong>Evening food:</strong> Bacon butties and mushroom melts will be served at 20:30.<br><strong>Last orders:</strong> 23:30<br><strong>Carriages:</strong> 00:00</p>
+            </div>
+          </div>
+      
+          <!-- TIMELINE (dots) at the bottom edge -->
+          <div class="timeline">
+            <div class="event-dot active" data-target="event1">
+              <p>1:30pm<br>Ceremony</p>
+            </div>
+            <div class="event-dot" data-target="event2">
+              <p>2:00pm<br>Drinks<br>Reception</p>
+            </div>
+            <div class="event-dot" data-target="event3">
+              <p>4:00pm<br>Wedding<br>Breakfast</p>
+            </div>
+            <div class="event-dot" data-target="event4">
+              <p>7:15pm<br>Reception</p>
+            </div>
+          </div>
+      
+        </div> <!-- /schedule-container -->
+        <p><br><br></p>
+      </section>
+      
+      <!-- REGISTRY -->
+        <section class="registry">
+            <h2>Registry</h2>
+            <div class="registry-content">
+            <p>Your presence at our wedding is more than enough, but if you’d like to contribute to our registry or honeymoon funds, please use the link below.</p>
+            <div class="registry-buttons">
+                <a href="#" class="btn">Browse Registry</a>
+            </div>
+            </div>
+        </section>
+
+        <!-- RSVP -->
+        <section class="rsvp">
+            <h2>We hope you can make it!</h2>
+            <p>Please RSVP by 31/05/2025</p>
+            <a href="pages/rsvp.html" class="rsvp-btn">RSVP</a>
+        </section>
+
+      <script>
+          const dots = document.querySelectorAll('.event-dot');
+          const events = document.querySelectorAll('.event-content');
+      
+          dots.forEach(dot => {
+          dot.addEventListener('click', () => {
+              // Remove 'active' from all dots & event-content
+              dots.forEach(d => d.classList.remove('active'));
+              events.forEach(e => e.classList.remove('active'));
+      
+              // Mark clicked dot as active
+              dot.classList.add('active');
+      
+              // Show matching event content
+              const targetId = dot.getAttribute('data-target');
+              const targetEvent = document.getElementById(targetId);
+              if (targetEvent) {
+              targetEvent.classList.add('active');
+              }
+          });
+          });
+      </script>
 </body>
 </html>

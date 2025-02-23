@@ -1,0 +1,42 @@
+/* --------
+     REGISTRY
+  -------- */
+  .registry {
+    background: #FAF8F5;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+  .registry-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .registry-content p {
+    margin-bottom: 2rem;
+    color: #555;
+  }
+  .registry-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .btn {
+    background-color: #4C3F36;
+    color: #FFF;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background 0.3s ease;
+  }
+  .btn:hover {
+    background-color: #6A574B; /* Slightly lighter/darker hover effect */
+  }
+  .btn.outline {
+    background: transparent;
+    border: 2px solid #4C3F36;
+    color: #4C3F36;
+  }
+  .btn.outline:hover {
+    background: #4C3F36;
+    color: #FFF;
+  }
+  
