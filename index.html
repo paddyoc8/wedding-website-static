@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="assets/css/home-reg.css"/>
     <link rel="stylesheet" href="assets/css/invite.css"/>
     <link rel="stylesheet" href="assets/css/popup.css"/>
+    <link rel="stylesheet" href="assets/css/section1.css"/>
     <script>
         function toggleDrawer() {
             const drawer = document.querySelector('.drawer');
@@ -69,6 +70,13 @@
             <p>Friday 1st August, 2025 · The Maynard, Grindleford</p>
             <a href="pages/rsvp.html" class="rsvp-button">RSVP</a><br><br>
         </div>
+        <div class="image-caption">
+          <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+          <span>Raven Crag, Lake District</span>
+        </div>
     </section>
 
     <!-- Overlay element -->
@@ -81,52 +89,116 @@
     <button onclick="closeBanner()">Continue to website</button>
   </div>
 
-    <section id="invite">
-      <div class="invite-card">
-        <h1>Emma & Patrick</h1>
-        <p>Invite you to celebrate</p>
-        <p>their marriage on</p><br>
-        <p><strong>Friday 1st August 2025</strong></p>
-        <p style="font-size: 1em;">at 1:30pm</p><br>
-        <p><strong>The Maynard</strong></p>
-        <p style="font-size: 1em;">Grindleford, Hope Valley</p><br>
-        <p>Reception to follow</p><br>
+  <section class="details-split">
+    <div class="details-text">
+      <!-- Each line is in its own paragraph to control spacing/indentation precisely -->
+      <p class="line">You’re invited to</p>
+      <p class="line">our wedding in the <em>Peak District</em></p>
+  
+      <p class="line">on Friday 1st August 2025</p>
+      <p class="line indent">Ceremony begins at 1:30pm</p>
+  
+      <p class="line">at The Maynard</p>
+      <p class="line indent">Grindleford, Hope Valley</p>
+  
+      <p class="line">Reception to follow</p>
+    </div>
+    <div class="details-image">
+      <img src="assets/images/heatherSlantingRock.jpg" alt="Peak District landscape" />
+      <div class="image-caption">
+        <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+          <circle cx="12" cy="13" r="4"></circle>
+        </svg>
+        <span>Over Owler Tor, Peak District</span>
       </div>
-    </section>    
+    </div>
+  </section>
 
     <!-- WHAT, WHERE, WHEN -->
     <section class="www-section">
-        <h2>When & Where</h2>
-        <div class="www-grid">
-            <div class="www-box">
-                <h3>Date</h3>
-                <p>Save the date! All key details for the day can be found on this website.</p>
-                <p>August 1st, 2025</p>
-            </div>
-            <div class="www-box">
-                <h3>Time</h3>
-                <p>You are able to arrive early at the venue. See full timings below.</p>
-                <p>12:30pm</p>
-            </div>
-            <div class="www-box">
-                <h3>Where</h3>
-                <div class="map-container">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2384.3286959885363!2d-1.630488423475293!3d53.30155937807391!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4879ff62be00b953%3A0xd648bf691767ce0c!2sThe%20Maynard!5e0!3m2!1sen!2suk!4v1740084938580!5m2!1sen!2suk" 
-                        width="500" 
-                        height="500" 
-                        style="border:0;" 
-                        allowfullscreen=""
-                        loading="lazy" 
-                        referrerpolicy="no-referrer-when-downgrade">
-                    </iframe>
-                  </div>
-                <p>The Maynard, Main Rd,<br>Grindleford, Hope Valley S32 2HE</p>
-            </div>
+      <div class="www-grid">
+        <!-- WHEN box -->
+        <div class="www-box www-when">
+          <h3>WHEN?</h3>
+          <p>
+            <!-- Clock Icon -->
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg"
+                width="16" height="16" fill="none"
+                stroke=var(--accent1) stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="8" r="7"></circle>
+              <polyline points="8 4 8 8 10 9"></polyline>
+            </svg>
+            Arrive from <strong>12:30pm</strong>
+          </p>
+          <p>
+            <!-- Chair Icon -->
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg"
+                width="16" height="16" fill="none"
+                stroke=var(--accent1) stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 10h8"></path>
+              <path d="M2 10v4"></path>
+              <path d="M10 10v4"></path>
+              <path d="M2 10V6"></path>
+              <path d="M2 6h3"></path>
+            </svg>
+            Take your seats at <strong>1:15pm</strong>
+          </p>
+          <p>
+            <!-- Rings Icon (accent color) -->
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg"
+                width="18" height="18" fill="none"
+                stroke=var(--accent1) stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+              <!-- Left ring -->
+              <circle cx="7" cy="11" r="4"></circle>
+              <!-- Right ring -->
+              <circle cx="13" cy="7" r="4"></circle>
+              <!-- Diamond shape on top of right ring -->
+              <path d="M13 3 L12 1 L13 -1 L14 1 Z" transform="translate(0 4)"></path>
+            </svg>
+            Ceremony begins at <strong>1:30pm</strong></p>
+          <a href="#schedule-overview" class="www-button">Schedule overview</a>
         </div>
+
+        <!-- WHERE box -->
+        <div class="www-box www-where">
+          <h3>WHERE?</h3>
+          <p>The ceremony and reception are at</p>
+          <p>
+            <!-- Pin Icon -->
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg"
+                width="16" height="16" fill="none"
+                stroke=var(--accent1) stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 10c0 3.5-4 7.5-4 7.5S4 13.5 4 10a4 4 0 1 1 8 0z"></path>
+              <circle cx="8" cy="10" r="1.5"></circle>
+            </svg>
+            The Maynard, Main Road<br>
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg"
+                width="16" height="16" fill="none"
+                stroke="transparent" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 10c0 3.5-4 7.5-4 7.5S4 13.5 4 10a4 4 0 1 1 8 0z"></path>
+              <circle cx="8" cy="10" r="1.5"></circle>
+            </svg>
+            Grindleford, Hope Valley, S32 2HE</p>
+          <a href="pages/venue-details.html" class="www-button">Venue details</a>
+        </div>
+
+        <!-- WHAT box -->
+        <div class="www-box www-what">
+          <h3>
+            WHAT?
+          </h3>
+          <a href="#FAQ-overview" class="www-button">FAQs</a>
+        </div>
+      </div>
     </section>
 
-    <section class="schedule">
+    <section id="schedule-overview" class="schedule">
         <h2>Schedule overview</h2>
       
         <div class="schedule-container">
@@ -178,23 +250,23 @@
           <!-- TIMELINE (dots) at the bottom edge -->
           <div class="timeline">
             <div class="event-dot active" data-target="event1">
-              <p>1:30pm<br>Ceremony</p>
+              <p><strong>Wedding<br>Ceremony</strong><br>1:30pm</p>
             </div>
             <div class="event-dot" data-target="event2">
-              <p>2:00pm<br>Drinks<br>Reception</p>
+              <p><strong>Drinks<br>Reception</strong><br>2:00pm</p>
             </div>
             <div class="event-dot" data-target="event3">
-              <p>4:00pm<br>Wedding<br>Breakfast</p>
+              <p><strong>Wedding<br>Breakfast</strong><br>4:00pm</p>
             </div>
             <div class="event-dot" data-target="event4">
-              <p>7:15pm<br>Reception</p>
+              <p><strong>Wedding<br>Reception</strong><br>7:15pm</p>
             </div>
           </div>
       
         </div> 
         
         <!-- /schedule-container -->
-        <p><br><br><br><br><br><a href="pages/schedule.html" class="link-btn">See the full schedule</a></p>
+        <p><br><br><br><br><br><a href="pages/schedule.html" class="schedule-button">See the full schedule</a></p>
       </section>
       
       <!-- REGISTRY -->
@@ -211,8 +283,8 @@
         <!-- RSVP -->
         <section class="rsvp">
             <h2>We hope you can make it!</h2>
-            <p>Please RSVP by 31st May 2025</p>
-            <a href="pages/rsvp.html" class="link-btn">RSVP</a>
+            <p>Please RSVP by Saturday 31st May.</p>
+            <a href="pages/rsvp.html" class="rsvp-btn">RSVP</a>
         </section>
 
       <script>

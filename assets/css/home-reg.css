@@ -2,13 +2,20 @@
      REGISTRY
   -------- */
   .registry {
-    background: #FAF8F5;
+    background: url('../images/invite.png');
+    background-size: cover;        /* Scale the image to cover the container */
+    background-position: center;   /* Center the image */
+    background-repeat: no-repeat;  /* Prevent tiling */
     padding: 4rem 2rem;
     text-align: center;
+    min-height: 500px;
+    width: 100%;
+    position: relative;
   }
   .registry-content {
     max-width: 600px;
     margin: 0 auto;
+    padding: 1rem 1rem;
   }
   .registry-content p {
     margin-bottom: 2rem;
@@ -38,5 +45,20 @@
   .btn.outline:hover {
     background: #4C3F36;
     color: #FFF;
+  }
+  .link-btn {
+    display: inline-block;
+    background-color: var(--accent1);
+    color: #FFF;
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    width: 100%;
+    max-width: 60%;
+  }
+  .link-btn:hover {
+    background-color: var(--accent2);
   }
   

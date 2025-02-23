@@ -27,7 +27,7 @@
     border-radius: 4px;
     padding: 2rem 2rem;
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 60%;
     background: var(--light1);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   
@@ -141,13 +141,28 @@
     background-color: var(--dark1);
   }
   .event-dot.active p {
-    font-weight: 600;
     color: var(--dark1);
   }
 
   .event-dot.active p:hover{
     color: var(--dark1);
     font-weight: 600;
+  }
+
+  .schedule-button {
+    display: inline-block;
+    background-color: var(--accent1);
+    color: #FFF;
+    padding: 0.8rem 2rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    width: 100%;
+    max-width: 60%;
+  }
+  .schedule-button:hover {
+    background-color: var(--accent2);
   }
   
   /* Fade-in animation */

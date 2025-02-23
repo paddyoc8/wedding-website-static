@@ -389,16 +389,21 @@ body {
   ::-webkit-scrollbar-thumb:hover {
     background-color: var(--accent2);
   }
-
-  .link-btn {
-    display: inline-block;
-    background-color: var(--accent1);
-    color: #FFF;
-    padding: 0.8rem 2rem;
-    border-radius: 50px;
-    font-weight: 600;
-    transition: background 0.3s ease;
+  /* Caption styling */
+  .image-caption {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: transparent;
+    padding: 5px 10px;
+    border-radius: 3px; 
+    font-size: 0.8rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
   }
-  .link-btn:hover {
-    background-color: var(--accent2);
+  
+  .image-caption .camera-icon {
+    margin-right: 5px;
+    align-items: center;
   }

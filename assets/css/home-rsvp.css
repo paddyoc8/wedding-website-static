@@ -4,7 +4,7 @@
   .rsvp {
     background: #ECE7E0;
     padding: 4rem 2rem;
-    text-align: center;
+    text-align: left;
   }
   .rsvp h2 {
     margin-bottom: 1rem;
@@ -14,14 +14,19 @@
     color: #555;
   }
   .rsvp-btn {
-    display: inline-block;
-    background-color: #4C3F36;
-    color: #FFF;
-    padding: 0.8rem 2rem;
-    border-radius: 50px;
-    font-weight: 600;
-    transition: background 0.3s ease;
-  }
-  .rsvp-btn:hover {
-    background-color: #6A574B;
-  }
+    border: 2px solid var(--accent1);
+    color: var(--accent1);
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-left: auto;
+    box-sizing: border-box;
+}
+
+.rsvp-btn:hover {
+    background-color: var(--accent1);
+    color: var(--light1);
+}
+  
