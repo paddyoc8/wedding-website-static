@@ -319,10 +319,10 @@ body {
 
 /* Scroll Down Button */
 .scroll-down {
-    position: relative; /* Position relative to the hero */
-    bottom: 0px; /* Move the arrow closer to the bottom of the image */
-    left: calc(50%-5px); /* Center horizontally */
-    transform: translateX(-50%); /* Perfect centering adjustment */
+    position: absolute; /* Position relative to the hero */
+    bottom: 5%; /* Move the arrow closer to the bottom of the image */
+    left: calc(50% - 35px);
+    translate: transformX(-35px);
     text-decoration: none;
     animation: bounce 2s infinite; /* Add the bounce effect */
     display: inline-block;
