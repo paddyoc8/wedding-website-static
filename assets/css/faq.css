@@ -53,7 +53,7 @@
 }
 
 .faq-answer.open {
-    max-height: 200px;
+    max-height: 100%;
     padding: 15px;
 }
 
