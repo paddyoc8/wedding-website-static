@@ -1,0 +1,134 @@
+/* Outer container */
+.faqs-section {
+    background-color: var(--accent1); /* Dark background */
+    padding: 2rem 0;
+  }
+  
+  /* Pink wrapper inside */
+  .faqs-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 1.5rem;
+    box-sizing: border-box;
+  }
+  
+  /* Title + Tabs */
+  .faqs-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+  
+  .faqs-header h2 {
+    margin-bottom: 0.5rem;
+    color: #fff;
+    font-size: 1.5rem;
+  }
+  
+  /* Tabs container */
+  .faqs-tabs {
+    display: inline-flex;
+    gap: 0.5rem;
+  }
+  .faqs-tabs p {
+    color: #fff;
+  }
+  
+  /* Individual tab buttons */
+  .tab-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #fff;
+    transition: background 0.3s ease;
+  }
+  
+  .tab-btn:hover {
+    background-color: transparent;
+  }
+  
+  /* Active tab style */
+  .tab-btn.active {
+    background-color: transparent;
+    color: #fff;
+    font-weight: 600;
+  }
+  
+  /* Content area */
+  .faqs-content {
+    display: flex;
+    flex-direction: column; /* We'll stack .faqs-box-groups vertically */
+    gap: 1rem;
+  }
+  
+  /* Each box group (for each tab) contains 2 boxes side by side */
+  .faqs-box-group {
+    display: flex;
+    gap: 1rem;
+    max-height: 50%;
+  }
+  
+  /* Individual boxes (white background) */
+  .faqs-box-left {
+    flex: 0 0 70%;
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 1rem;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-width: 70%;
+    position: relative; /* This makes the caption position relative to this container */
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+  }
+  .faqs-box-right {
+    flex: 0 0 30%;
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 1rem;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    max-width: 30%;
+  }
+  
+  .faqs-box-left img {
+    width: 100%;
+    max-height: 150px;
+    translate: translateY(-50px);
+    object-fit: cover;
+  }
+  
+  /* Footer link */
+  .faqs-footer {
+    text-align: center;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  
+  .faqs-button {
+    background-color: #c26e98;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    width: 100%;
+  }
+  
+  .faqs-button:hover {
+    background-color: #a85a7d;
+  }
+  
+  /* Responsive: stack columns on smaller screens */
+  @media (max-width: 768px) {
+    .faqs-box-group {
+      flex-direction: column;
+    }
+  }
+  
