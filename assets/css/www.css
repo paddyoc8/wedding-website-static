@@ -2,8 +2,9 @@
    WHAT, WHEN, WHERE
   ----------------- */
   .www-section {
-    padding: 2rem 2rem;
+    padding: 1rem 1rem;
     text-align: center;
+    background: #FAF8F5;
   }
   .www-section h2 {
     color: var(--dark1);
@@ -14,43 +15,41 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
-    margin-top: 1rem;
     text-align: left;
   }
   .www-box {
-    background: #FFF;
+    background: transparent;
     padding: 2rem;
-    min-width: 200px;
-    max-width: 250px;
+    min-width: 30%;
+    max-width: 30%;
     border-radius: 8px;
     border: 0px solid #DDD;
   }
   .www-box h3 {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
-    color: var(--dark1);
+    color: #824a4e;
     font-family: var(--bodyFont);
   }
   .www-box p {
     color: #555;
     margin-bottom: 0.3rem;
   }
-
-  .map-container {
-    position: relative;
-    /* 16:9 aspect ratio (or pick another ratio) */
-    padding-bottom: 56.25%; 
-    height: 0;
-    overflow: hidden;
-    max-width: 100%; /* Ensures it doesn’t overflow its parent */
-  }
-  
-  .map-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
+  .www-button {
+    display: inline-block;
+    background-color: var(--accent1);
+    color: var(--light1);
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-left: auto;
     width: 100%;
-    height: 100%;
-    border: 0; /* Remove default border */
   }
-  
+  .www-button:hover {
+    background-color: var(--accent2);
+    color: var(--light1);
+  }

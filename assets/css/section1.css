@@ -1,0 +1,60 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: #333;
+    line-height: 1.5;
+    background-color: #fff;
+  }
+  
+  /* --------------------- */
+  /* HERO SECTION (TOP)    */
+  /* --------------------- */
+  .details-split {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 50%;
+  }
+
+  .details-split h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .details-text {
+    flex: 0 0 55%;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+  
+  .details-image {
+    flex: 0 0 45%;
+    position: relative; /* This makes the caption position relative to this container */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .details-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Each line of text */
+.line {
+    margin: 0;
+    margin-bottom: 0.4em;  /* Adjust spacing between lines as needed */
+  }
+  
+  /* Indented lines */
+  .indent {
+    margin-left: 2em;      /* Adjust the indentation amount as you prefer */
+  }
