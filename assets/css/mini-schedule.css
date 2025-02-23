@@ -3,13 +3,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 0;
+  margin: 0 4rem;
 }
   /* Main section wrapper */
   .schedule {
     margin: 0 auto;
     text-align: center;
-    padding: 2rem 0rem;
+    padding: 4rem 0rem;
     background: var(--light1);
     width: 100%;  
   }
@@ -25,7 +25,7 @@
     position: relative;
     border: 1px solid var(--accent2);
     border-radius: 4px;
-    padding: 2rem;
+    padding: 2rem 2rem;
     margin: 0 auto;
     max-width: 800px;
     background: var(--light1);
@@ -98,19 +98,6 @@
     justify-content: space-around;
     align-items: top; /* circles at the container's bottom */
   }
-  
-  /* Remove or comment out any timeline line if using the container's border as the line:
-  .timeline::before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background-color: #ccc;
-    z-index: 0;
-  }
-  */
   
   /* Each dot with text above it */
   .event-dot {
