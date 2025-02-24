@@ -18,7 +18,6 @@
   .details-split {
     display: flex;
     align-items: center;
-    justify-content: center;
     height: 70vh
   }
   
@@ -27,33 +26,42 @@
     padding: 2rem;
     box-sizing: border-box;
     overflow: visible;
+    letter-spacing: 0ch;
+    white-space: nowrap;
+    justify-content: left;
+    max-width: 55%;
+    z-index: 3;
   }
   .details-text h1 {
     font-size: 3rem;
     font-weight: 100;
     margin-bottom: 1rem;
+    letter-spacing: 0.565ch;
   }
   .details-text h2 {
     font-size: 2rem;
     font-weight: 100;
-    margin-bottom: 1rem;
+    display: inline;
+    letter-spacing: 0.2ch;
   }
 
   .details-text p {
+    font-size: 1rem;
+    display: inline;
+    white-space: pre;
     margin-bottom: 1rem;
-    font-size: 1.5rem;
   }
   
   .details-image {
     flex: 0 0 45%;
-    position: relative; /* This makes the caption position relative to this container */
+    position: relative;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
-  }
+  }  
   
   .details-image img {
     max-height: 600px;
