@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="assets/css/home-reg.css"/>
     <link rel="stylesheet" href="assets/css/invite.css"/>
     <link rel="stylesheet" href="assets/css/popup.css"/>
-    <link rel="stylesheet" href="assets/css/section1.css"/>
+    <link rel="stylesheet" href="assets/css/details.css"/>
+    <link rel="stylesheet" href="assets/css/home-faq.css"/>
     <script>
         function toggleDrawer() {
             const drawer = document.querySelector('.drawer');
@@ -269,6 +270,81 @@
         <p><br><br><br><br><br><a href="pages/schedule.html" class="schedule-button">See the full schedule</a></p>
       </section>
       
+      <!-- FAQs -->
+      <section class="faqs-section">
+        <div class="faqs-wrapper">
+      
+          <!-- Title -->
+          <div class="faqs-header">
+            <h2>FAQs</h2>
+      
+            <!-- Tabs -->
+            <div class="faqs-tabs">
+              <button class="tab-btn active" data-tab="travel">TRAVEL</button><p> / </p>
+              <button class="tab-btn" data-tab="guestinfo">GUEST INFO</button><p> / </p>
+              <button class="tab-btn" data-tab="venue">VENUE</button>
+            </div>
+          </div>
+      
+          <!-- Main content area -->
+          <div class="faqs-content">
+      
+            <!-- TRAVEL content (shown by default) -->
+            <div class="faqs-box-group travel">
+              <!-- Left column box -->
+              <div class="faqs-box-left">
+                <img src="assets/images/maynardAbstract.jpg" alt="Scenic travel image" />
+                <h3>Is there parking at the venue?</h3>
+                <p>There is a small car park at The Maynard and street parking is available. Please remember to register your vehicle at the reception desk if you park at the hotel.</p>
+              </div>
+              <!-- Right column box -->
+              <div class="faqs-box-right">
+                <h3>Is there public transport nearby?</h3>
+                <p>There is a nearby <strong>train station</strong> and <strong>bus stop</strong>. Please find further details in the full FAQs, including numbers of local taxi companies as Uber does not operate in this area.</p>
+              </div>
+            </div>
+      
+            <!-- GUEST INFO content (hidden initially) -->
+            <div class="faqs-box-group guestinfo" style="display: none;">
+              <!-- Left column box -->
+              <div class="faqs-box-left">
+                <img src="guest-info.jpg" alt="Guests at the wedding" />
+                <h3>What should I wear?</h3>
+                <p>Dress code details, any theme, etc.</p>
+              </div>
+              <!-- Right column box -->
+              <div class="faqs-box-right">
+                <h3>Can I bring a plus one?</h3>
+                <p>Explain any policy regarding guests or children.</p>
+              </div>
+            </div>
+      
+            <!-- VENUE content (hidden initially) -->
+            <div class="faqs-box-group venue" style="display: none;">
+              <!-- Left column box -->
+              <div class="faqs-box-left">
+                <img src="venue.jpg" alt="The Maynard or relevant venue image" />
+                <h3>Is there parking at the venue?</h3>
+                <p>Parking details, instructions, etc.</p>
+              </div>
+              <!-- Right column box -->
+              <div class="faqs-box-right">
+                <h3>Accessibility</h3>
+                <p>Info about wheelchair access, lifts, etc.</p>
+              </div>
+            </div>
+      
+          </div>
+      
+          <!-- Footer link to full FAQs, optional -->
+          <div class="faqs-footer">
+            <a href="pages/faq.html" class="faqs-button">Full FAQs</a>
+          </div>
+      
+        </div>
+      </section>          
+      
+
       <!-- REGISTRY -->
         <section class="registry">
             <h2>Gift Registry</h2>
@@ -336,5 +412,33 @@
           document.getElementById("overlay").style.display = "none";
         }
       </script>
+
+      <script>
+        // Grab all the tab buttons and the box groups
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const boxGroups = document.querySelectorAll('.faqs-box-group');
+
+        tabButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            // Get the tab name (travel, guestinfo, or venue)
+            const tabName = button.getAttribute('data-tab');
+
+            // 1. Update the active button
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            // 2. Show/Hide the relevant box group
+            boxGroups.forEach(group => {
+              // If the group's class list contains the tabName, show it; otherwise hide it
+              if (group.classList.contains(tabName)) {
+                group.style.display = 'flex';  // or 'block' if you prefer
+              } else {
+                group.style.display = 'none';
+              }
+            });
+          });
+        });
+      </script>
+
 </body>
 </html>
