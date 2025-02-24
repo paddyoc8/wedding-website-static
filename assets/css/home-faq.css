@@ -26,6 +26,11 @@
     color: #fff;
     font-size: 1.5rem;
   }
+
+  .faqs-box-group h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
   
   /* Tabs container */
   .faqs-tabs {
@@ -34,6 +39,7 @@
   }
   .faqs-tabs p {
     color: #fff;
+    font-size: 1.5rem;
   }
   
   /* Individual tab buttons */
@@ -45,10 +51,12 @@
     cursor: pointer;
     color: #fff;
     transition: background 0.3s ease;
+    font-size: 1rem;
   }
   
   .tab-btn:hover {
     background-color: transparent;
+    font-weight: 600;
   }
   
   /* Active tab style */
