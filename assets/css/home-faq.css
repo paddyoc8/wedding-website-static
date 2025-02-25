@@ -2,16 +2,17 @@
 .faqs-section {
     background-color: var(--accent1); /* Dark background */
     padding: 2rem 0;
+    width: 100%;
   }
   
   /* Pink wrapper inside */
   .faqs-wrapper {
-    max-width: 900px;
     margin: 0 auto;
     background-color: transparent;
     border-radius: 6px;
-    padding: 1.5rem;
+    padding: 0rem;
     box-sizing: border-box;
+    max-width: 70%;
   }
   
   /* Title + Tabs */
@@ -77,8 +78,9 @@
   /* Each box group (for each tab) contains 2 boxes side by side */
   .faqs-box-group {
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     max-height: 50%;
+    margin-bottom: 1rem;
   }
   
   /* Individual boxes (white background) */
@@ -89,15 +91,7 @@
     flex: 1 1 250px;     /* Each card tries to be at least 300px wide */
     text-align: left;    /* If you’d like left-aligned details */
   }
-  
-  /* Footer link */
-  .faqs-footer {
-    text-align: center;
-    width: 100%;
-    padding: 2rem 0rem;
-    position: relative;
-  }
-  
+   
   .faqs-button {
     background-color: #fff;
     color: var(--accent1);
@@ -107,6 +101,7 @@
     font-weight: 600;
     transition: background 0.3s ease;
     width: 100%;
+    text-align: center;
   }
   
   .faqs-button:hover {
