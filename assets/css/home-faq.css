@@ -2,16 +2,17 @@
 .faqs-section {
     background-color: var(--accent1); /* Dark background */
     padding: 2rem 0;
+    width: 100%;
   }
   
   /* Pink wrapper inside */
   .faqs-wrapper {
-    max-width: 900px;
     margin: 0 auto;
     background-color: transparent;
     border-radius: 6px;
-    padding: 1.5rem;
+    padding: 0rem;
     box-sizing: border-box;
+    max-width: 70%;
   }
   
   /* Title + Tabs */
@@ -26,6 +27,11 @@
     color: #fff;
     font-size: 1.5rem;
   }
+
+  .faqs-box-group h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
   
   /* Tabs container */
   .faqs-tabs {
@@ -34,6 +40,7 @@
   }
   .faqs-tabs p {
     color: #fff;
+    font-size: 1.5rem;
   }
   
   /* Individual tab buttons */
@@ -45,10 +52,12 @@
     cursor: pointer;
     color: #fff;
     transition: background 0.3s ease;
+    font-size: 1rem;
   }
   
   .tab-btn:hover {
     background-color: transparent;
+    font-weight: 600;
   }
   
   /* Active tab style */
@@ -61,8 +70,9 @@
   /* Content area */
   .faqs-content {
     display: flex;
-    flex-direction: column; /* We'll stack .faqs-box-groups vertically */
-    gap: 1rem;
+    flex-wrap: wrap; /* So they stack on small screens */
+    justify-content: center;
+    margin-top: 2rem;
   }
   
   /* Each box group (for each tab) contains 2 boxes side by side */
@@ -70,59 +80,33 @@
     display: flex;
     gap: 1rem;
     max-height: 50%;
+    margin-bottom: 1rem;
   }
   
   /* Individual boxes (white background) */
-  .faqs-box-left {
-    flex: 0 0 70%;
-    background-color: #fff;
-    border-radius: 6px;
-    padding: 1rem;
-    box-sizing: border-box;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    max-width: 70%;
-    position: relative; /* This makes the caption position relative to this container */
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
+  .faqs-box {
+    background-color: #fff; /* A semi-transparent overlay for style */
+    padding: 2rem;
+    border-radius: 8px;
+    flex: 1 1 250px;     /* Each card tries to be at least 300px wide */
+    text-align: left;    /* If you’d like left-aligned details */
   }
-  .faqs-box-right {
-    flex: 0 0 30%;
-    background-color: #fff;
-    border-radius: 6px;
-    padding: 1rem;
-    box-sizing: border-box;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    max-width: 30%;
-  }
-  
-  .faqs-box-left img {
-    width: 100%;
-    max-height: 150px;
-    translate: translateY(-50px);
-    object-fit: cover;
-  }
-  
-  /* Footer link */
-  .faqs-footer {
-    text-align: center;
-    margin-top: 1rem;
-    width: 100%;
-  }
-  
+   
   .faqs-button {
-    background-color: #c26e98;
-    color: #fff;
+    background-color: #fff;
+    color: var(--accent1);
     padding: 0.75rem 1.5rem;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-weight: 600;
     transition: background 0.3s ease;
     width: 100%;
+    text-align: center;
   }
   
   .faqs-button:hover {
-    background-color: #a85a7d;
+    background-color: var(--accent2);
+    color: #fff;
   }
   
   /* Responsive: stack columns on smaller screens */
