@@ -109,7 +109,7 @@ body {
     position: relative;
     width: 100%;
     min-height: 100vh;
-    background: url('../images/header.jpg') no-repeat center/cover;
+    background: url('../images/heros/ravenCrag.jpg') no-repeat center/cover;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -122,7 +122,7 @@ body {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background: url('../images/maynardAbstract.jpg') no-repeat center/cover; /* Background image */
+    background: url('../images/heros/maynardAbstract.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -138,7 +138,7 @@ body {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background: url('../images/heatherRock.jpg') no-repeat center/cover; /* Background image */
+    background: url('../images/heros/motherCap.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -154,7 +154,7 @@ body {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background: url('../images/maynardEntrance.jpg') no-repeat center/cover; /* Background image */
+    background: url('../images/heros/maynardEntrance.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -170,7 +170,7 @@ body {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background: url('../images/maynardAbstract.jpg') no-repeat center/cover; /* Background image */
+    background: url('../images/heros/maynardAbstract.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -187,7 +187,7 @@ body {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background: url('../images/heatherRock.jpg') no-repeat center/cover; /* Background image */
+    background: url('../images/heros/motherCap.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -196,6 +196,18 @@ body {
     overflow: hidden; /* Ensures child elements stay within the hero */
     padding: 0; /* Removes any unwanted spacing */
     margin: 0; /* Ensures no external margins affect positioning */
+}
+
+.hero-location {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: url('../images/heros/bamfordEdge.jpg') no-repeat center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--light1);
 }
 
 .hero-overlay {

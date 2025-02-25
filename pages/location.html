@@ -74,6 +74,44 @@
             <span>Bamford Edge, Peak District</span>
           </div>
     </section>
+
+    <div class="slideshow-container">
+        <div class="slide fade">
+          <img src="../assets/images/slideshow/2019.jpg" alt="2019" class="responsive-image">
+          <div class="slide-caption">Cowering from a storm on Brown Knoll, 2019.</div>
+        </div>
+        <div class="slide fade">
+          <img src="image2.jpg" alt="Venue Image 2" class="responsive-image">
+          <div class="slide-caption">Our charming wedding venue nestled in nature.</div>
+        </div>
+        <div class="slide fade">
+          <img src="image3.jpg" alt="Venue Image 3" class="responsive-image">
+          <div class="slide-caption">Celebrating love amidst scenic landscapes.</div>
+        </div>
+        
+        <!-- Navigation arrows -->
+        <a class="slide-nav prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="slide-nav next" onclick="plusSlides(1)">&#10095;</a>
+      </div>   
+
+      <script>
+        let slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+        showSlides(slideIndex += n);
+        }
+
+        function showSlides(n) {
+        const slides = document.getElementsByClassName("slide");
+        if (n > slides.length) { slideIndex = 1; }
+        if (n < 1) { slideIndex = slides.length; }
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slides[slideIndex - 1].style.display = "block";
+        }
+      </script>
     
 </body>
 </html>
