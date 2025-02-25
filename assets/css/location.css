@@ -1,0 +1,12 @@
+/* Hero Section */
+.hero-location {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: url('../images/invite.png') no-repeat center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--light1);
+}
