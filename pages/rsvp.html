@@ -83,9 +83,6 @@
             <button type="submit">Search</button>
         </form>
 
-        <!-- Button to perform another search; initially hidden -->
-        <button id="searchAgain" class="hidden">Search for another guest</button>
-
         <!-- Existing RSVP Summary (if a guest has already submitted) -->
         <div id="existingRSVP" class="hidden">
             <h2>Your RSVP Summary</h2>
@@ -101,6 +98,8 @@
             <p>Other related guests you might like to RSVP for:</p>
             <div id="relatedGuestsContainer"></div>
             <button id="confirmSelection">Confirm selection</button>
+            <!-- Button to perform another search; initially hidden -->
+            <button id="searchAgain" class="hidden">Search for another guest</button>
           </div>
 
         <!-- New/Editing RSVP Forms -->
@@ -114,6 +113,7 @@
         <div id="thankYouStepYes" class="hidden">
             <p>Thank you for submitting your RSVP. If you need to make any changes you have until 31st May 2025.</p>
             <button id="editAfterSubmission">Edit RSVP</button>
+            <button id="searchAgain">Search for another guest</button>
         </div>
 
         <div id="thankYouStepNo" class="hidden">
@@ -406,7 +406,7 @@
                     <form class="individual-rsvp-form" data-key="${member.key}">
                         <h3>${member.Forename} ${member.Surname}</h3>
                         ${prefillMessage}
-                        <label>Attending:</label>
+                        <label><h4>Attending:</h4></label>
                         <select data-key="${member.key}" class="attending">
                             <option value="Yes" ${attendingYes}>Yes</option>
                             <option value="No" ${attendingNo}>No</option>
@@ -469,7 +469,7 @@
                 existingSubmissionsMessage.id = "existingSubmissionsMessage";
                 document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
                 }
-                existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
+                // existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
                 displayExistingRSVP(alreadySubmittedGroup);
                 document.getElementById("existingRSVP").classList.remove("hidden");
             }

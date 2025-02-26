@@ -42,7 +42,7 @@
     background-color: var(--accent2);
 }
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 /* Updated Submission Table Styling */
