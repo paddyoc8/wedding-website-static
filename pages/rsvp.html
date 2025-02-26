@@ -69,8 +69,7 @@
     </section>
     
     <div class="rsvp-container" id="next-section">
-        <h1>RSVP to Our Wedding</h1>
-
+        
         <!-- RSVP Closed Message (displayed after deadline) -->
         <div id="rsvpClosedMessage" class="hidden">
             <p>The RSVP window has closed. Please get in touch with us if you need further assistance.</p>
@@ -78,6 +77,7 @@
         
         <!-- Search Form -->
         <form id="searchForm">
+            <h1>RSVP to Our Wedding</h1>
             <label for="search">Search for your name:</label>
             <input type="text" id="search" placeholder="Enter your name" required>
             <button type="submit">Search</button>
@@ -93,6 +93,7 @@
 
         <!-- Confirmation Step (select group members if not already submitted) -->
         <div id="confirmationStep" class="hidden">
+            <h2>Select guests</h2>
             <p>Your search result:</p>
             <div id="primaryGuestContainer"></div>
             <p>Other related guests you might like to RSVP for:</p>
@@ -121,7 +122,7 @@
             <p>We're sorry you can't join us. We'll miss you on the big day!</p>
         </div>
 
-        <!-- Submission Table (for additional display after submission) -->
+        <!-- Submission Table (for additional display after submission)
         <div id="submissionTable" class="hidden">
             <h2>RSVP Submissions</h2>
             <table>
@@ -136,7 +137,24 @@
                 </thead>
                 <tbody id="submissionTableBody"></tbody>
             </table>
-        </div>
+        </div> -->
+
+        <!-- Final Submission / Confirmation Page -->
+        <!-- Final Submission / Confirmation Page -->
+        <div id="finalSubmission" class="hidden">
+            <div id="finalMessage">
+            <h2>Thank You!</h2>
+            <p>Your RSVP has been submitted successfully.</p>
+            <p>If you need to make any changes, please click the button below to edit your submission.</p>
+            <button id="editAfterSubmission">Edit RSVP</button>
+            </div>
+            <div id="finalSummary">
+            <h2>Submission Summary</h2>
+            <div class="order-summary">
+                <!-- We'll dynamically insert each guest's details as an order-item -->
+            </div>
+            </div>
+        </div>  
     </div>
 
     <div class="menu-container" id="menus">
@@ -204,7 +222,7 @@
                 "existingRSVP",
                 "thankYouStepYes",
                 "thankYouStepNo",
-                "submissionTable"
+                // "submissionTable"
             ];
             steps.forEach(id => {
                 const el = document.getElementById(id);
@@ -600,6 +618,7 @@
             });
 
             let selectedKeys = selectedGroup.map(member => member.key);
+            // After updating Firebase and fetching the latest RSVP data...
             Promise.all(
                 selectedKeys.map(key => db.ref(`rsvps/${key}`).once('value'))
             ).then(snapshots => {
@@ -613,34 +632,33 @@
                         }
                     }
                 });
-                submissionTableBody.innerHTML = "";
+                // Build the summary using order-item cards
+                const summaryContainer = document.querySelector('#finalSummary .order-summary');
+                summaryContainer.innerHTML = ""; // clear previous items
                 Object.values(latestRSVPs).forEach(member => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${member.Forename} ${member.Surname}</td>
-                        <td>${member.Attending}</td>
-                        <td>${member.Attending === "no" ? '-' : member.Menu || '-'}</td>
-                        <td>${member.Dietary || '-'}</td>
-                        <td>${member.NonDrinker || '-'}</td>
+                    let itemHTML = `
+                        <div class="order-item">
+                        <p><strong>Name:</strong> ${member.Forename} ${member.Surname}</p>
+                        <p><strong>Attending:</strong> ${member.Attending}</p>
+                        <p><strong>Menu:</strong> ${member.Attending.toLowerCase() === "no" ? '-' : (member.Menu || '-')}</p>
+                        <p><strong>Dietary:</strong> ${member.Dietary || '-'}</p>
+                        <p><strong>Alcohol Free:</strong> ${member.NonDrinker || '-'}</p>
+                        </div>
                     `;
-                    submissionTableBody.appendChild(row);
+                    summaryContainer.insertAdjacentHTML('beforeend', itemHTML);
                 });
-                submissionTable.classList.remove('hidden');
+                // Hide other steps and show finalSubmission
+                hideAllSteps();
+                document.getElementById("finalSubmission").classList.remove('hidden');
             });
+        });
 
-            // After updating Firebase, hide all steps and show the thank-you message:
-            hideAllSteps();
-            document.getElementById("menus").classList.remove('hidden'); // if needed
-            document.getElementById("thankYouStepYes").classList.remove('hidden');
-            // Optionally, hide rsvpForms if not already done.
-            });
-
-            document.getElementById("editAfterSubmission").addEventListener('click', () => {
+        document.getElementById("editAfterSubmission").addEventListener('click', () => {
             hideAllSteps();
             selectedGroup = currentGroup;
             createRSVPForms();
             document.getElementById("rsvpForms").classList.remove("hidden");
-            });
+        });
 
     </script>
     <script>
