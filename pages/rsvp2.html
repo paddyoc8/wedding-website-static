@@ -75,6 +75,16 @@
         <div id="rsvpClosedMessage" class="hidden">
             <p>The RSVP window has closed. Please get in touch with us if you need further assistance.</p>
         </div>
+        
+        <!-- Search Form -->
+        <form id="searchForm">
+            <label for="search">Search for your name:</label>
+            <input type="text" id="search" placeholder="Enter your name" required>
+            <button type="submit">Search</button>
+        </form>
+
+        <!-- Button to perform another search; initially hidden -->
+        <button id="searchAgain" class="hidden">Search for another guest</button>
 
         <!-- Existing RSVP Summary (if a guest has already submitted) -->
         <div id="existingRSVP" class="hidden">
@@ -84,19 +94,14 @@
             <button id="editRSVPButton">Edit RSVP</button>
         </div>
 
-        <!-- Search Form -->
-        <form id="searchForm">
-            <label for="search">Search for your name:</label>
-            <input type="text" id="search" placeholder="Enter your name" required>
-            <button type="submit">Search</button>
-        </form>
-
         <!-- Confirmation Step (select group members if not already submitted) -->
         <div id="confirmationStep" class="hidden">
-            <p>Would you like to RSVP for the guests below?</p>
-            <div id="groupDetails"></div>
+            <p>Your search result:</p>
+            <div id="primaryGuestContainer"></div>
+            <p>Other related guests you might like to RSVP for:</p>
+            <div id="relatedGuestsContainer"></div>
             <button id="confirmSelection">Confirm selection</button>
-        </div>
+          </div>
 
         <!-- New/Editing RSVP Forms -->
         <div id="rsvpForms" class="hidden">
@@ -238,65 +243,131 @@
             container.innerHTML = html;
         }
 
-        // Function to reset the page state before a new search
-        function resetSearch() {
-            document.getElementById("existingRSVP").classList.add('hidden');
-            document.getElementById("confirmationStep").classList.add('hidden');
-            document.getElementById("rsvpForms").classList.add('hidden');
-            document.getElementById("thankYouStepYes").classList.add('hidden');
-            document.getElementById("thankYouStepNo").classList.add('hidden');
-            document.getElementById("submissionTable").classList.add('hidden');
-            document.getElementById("rsvpSummaryContainer").innerHTML = "";
-            document.getElementById("groupDetails").innerHTML = "";
+        // Clear UI result elements without wiping out the search input value
+        function clearResults() {
+        const sections = [
+            "existingRSVP",
+            "confirmationStep",
+            "rsvpForms",
+            "thankYouStepYes",
+            "thankYouStepNo",
+            "submissionTable"
+        ];
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('hidden');
+        });
+
+        const containers = [
+            "primaryGuestContainer",
+            "relatedGuestsContainer"
+        ];
+        containers.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = "";
+        });
         }
+
+        // Reset everything including the search input (used when "Search for Another Guest" is clicked)
+        function resetSearch() {
+            clearResults();
+            const searchInput = document.getElementById("search");
+            if (searchInput) searchInput.value = "";
+        }
+
+        const searchAgainButton = document.getElementById('searchAgain');
 
         // Search for guest group in Firebase
         searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            // Reset all sections for a fresh search
-            resetSearch();
-            
+            // Only clear previous results, but keep the current search value intact
+            clearResults();
+
             const searchValue = document.getElementById('search').value.toLowerCase();
-
+            
             db.ref('rsvps').once('value').then(snapshot => {
-                currentGroup = [];
-                let groupID = null;
-
+                let matchingGuests = [];
+                // Loop through all guests to find matches based on the search input
                 snapshot.forEach(childSnapshot => {
-                    const guest = childSnapshot.val();
-                    const fullName = `${guest.Forename || ''} ${guest.Surname || ''}`.toLowerCase().trim();
-                    if (fullName.includes(searchValue)) {
-                        groupID = guest.GroupID || null;
-                    }
+                const guest = childSnapshot.val();
+                const fullName = `${guest.Forename || ''} ${guest.Surname || ''}`.toLowerCase().trim();
+                if (fullName.includes(searchValue)) {
+                    matchingGuests.push({ key: childSnapshot.key, ...guest });
+                }
+                });
+                
+                if (matchingGuests.length > 0) {
+                // Choose the primary match (first in the list)
+                const primaryMatch = matchingGuests[0];
+                const groupID = primaryMatch.GroupID || null;
+                
+                // After computing groupMembers in your search handler:
+                let groupMembers = [];
+                snapshot.forEach(childSnapshot => {
+                const guest = childSnapshot.val();
+                if (guest.GroupID === groupID) {
+                    groupMembers.push({ key: childSnapshot.key, ...guest });
+                }
                 });
 
-                snapshot.forEach(childSnapshot => {
-                    const guest = childSnapshot.val();
-                    if (guest.GroupID === groupID) {
-                        currentGroup.push({ key: childSnapshot.key, ...guest });
-                    }
-                });
+                // Update global currentGroup with the full group so that confirm selection finds them
+                currentGroup = groupMembers;
+                
+                // Check if every group member has already submitted an RSVP
+                const alreadySubmitted = currentGroup.every(member => member.Submitted === true);
+                
+                // Hide the search form and show the "Search for Another Guest" button
+                searchForm.classList.add('hidden');
+                searchAgainButton.classList.remove('hidden');
+                
+                if (alreadySubmitted) {
+                    // If everyone has submitted, display the existing RSVP summary
+                    displayExistingRSVP(currentGroup);
+                    document.getElementById("existingRSVP").classList.remove('hidden');
+                    return; // Stop further processing
+                }
 
-                if (currentGroup.length > 0) {
-                    // If all group members have already submitted, show summary
-                    const alreadySubmitted = currentGroup.every(member => member.Submitted === true);
-                    if (alreadySubmitted) {
-                        displayExistingRSVP(currentGroup);
-                        existingRSVP.classList.remove('hidden');
-                    } else {
-                        groupDetails.innerHTML = currentGroup.map(member => `
-                            <label>
-                                <input type="checkbox" class="groupMember" value="${member.key}" checked>
-                                ${member.Forename} ${member.Surname}
-                            </label><br>
-                        `).join('');
-                        confirmationStep.classList.remove('hidden');
-                    }
+                // Then update the UI for primary and related guests:
+                const primaryGuestContainer = document.getElementById('primaryGuestContainer');
+                const relatedGuestsContainer = document.getElementById('relatedGuestsContainer');
+
+                // Display the primary guest (with checkbox disabled)
+                primaryGuestContainer.innerHTML = `
+                <label>
+                    <input type="checkbox" class="groupMember" value="${primaryMatch.key}" checked disabled>
+                    ${primaryMatch.Forename} ${primaryMatch.Surname}
+                </label>
+                `;
+
+                // Display related guests (excluding primary match)
+                const relatedGuests = groupMembers.filter(member => member.key !== primaryMatch.key);
+                if (relatedGuests.length > 0) {
+                relatedGuestsContainer.innerHTML = relatedGuests.map(member => `
+                    <label>
+                    <input type="checkbox" class="groupMember" value="${member.key}" checked>
+                    ${member.Forename} ${member.Surname}
+                    </label>
+                `).join('<br>');
+                } else {
+                relatedGuestsContainer.innerHTML = `<p>No additional related guests found.</p>`;
+                }
+                
+                confirmationStep.classList.remove('hidden');
                 } else {
                     alert('No matching guests found.');
                 }
             });
-        });
+            });
+
+        // Event listener for "Search for Another Guest" button
+        searchAgainButton.addEventListener('click', () => {
+            resetSearch();
+            // Show the search form again
+            searchForm.classList.remove('hidden');
+            // Hide the "Search for Another Guest" button
+            searchAgainButton.classList.add('hidden');
+            });
+
 
         // Edit RSVP button for existing submissions
         document.getElementById("editRSVPButton").addEventListener('click', () => {
@@ -363,21 +434,54 @@
         }
 
         confirmSelection.addEventListener('click', () => {
-            const checkboxes = document.querySelectorAll('.groupMember:checked');
+            // Gather selected guests (including disabled primary guest)
+            const checkboxes = document.querySelectorAll('.groupMember');
             selectedGroup = [];
             checkboxes.forEach(checkbox => {
+                if (checkbox.checked || checkbox.disabled) {
                 let selectedMember = currentGroup.find(member => member.key === checkbox.value);
                 if (selectedMember) {
                     selectedGroup.push(selectedMember);
                 }
+                }
             });
+
             if (selectedGroup.length === 0) {
                 alert('Please select at least one person to RSVP for.');
                 return;
             }
-            createRSVPForms();
-            rsvpForms.classList.remove('hidden');
-        });
+
+            // Split the selected group into two arrays:
+            const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
+            const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
+
+            // If some guests have already submitted, display their previous submissions
+            // and add an edit button.
+            if (alreadySubmittedGroup.length > 0) {
+                // Display a message (assumes you have a container for existing submissions)
+                let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
+                if (!existingSubmissionsMessage) {
+                existingSubmissionsMessage = document.createElement("div");
+                existingSubmissionsMessage.id = "existingSubmissionsMessage";
+                existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
+                // Insert it before the existingRSVP container, for example:
+                document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
+                } else {
+                existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
+                }
+                // Use your existing function to display the summary for these guests
+                displayExistingRSVP(alreadySubmittedGroup);
+                document.getElementById("existingRSVP").classList.remove("hidden");
+            }
+
+            // For guests that haven't yet submitted, build the submission forms.
+            if (notSubmittedGroup.length > 0) {
+                // Update the global selectedGroup to just the ones needing new submission.
+                selectedGroup = notSubmittedGroup;
+                createRSVPForms();
+                rsvpForms.classList.remove("hidden");
+            }
+            });
 
         function createRSVPForms() {
             individualRSVPForms.innerHTML = '';
