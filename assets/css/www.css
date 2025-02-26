@@ -22,8 +22,10 @@
     padding: 2rem;
     min-width: 30%;
     max-width: 30%;
+    min-height: 100%;
     border-radius: 8px;
     border: 0px solid #DDD;
+    position: relative;
   }
   .www-box h3 {
     font-size: 1.2rem;
@@ -48,6 +50,7 @@
     transition: background-color 0.3s ease, color 0.3s ease;
     margin-left: auto;
     width: 100%;
+    bottom: 0;
   }
   .www-button:hover {
     background-color: var(--accent2);
