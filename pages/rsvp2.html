@@ -209,7 +209,8 @@
         function displayExistingRSVP(group) {
             const container = document.getElementById("rsvpSummaryContainer");
             let html = `
-                <table class="rsvp-summary-table">
+            <div class="table-responsive">    
+            <table class="rsvp-summary-table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -220,6 +221,7 @@
                     </tr>
                 </thead>
                 <tbody>
+            </div>
             `;
             group.forEach(member => {
                 html += `

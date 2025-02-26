@@ -254,3 +254,26 @@
 .rsvp-summary-table tr:nth-child(even) td {
     background-color: #f9f9fa;
 }
+
+/* Make any table inside .table-responsive scroll horizontally on small screens */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Optional: if you want a minimum width to preserve column layout */
+@media (max-width: 768px) {
+    .rsvp-summary-table,
+    #submissionTable table {
+        min-width: 600px;
+    }
+    
+    .rsvp-summary-table th,
+    .rsvp-summary-table td,
+    #submissionTable th,
+    #submissionTable td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+}
