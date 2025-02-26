@@ -235,6 +235,23 @@
         const submissionTableBody = document.getElementById('submissionTableBody');
         const existingRSVP = document.getElementById('existingRSVP');
 
+        const standardMenuContent = `
+            <p>Chicken liver parfait, red wine poached pear, red onion marmalade and toasted sourdough (GFa)</p>
+            <p>Lamb shanks with fondant potato, slow roasted Mediterranean vegetables and red wine jus (GF)</p>
+            <p>Traditional bread &amp; butter pudding, with crème anglaise and vanilla ice cream (V)</p>
+        `;
+        const vegetarianMenuContent = `
+            <p>Roasted tomato &amp; roasted red pepper soup (GF)(VE)</p>
+            <p>Root vegetable &amp; mushroom cottage pie served with green beans (VE)(GF)</p>
+            <p>Traditional bread &amp; butter pudding, with crème anglaise and vanilla ice cream (V)</p>
+        `;
+        const childMenuContent = `
+            <p>Halloumi sticks and tomato dipping sauce</p>
+            <p>Kid’s beef burger with chips</p>
+            <p>Warm chocolate brownie with vanilla ice cream (V)(GF)</p>
+        `;
+
+
         let currentGroup = [];
         let selectedGroup = [];
 
@@ -402,37 +419,64 @@
                     attendingYes = 'selected';
                 }
                 
+                // Build the form HTML string with pre-filled values:
                 const formHTML = `
                     <form class="individual-rsvp-form" data-key="${member.key}">
                         <h3>${member.Forename} ${member.Surname}</h3>
                         ${prefillMessage}
-                        <label><h4>Attending:</h4></label>
+
+                        <label>Attending:</label>
                         <select data-key="${member.key}" class="attending">
                             <option value="Yes" ${attendingYes}>Yes</option>
                             <option value="No" ${attendingNo}>No</option>
                         </select>
+
+                        <!-- Meal choices -->
                         <div class="meal-section" data-key="${member.key}">
                             <h4>Menu choice</h4>
                             <p>Please select your menu below. Full menus are set out at the bottom of the page.</p>
-                            <label><input type="radio" name="main-${member.key}" value="Standard" ${standard} required> Standard</label><br>
-                            <label><input type="radio" name="main-${member.key}" value="Vegetarian" ${vegetarian} required> Vegetarian</label><br>
-                            <label><input type="radio" name="main-${member.key}" value="Child" ${child} required> Children's</label><br>
+                            <label>
+                                <input type="radio" name="main-${member.key}" value="Standard" ${standard} required> Standard
+                                <span class="info-container">
+                                    <span class="info-icon">i</span>
+                                    <div class="tooltip">${standardMenuContent}</div>
+                                </span>
+                                </label><br>
+                                <label>
+                                <input type="radio" name="main-${member.key}" value="Vegetarian" ${vegetarian} required> Vegetarian
+                                <span class="info-container">
+                                    <span class="info-icon">i</span>
+                                    <div class="tooltip">${vegetarianMenuContent}</div>
+                                </span>
+                                </label><br>
+                                <label>
+                                <input type="radio" name="main-${member.key}" value="Child" ${child} required> Children's
+                                <span class="info-container">
+                                    <span class="info-icon">i</span>
+                                    <div class="tooltip">${childMenuContent}</div>
+                                </span>
+                                </label><br>
+                            
+                                <button type="button" class="menu-info-button"><a href="#menus">Menu info</a></button>
+
                             <h4>Specify any dietary requirements below</h4>
                             <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
                             <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
                             <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
                             <label for="other-${member.key}">Other dietary requirements (if any):</label>
                             <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
+
                             <h4>Please flag below if you would prefer the alcohol free package.</h4>
                             <label><input type="checkbox" name="non-drinker-${member.key}" value="Yes"> Alcohol free</label><br>
                         </div>
+
                         <div class="non-attending-message hidden" data-key="${member.key}">
                             <p>We're sorry you won't be able to celebrate with us.</p>
                         </div>
                     </form>
                     `;
                 return formHTML;
-            });
+                });
         }
 
         confirmSelection.addEventListener('click', () => {
