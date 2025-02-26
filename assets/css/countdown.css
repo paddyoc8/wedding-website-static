@@ -3,13 +3,14 @@
     margin: 0 auto;
     padding: 2rem;
     display: flex;
-    justify-content: space-between;
     background: #FAF8F5;
+    justify-content: center;
   }
   
   .time-box {
     text-align: center;
     width: 60%;
+    max-width: 10%;
   }
   
   .number {
@@ -24,3 +25,10 @@
     color: var(--accent1);
   }
   
+
+  @media (max-width: 768px) {
+    .time-box {
+      width: 100%;
+      max-width: 100%;
+    }
+}
