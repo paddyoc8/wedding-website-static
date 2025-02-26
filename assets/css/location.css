@@ -1,0 +1,71 @@
+/* Container inherits width from parent and can be constrained with max-width if desired */
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px; /* Remove or adjust if you prefer fluid sizing */
+    margin: auto;
+    overflow: hidden;
+  }
+  
+  /* Each slide should blend with your site's styling */
+  .slide {
+    display: none;
+    position: relative;
+  }
+  
+  /* Let images be responsive and adopt your site's image styling */
+  .responsive-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  /* Fade transition effect */
+  .fade {
+    animation: fadeEffect 0.8s;
+  }
+  
+  @keyframes fadeEffect {
+    from { opacity: 0.4; }
+    to { opacity: 1; }
+  }
+  
+  /* Caption uses CSS variables to match your site's color palette, or falls back to defaults */
+  .slide-caption {
+    color: var(--text-color, #fff);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Navigation arrows styled to align with your wider design */
+  .slide-nav {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    color: var(--primary-color, #fff);
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    user-select: none;
+    transform: translateY(-50%);
+    transition: background 0.3s ease;
+  }
+  
+  .slide-nav:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .prev {
+    left: 10px;
+  }
+  
+  .next {
+    right: 10px;
+  }
+  
