@@ -178,7 +178,12 @@
   .schedule-button:hover {
     background-color: var(--accent2);
   }
-  
+
+  .event-details {
+    border-left: 1px solid #ccc;  /* the vertical line */
+    margin-left: 1rem;           /* spacing so the text isn’t flush against the line */
+    padding-left: 2rem;
+  }
   /* Fade-in animation */
   @keyframes fadeIn {
     from {opacity: 0; transform: translateY(5px);}
