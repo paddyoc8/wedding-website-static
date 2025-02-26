@@ -181,4 +181,99 @@
     padding: 1rem;
     /* etc. */
   }
-  
+
+/* RSVP Closed Message Styling */
+#rsvpClosedMessage {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--dark1);
+    margin-bottom: 1rem;
+}
+
+#existingRSVP {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid var(--accent2);
+    border-radius: 5px;
+    background-color: #f9f9fa;
+    justify-content: center;
+    position: relative;
+}
+
+#editRSVPButton {
+    margin: 1rem auto;
+    display: block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--accent1);
+    border: none;
+    border-radius: 5px;
+    color: var(--light1);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#editRSVPButton:hover {
+    background-color: var(--accent2);
+}
+
+
+#rsvpSummaryContainer {
+    margin: 1rem 0;
+    padding: 0.5rem;
+}
+
+/* Shared RSVP Table Styling */
+.rsvp-summary-table {
+    margin: 0 auto;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--accent2);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rsvp-summary-table thead {
+    background-color: var(--accent1);
+    color: var(--light1);
+}
+
+.rsvp-summary-table th,
+.rsvp-summary-table td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--accent2);
+}
+
+.rsvp-summary-table tr:last-child td {
+    border-bottom: none;
+}
+
+.rsvp-summary-table tr:nth-child(even) td {
+    background-color: #f9f9fa;
+}
+
+/* Make any table inside .table-responsive scroll horizontally on small screens */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Optional: if you want a minimum width to preserve column layout */
+@media (max-width: 768px) {
+    .rsvp-summary-table,
+    #submissionTable table {
+        min-width: 600px;
+    }
+    
+    .rsvp-summary-table th,
+    .rsvp-summary-table td,
+    #submissionTable th,
+    #submissionTable td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+}

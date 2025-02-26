@@ -19,6 +19,7 @@
     font-size: 1.2rem;
     margin-bottom: 2rem;
     color: var(--dark1);
+    line-height: 1.5rem;
 }
 
 .schedule-timeline {
