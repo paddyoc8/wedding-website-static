@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="assets/css/popup.css"/>
     <link rel="stylesheet" href="assets/css/details.css"/>
     <link rel="stylesheet" href="assets/css/home-faq.css"/>
+    <link rel="stylesheet" href="assets/css/countdown.css"/>
     <script>
         function toggleDrawer() {
             const drawer = document.querySelector('.drawer');
@@ -91,6 +92,29 @@
     <p>If you wish to stay at The Maynard on the night of the wedding (Friday 1st August) we have X rooms available at £190 per room (including breakfast). Get in touch with us if you'd like to reserve a room.</p>
     <button onclick="closeBanner()">Continue to website</button>
   </div>
+
+  <div id="countdown-timer">
+    <div class="time-box">
+      <div class="number" id="months">00</div>
+      <div class="label">MONTHS</div>
+    </div>
+    <div class="time-box">
+      <div class="number" id="days">00</div>
+      <div class="label">DAYS</div>
+    </div>
+    <div class="time-box">
+      <div class="number" id="hours">00</div>
+      <div class="label">HOURS</div>
+    </div>
+    <div class="time-box">
+      <div class="number" id="minutes">00</div>
+      <div class="label">MINUTES</div>
+    </div>
+    <div class="time-box">
+      <div class="number" id="seconds">00</div>
+      <div class="label">SECONDS</div>
+    </div>
+  </div>  
 
   <section class="details-split">
     <div class="details-text">
@@ -447,6 +471,42 @@
           });
         });
       </script>
+
+      <script>
+        // Set your target date here (adjust as needed)
+        const targetDate = new Date("Aug 1, 2025 13:30:00").getTime();
+        
+        function updateCountdown() {
+          const now = new Date().getTime();
+          let diff = targetDate - now;
+        
+          // If the countdown is over, stop updating
+          if (diff < 0) {
+            diff = 0;
+            clearInterval(timerInterval);
+          }
+        
+          // Approximate calculation: 1 month ≈ 30.44 days
+          const msPerMonth = 1000 * 60 * 60 * 24 * 30.44;
+          const months = Math.floor(diff / msPerMonth);
+          const remainderAfterMonths = diff % msPerMonth;
+        
+          const days = Math.floor(remainderAfterMonths / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((remainderAfterMonths % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((remainderAfterMonths % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((remainderAfterMonths % (1000 * 60)) / 1000);
+        
+          document.getElementById("months").textContent = String(months).padStart(2, '0');
+          document.getElementById("days").textContent = String(days).padStart(2, '0');
+          document.getElementById("hours").textContent = String(hours).padStart(2, '0');
+          document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
+          document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
+        }
+        
+        // Initial call and update every second
+        updateCountdown();
+        const timerInterval = setInterval(updateCountdown, 1000);
+        </script>
 
 </body>
 </html>

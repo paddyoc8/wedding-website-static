@@ -1,0 +1,26 @@
+#countdown-timer {
+    width: 100%;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    background: #FAF8F5;
+  }
+  
+  .time-box {
+    text-align: center;
+    width: 60%;
+  }
+  
+  .number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--accent1);
+  }
+  
+  .label {
+    font-size: 0.8em;
+    margin-top: 5px;
+    color: var(--accent1);
+  }
+  
