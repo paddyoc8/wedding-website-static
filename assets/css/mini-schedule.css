@@ -12,6 +12,7 @@
     padding: 4rem 0rem;
     background: var(--light1);
     width: 100%;  
+    margin-bottom: 4rem;
   }
 
   .schedule h2 {
@@ -48,6 +49,14 @@
     justify-content: space-between;
     gap: 2rem;
     margin-bottom: 0rem; /* space above the timeline */
+  }
+
+  .event-content .schedule-button {
+    bottom: 10px;  /* Adjust spacing as needed */
+    right: 10px;
+    /* Optional: override width/max-width if necessary */
+    width: auto;
+    max-width: none;
   }
 
   .event-image {
@@ -163,21 +172,30 @@
     font-weight: 600;
   }
 
-  .schedule-button {
-    display: inline-block;
-    background-color: var(--accent1);
-    color: #FFF;
-    padding: 0.8rem 2rem;
-    border-radius: 0.25rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.3s ease;
-    width: 100%;
-    max-width: 70%;
-  }
-  .schedule-button:hover {
-    background-color: var(--accent2);
-  }
+  /* Existing schedule-button styling */
+.schedule-button {
+  display: inline-block;
+  background-color: var(--accent1);
+  color: #FFF;
+  padding: 0.8rem 2rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+.schedule-button:hover {
+  background-color: var(--accent2);
+}
+
+/* New modifier for mini-schedule */
+.schedule-button.schedule-button--mini {
+  position: absolute;
+  bottom: 10px;   /* adjust as needed */
+  right: 10px;    /* adjust as needed */
+  width: auto;
+  max-width: none;
+}
+
 
   .event-details {
     border-left: 1px solid #ccc;  /* the vertical line */
