@@ -194,6 +194,33 @@
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        
+        // Hide every major step in the RSVP flow.
+        function hideAllSteps() {
+            const steps = [
+                "searchForm",
+                "confirmationStep",
+                "rsvpForms",
+                "existingRSVP",
+                "thankYouStepYes",
+                "thankYouStepNo",
+                "submissionTable"
+            ];
+            steps.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add("hidden");
+            });
+            // Also hide the "Search for another guest" button.
+            const searchAgain = document.getElementById("searchAgain");
+            if (searchAgain) searchAgain.classList.add("hidden");
+            }
+
+            // Optionally, create a helper to show one step after hiding all.
+            function showStep(stepId) {
+                hideAllSteps();
+                const el = document.getElementById(stepId);
+                if (el) el.classList.remove("hidden");
+            }
 
         const searchForm = document.getElementById('searchForm');
         const confirmationStep = document.getElementById('confirmationStep');
@@ -245,28 +272,20 @@
 
         // Clear UI result elements without wiping out the search input value
         function clearResults() {
-        const sections = [
-            "existingRSVP",
-            "confirmationStep",
-            "rsvpForms",
-            "thankYouStepYes",
-            "thankYouStepNo",
-            "submissionTable"
-        ];
-        sections.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.classList.add('hidden');
-        });
-
-        const containers = [
-            "primaryGuestContainer",
-            "relatedGuestsContainer"
-        ];
-        containers.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.innerHTML = "";
-        });
-        }
+            // Hide result sections
+            const sections = ["existingRSVP", "confirmationStep", "rsvpForms", "thankYouStepYes", "thankYouStepNo", "submissionTable"];
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+            
+            // Clear result containers
+            const containers = ["primaryGuestContainer", "relatedGuestsContainer"];
+            containers.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = "";
+            });
+            }
 
         // Reset everything including the search input (used when "Search for Another Guest" is clicked)
         function resetSearch() {
@@ -280,14 +299,13 @@
         // Search for guest group in Firebase
         searchForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            // Only clear previous results, but keep the current search value intact
-            clearResults();
-
-            const searchValue = document.getElementById('search').value.toLowerCase();
+            // Hide all steps first
+            hideAllSteps();
             
+            const searchValue = document.getElementById('search').value.toLowerCase();
+
             db.ref('rsvps').once('value').then(snapshot => {
                 let matchingGuests = [];
-                // Loop through all guests to find matches based on the search input
                 snapshot.forEach(childSnapshot => {
                 const guest = childSnapshot.val();
                 const fullName = `${guest.Forename || ''} ${guest.Surname || ''}`.toLowerCase().trim();
@@ -295,77 +313,61 @@
                     matchingGuests.push({ key: childSnapshot.key, ...guest });
                 }
                 });
-                
+
                 if (matchingGuests.length > 0) {
-                // Choose the primary match (first in the list)
+                // Choose the primary match and get the group via GroupID
                 const primaryMatch = matchingGuests[0];
                 const groupID = primaryMatch.GroupID || null;
-                
-                // After computing groupMembers in your search handler:
                 let groupMembers = [];
                 snapshot.forEach(childSnapshot => {
-                const guest = childSnapshot.val();
-                if (guest.GroupID === groupID) {
+                    const guest = childSnapshot.val();
+                    if (guest.GroupID === groupID) {
                     groupMembers.push({ key: childSnapshot.key, ...guest });
-                }
+                    }
                 });
-
-                // Update global currentGroup with the full group so that confirm selection finds them
                 currentGroup = groupMembers;
-                
-                // Check if every group member has already submitted an RSVP
-                const alreadySubmitted = currentGroup.every(member => member.Submitted === true);
-                
-                // Hide the search form and show the "Search for Another Guest" button
+
+                // Now update the UI:
+                // Hide the search form and show the "Search for another guest" button.
                 searchForm.classList.add('hidden');
                 searchAgainButton.classList.remove('hidden');
-                
-                if (alreadySubmitted) {
-                    // If everyone has submitted, display the existing RSVP summary
-                    displayExistingRSVP(currentGroup);
-                    document.getElementById("existingRSVP").classList.remove('hidden');
-                    return; // Stop further processing
-                }
 
-                // Then update the UI for primary and related guests:
+                // Build the confirmation UI for primary and related guests.
                 const primaryGuestContainer = document.getElementById('primaryGuestContainer');
                 const relatedGuestsContainer = document.getElementById('relatedGuestsContainer');
 
-                // Display the primary guest (with checkbox disabled)
                 primaryGuestContainer.innerHTML = `
-                <label>
+                    <label>
                     <input type="checkbox" class="groupMember" value="${primaryMatch.key}" checked disabled>
                     ${primaryMatch.Forename} ${primaryMatch.Surname}
-                </label>
+                    </label>
                 `;
 
-                // Display related guests (excluding primary match)
                 const relatedGuests = groupMembers.filter(member => member.key !== primaryMatch.key);
                 if (relatedGuests.length > 0) {
-                relatedGuestsContainer.innerHTML = relatedGuests.map(member => `
+                    relatedGuestsContainer.innerHTML = relatedGuests.map(member => `
                     <label>
-                    <input type="checkbox" class="groupMember" value="${member.key}" checked>
-                    ${member.Forename} ${member.Surname}
+                        <input type="checkbox" class="groupMember" value="${member.key}" checked>
+                        ${member.Forename} ${member.Surname}
                     </label>
-                `).join('<br>');
+                    `).join('<br>');
                 } else {
-                relatedGuestsContainer.innerHTML = `<p>No additional related guests found.</p>`;
+                    relatedGuestsContainer.innerHTML = `<p>No additional related guests found.</p>`;
                 }
-                
-                confirmationStep.classList.remove('hidden');
+
+                // Show the confirmation step.
+                document.getElementById("confirmationStep").classList.remove('hidden');
+
                 } else {
-                    alert('No matching guests found.');
+                alert('No matching guests found.');
                 }
             });
             });
 
-        // Event listener for "Search for Another Guest" button
-        searchAgainButton.addEventListener('click', () => {
-            resetSearch();
-            // Show the search form again
-            searchForm.classList.remove('hidden');
-            // Hide the "Search for Another Guest" button
-            searchAgainButton.classList.add('hidden');
+            searchAgainButton.addEventListener('click', () => {
+                resetSearch(); // This clears previous results and resets the search input.
+                hideAllSteps();
+                document.getElementById("searchForm").classList.remove("hidden");
             });
 
 
@@ -434,7 +436,10 @@
         }
 
         confirmSelection.addEventListener('click', () => {
-            // Gather selected guests (including disabled primary guest)
+            // Hide all previous steps.
+            hideAllSteps();
+
+            // Gather selected guests (including disabled primary guest).
             const checkboxes = document.querySelectorAll('.groupMember');
             selectedGroup = [];
             checkboxes.forEach(checkbox => {
@@ -451,35 +456,29 @@
                 return;
             }
 
-            // Split the selected group into two arrays:
+            // Split the selected group:
             const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
             const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
 
-            // If some guests have already submitted, display their previous submissions
-            // and add an edit button.
             if (alreadySubmittedGroup.length > 0) {
-                // Display a message (assumes you have a container for existing submissions)
+                // Display their previous submission summary and an edit option.
+                // (Assumes the container existingRSVP and the element existingSubmissionsMessage exist.)
                 let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
                 if (!existingSubmissionsMessage) {
                 existingSubmissionsMessage = document.createElement("div");
                 existingSubmissionsMessage.id = "existingSubmissionsMessage";
-                existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
-                // Insert it before the existingRSVP container, for example:
                 document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
-                } else {
-                existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
                 }
-                // Use your existing function to display the summary for these guests
+                existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
                 displayExistingRSVP(alreadySubmittedGroup);
                 document.getElementById("existingRSVP").classList.remove("hidden");
             }
 
-            // For guests that haven't yet submitted, build the submission forms.
             if (notSubmittedGroup.length > 0) {
-                // Update the global selectedGroup to just the ones needing new submission.
+                // Build new submission forms for those who haven't submitted.
                 selectedGroup = notSubmittedGroup;
                 createRSVPForms();
-                rsvpForms.classList.remove("hidden");
+                document.getElementById("rsvpForms").classList.remove("hidden");
             }
             });
 
@@ -585,18 +584,20 @@
                 submissionTable.classList.remove('hidden');
             });
 
-            // Show menu options and thank you message with edit option
-            document.getElementById("menus").classList.remove('hidden');
-            thankYouStepYes.classList.remove('hidden');
-            rsvpForms.classList.add('hidden');
-        });
+            // After updating Firebase, hide all steps and show the thank-you message:
+            hideAllSteps();
+            document.getElementById("menus").classList.remove('hidden'); // if needed
+            document.getElementById("thankYouStepYes").classList.remove('hidden');
+            // Optionally, hide rsvpForms if not already done.
+            });
 
-        document.getElementById("editAfterSubmission").addEventListener('click', () => {
-            thankYouStepYes.classList.add('hidden');
+            document.getElementById("editAfterSubmission").addEventListener('click', () => {
+            hideAllSteps();
             selectedGroup = currentGroup;
             createRSVPForms();
-            rsvpForms.classList.remove('hidden');
-        });
+            document.getElementById("rsvpForms").classList.remove("hidden");
+            });
+
     </script>
     <script>
         // Collapsible menu FAQ logic
