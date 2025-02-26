@@ -122,11 +122,11 @@
       <h2>You’re invited to</h2>
       <h1>our wedding in the <strong>Peak District</strong></h1><br>
 
-      <p>on </p><h2>Friday 1st August 2025</h2><br>
-      <p><span style="color:#fff">on </span>Ceremony begins at 1:30pm</p><br><br>
+      <p>   on   </p><h2>Friday 1st August 2025</h2><br>
+      <p><span style="color:#fff">   on   </span>Ceremony begins at 1:30pm</p><br><br>
   
-      <p>at </p><h2>The Maynard</h2><br>
-      <p><span style="color:#fff">at </span>Grindleford, Hope Valley</p><br><br><br>
+      <p>   at   </p><h2>The Maynard</h2><br>
+      <p><span style="color:#fff">   at   </span>Grindleford, Hope Valley</p><br><br><br>
   
       <p>Reception to follow</p>
     </div>
@@ -220,6 +220,7 @@
           <h3>
             WHAT?
           </h3>
+          <p>Something will go in here.</p>
           <a href="#FAQ-overview" class="www-button">FAQs</a>
         </div>
       </div>
@@ -429,7 +430,7 @@
         document.addEventListener("DOMContentLoaded", function() {
           const lastShown = localStorage.getItem("bannerLastShown");
           const now = new Date().getTime();
-          const oneDay = 1//24 * 60 * 60 * 1000; // 24 hours in milliseconds
+          const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
           // Show banner and overlay if not shown in the last 24 hours
           if (!lastShown || (now - lastShown) > oneDay) {

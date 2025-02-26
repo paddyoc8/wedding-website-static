@@ -23,17 +23,17 @@
   /* SCHEDULE CONTAINER */
   .schedule-container {
     position: relative;
-    border: 1px solid var(--accent2);
+    border: 1px solid #e6e6e6;
     border-radius: 4px;
     padding: 2rem 2rem;
     margin: 0 auto;
     max-width: 70%;
     height: 100%;
     background: var(--light1);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.082); */
   
     /* Make the bottom border thicker or more distinct if desired: */
-    border-bottom: 2px solid var(--accent2);
+    border-bottom: 2px solid #e6e6e6;
     /* If you want the line to be darker: border-bottom-color: #333; */
   }
   
