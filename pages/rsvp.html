@@ -69,8 +69,7 @@
     </section>
     
     <div class="rsvp-container" id="next-section">
-        <h1>RSVP to Our Wedding</h1>
-
+        
         <!-- RSVP Closed Message (displayed after deadline) -->
         <div id="rsvpClosedMessage" class="hidden">
             <p>The RSVP window has closed. Please get in touch with us if you need further assistance.</p>
@@ -78,13 +77,11 @@
         
         <!-- Search Form -->
         <form id="searchForm">
+            <h1>RSVP to Our Wedding</h1>
             <label for="search">Search for your name:</label>
             <input type="text" id="search" placeholder="Enter your name" required>
             <button type="submit">Search</button>
         </form>
-
-        <!-- Button to perform another search; initially hidden -->
-        <button id="searchAgain" class="hidden">Search for another guest</button>
 
         <!-- Existing RSVP Summary (if a guest has already submitted) -->
         <div id="existingRSVP" class="hidden">
@@ -96,11 +93,14 @@
 
         <!-- Confirmation Step (select group members if not already submitted) -->
         <div id="confirmationStep" class="hidden">
+            <h2>Select guests</h2>
             <p>Your search result:</p>
             <div id="primaryGuestContainer"></div>
             <p>Other related guests you might like to RSVP for:</p>
             <div id="relatedGuestsContainer"></div>
             <button id="confirmSelection">Confirm selection</button>
+            <!-- Button to perform another search; initially hidden -->
+            <button id="searchAgain" class="hidden">Search for another guest</button>
           </div>
 
         <!-- New/Editing RSVP Forms -->
@@ -114,6 +114,7 @@
         <div id="thankYouStepYes" class="hidden">
             <p>Thank you for submitting your RSVP. If you need to make any changes you have until 31st May 2025.</p>
             <button id="editAfterSubmission">Edit RSVP</button>
+            <button id="searchAgain">Search for another guest</button>
         </div>
 
         <div id="thankYouStepNo" class="hidden">
@@ -121,7 +122,7 @@
             <p>We're sorry you can't join us. We'll miss you on the big day!</p>
         </div>
 
-        <!-- Submission Table (for additional display after submission) -->
+        <!-- Submission Table (for additional display after submission)
         <div id="submissionTable" class="hidden">
             <h2>RSVP Submissions</h2>
             <table>
@@ -136,7 +137,24 @@
                 </thead>
                 <tbody id="submissionTableBody"></tbody>
             </table>
-        </div>
+        </div> -->
+
+        <!-- Final Submission / Confirmation Page -->
+        <!-- Final Submission / Confirmation Page -->
+        <div id="finalSubmission" class="hidden">
+            <div id="finalMessage">
+            <h2>Thank You!</h2>
+            <p>Your RSVP has been submitted successfully.</p>
+            <p>If you need to make any changes, please click the button below to edit your submission.</p>
+            <button id="editAfterSubmission">Edit RSVP</button>
+            </div>
+            <div id="finalSummary">
+            <h2>Submission Summary</h2>
+            <div class="order-summary">
+                <!-- We'll dynamically insert each guest's details as an order-item -->
+            </div>
+            </div>
+        </div>  
     </div>
 
     <div class="menu-container" id="menus">
@@ -204,7 +222,7 @@
                 "existingRSVP",
                 "thankYouStepYes",
                 "thankYouStepNo",
-                "submissionTable"
+                // "submissionTable"
             ];
             steps.forEach(id => {
                 const el = document.getElementById(id);
@@ -234,6 +252,23 @@
         const submissionTable = document.getElementById('submissionTable');
         const submissionTableBody = document.getElementById('submissionTableBody');
         const existingRSVP = document.getElementById('existingRSVP');
+
+        const standardMenuContent = `
+            <p>Chicken liver parfait, red wine poached pear, red onion marmalade and toasted sourdough (GFa)</p>
+            <p>Lamb shanks with fondant potato, slow roasted Mediterranean vegetables and red wine jus (GF)</p>
+            <p>Traditional bread &amp; butter pudding, with crème anglaise and vanilla ice cream (V)</p>
+        `;
+        const vegetarianMenuContent = `
+            <p>Roasted tomato &amp; roasted red pepper soup (GF)(VE)</p>
+            <p>Root vegetable &amp; mushroom cottage pie served with green beans (VE)(GF)</p>
+            <p>Traditional bread &amp; butter pudding, with crème anglaise and vanilla ice cream (V)</p>
+        `;
+        const childMenuContent = `
+            <p>Halloumi sticks and tomato dipping sauce</p>
+            <p>Kid’s beef burger with chips</p>
+            <p>Warm chocolate brownie with vanilla ice cream (V)(GF)</p>
+        `;
+
 
         let currentGroup = [];
         let selectedGroup = [];
@@ -402,37 +437,64 @@
                     attendingYes = 'selected';
                 }
                 
+                // Build the form HTML string with pre-filled values:
                 const formHTML = `
                     <form class="individual-rsvp-form" data-key="${member.key}">
                         <h3>${member.Forename} ${member.Surname}</h3>
                         ${prefillMessage}
+
                         <label>Attending:</label>
                         <select data-key="${member.key}" class="attending">
                             <option value="Yes" ${attendingYes}>Yes</option>
                             <option value="No" ${attendingNo}>No</option>
                         </select>
+
+                        <!-- Meal choices -->
                         <div class="meal-section" data-key="${member.key}">
                             <h4>Menu choice</h4>
                             <p>Please select your menu below. Full menus are set out at the bottom of the page.</p>
-                            <label><input type="radio" name="main-${member.key}" value="Standard" ${standard} required> Standard</label><br>
-                            <label><input type="radio" name="main-${member.key}" value="Vegetarian" ${vegetarian} required> Vegetarian</label><br>
-                            <label><input type="radio" name="main-${member.key}" value="Child" ${child} required> Children's</label><br>
+                            <label>
+                                <input type="radio" name="main-${member.key}" value="Standard" ${standard} required> Standard
+                                <span class="info-container">
+                                    <span class="info-icon">i</span>
+                                    <div class="tooltip">${standardMenuContent}</div>
+                                </span>
+                                </label><br>
+                                <label>
+                                <input type="radio" name="main-${member.key}" value="Vegetarian" ${vegetarian} required> Vegetarian
+                                <span class="info-container">
+                                    <span class="info-icon">i</span>
+                                    <div class="tooltip">${vegetarianMenuContent}</div>
+                                </span>
+                                </label><br>
+                                <label>
+                                <input type="radio" name="main-${member.key}" value="Child" ${child} required> Children's
+                                <span class="info-container">
+                                    <span class="info-icon">i</span>
+                                    <div class="tooltip">${childMenuContent}</div>
+                                </span>
+                                </label><br>
+                            
+                                <button type="button" class="menu-info-button"><a href="#menus">Menu info</a></button>
+
                             <h4>Specify any dietary requirements below</h4>
                             <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
                             <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
                             <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
                             <label for="other-${member.key}">Other dietary requirements (if any):</label>
                             <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
+
                             <h4>Please flag below if you would prefer the alcohol free package.</h4>
                             <label><input type="checkbox" name="non-drinker-${member.key}" value="Yes"> Alcohol free</label><br>
                         </div>
+
                         <div class="non-attending-message hidden" data-key="${member.key}">
                             <p>We're sorry you won't be able to celebrate with us.</p>
                         </div>
                     </form>
                     `;
                 return formHTML;
-            });
+                });
         }
 
         confirmSelection.addEventListener('click', () => {
@@ -469,7 +531,7 @@
                 existingSubmissionsMessage.id = "existingSubmissionsMessage";
                 document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
                 }
-                existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
+                // existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
                 displayExistingRSVP(alreadySubmittedGroup);
                 document.getElementById("existingRSVP").classList.remove("hidden");
             }
@@ -556,6 +618,7 @@
             });
 
             let selectedKeys = selectedGroup.map(member => member.key);
+            // After updating Firebase and fetching the latest RSVP data...
             Promise.all(
                 selectedKeys.map(key => db.ref(`rsvps/${key}`).once('value'))
             ).then(snapshots => {
@@ -569,34 +632,33 @@
                         }
                     }
                 });
-                submissionTableBody.innerHTML = "";
+                // Build the summary using order-item cards
+                const summaryContainer = document.querySelector('#finalSummary .order-summary');
+                summaryContainer.innerHTML = ""; // clear previous items
                 Object.values(latestRSVPs).forEach(member => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${member.Forename} ${member.Surname}</td>
-                        <td>${member.Attending}</td>
-                        <td>${member.Attending === "no" ? '-' : member.Menu || '-'}</td>
-                        <td>${member.Dietary || '-'}</td>
-                        <td>${member.NonDrinker || '-'}</td>
+                    let itemHTML = `
+                        <div class="order-item">
+                        <p><strong>Name:</strong> ${member.Forename} ${member.Surname}</p>
+                        <p><strong>Attending:</strong> ${member.Attending}</p>
+                        <p><strong>Menu:</strong> ${member.Attending.toLowerCase() === "no" ? '-' : (member.Menu || '-')}</p>
+                        <p><strong>Dietary:</strong> ${member.Dietary || '-'}</p>
+                        <p><strong>Alcohol Free:</strong> ${member.NonDrinker || '-'}</p>
+                        </div>
                     `;
-                    submissionTableBody.appendChild(row);
+                    summaryContainer.insertAdjacentHTML('beforeend', itemHTML);
                 });
-                submissionTable.classList.remove('hidden');
+                // Hide other steps and show finalSubmission
+                hideAllSteps();
+                document.getElementById("finalSubmission").classList.remove('hidden');
             });
+        });
 
-            // After updating Firebase, hide all steps and show the thank-you message:
-            hideAllSteps();
-            document.getElementById("menus").classList.remove('hidden'); // if needed
-            document.getElementById("thankYouStepYes").classList.remove('hidden');
-            // Optionally, hide rsvpForms if not already done.
-            });
-
-            document.getElementById("editAfterSubmission").addEventListener('click', () => {
+        document.getElementById("editAfterSubmission").addEventListener('click', () => {
             hideAllSteps();
             selectedGroup = currentGroup;
             createRSVPForms();
             document.getElementById("rsvpForms").classList.remove("hidden");
-            });
+        });
 
     </script>
     <script>
