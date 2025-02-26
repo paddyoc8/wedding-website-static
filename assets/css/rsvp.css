@@ -17,7 +17,6 @@
 .rsvp-container form {
     display: flex;
     flex-direction: column;
-    background-color: #f9f9fa;
 }
 .rsvp-container label {
     margin: 0.5rem 0 0.2rem;
@@ -180,6 +179,7 @@
     border: 1px solid #ddd;
     margin-bottom: 1rem;
     padding: 1rem;
+    background-color: #f9f9fa;
     /* etc. */
   }
 
@@ -307,7 +307,7 @@
     left: 100%; /* Position it to the right of the icon */
     top: 50%;
     transform: translate(10px, -50%);
-    background: var(--accent2);
+    background: var(--light1);
     border: 1px solid var(--dark2);
     border-radius: 5px;
     padding: 10px;
@@ -323,16 +323,20 @@
 }
 
 .menu-info-button {
-    margin: 1rem auto;
-    display: block;
-    padding: 0.75rem 1.5rem;
-    background-color: var(--accent1);
-    border: none;
-    border-radius: 5px;
-    color: var(--light1);
+    display: inline-block;
+    background-color: transparent;
+    border: 1px solid var(--accent1);
+    color: #FFF;
+    padding: 0.8rem 2rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
     text-decoration: none;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s ease;
+}
+
+.menu-info-button a {
+    text-decoration: none; /* Remove underline */
+    color: #fff; /* Use the nav link color */
+    transition: color 0.3s; /* Match hover transition effect */
 }
 
