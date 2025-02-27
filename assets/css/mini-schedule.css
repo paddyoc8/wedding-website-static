@@ -205,70 +205,80 @@
     to   {opacity: 1; transform: translateY(0);}
   }
   
-  /* Responsive adjustments */
+
+
   @media (max-width: 768px) {
-    .event-content.active {
-      flex-direction: column;
+    /* Make the event container position relative */
+    .schedule-container {
+      position: relative;
+      padding: 0rem;
+      /* Remove fixed height so the container expands with content */
       height: auto;
+      display: block;
     }
 
-    .event-details {
-        text-align: left;
-        border-top: 1px solid #ccc;  /* the vertical line */
-        margin-top: 1rem;           /* spacing so the text isn’t flush against the line */
-        padding-top: 2rem;
-        position: relative;
-        margin-left: 0;
-        padding-left: 0;
-        border-left: none;
-    }
-    /* Each dot with text above it */
-    .event-dot {
+    .event-content.active {
       position: relative;
-      text-align: center;
-      cursor: pointer;
-      z-index: 1; /* Above the line */
-      width: 120px;  /* Or whatever you prefer */
-      /* The dot is at top, so no extra top padding needed */
+      padding: 1rem;
+      /* Remove fixed height so the container expands with content */
+      height: auto;
+      display: block;
     }
     
-    /* The label text sits *below* the dot */
-    .event-dot p {
-      margin-top: 1.5rem; /* gap so the text isn’t too close to the circle */
-      font-size: 0.85rem;
-      color: var(--dark1);
+    /* Position the image behind everything */
+    .event-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .event-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
     
-    .event-dot p:hover {
-      font-weight: 600;
-      color: var(--dark1);
-    }
-    
-    /* Circle “dot” pinned near the top */
-    .event-dot::before {
+    /* Create a transparent grey overlay using a pseudo-element */
+    .event-content.active::before {
       content: "";
       position: absolute;
-      top: 0; /* Dot at the top of .event-dot */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 14px;
-      height: 14px;
-      background-color: #ccc;
-      border-radius: 50%;
-      transition: background 0.3s;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4); /* adjust opacity/color as needed */
+      z-index: 2;
     }
-    .event-dot:hover::before {
-      background-color: var(--dark1);
-    }
-    .event-dot.active::before {
-      background-color: var(--dark1);
-    }
-    .event-dot.active p {
-      color: var(--dark1);
+    
+    /* Bring the text on top of the overlay */
+    .event-info,
+    .event-details {
+      position: relative;
+      z-index: 3;
+      padding: 1rem;
+      color: #fff;  /* adjust text color for readability */
+      text-align: center;
+      border-left: none;
+      padding-left: none;
+      margin-left: 0;
     }
 
-    .event-dot.active p:hover{
-      color: var(--dark1);
-      font-weight: 600;
+    .event-details p,
+    .event-info p {
+      margin-bottom: 1rem;
+      color: #fff
     }
+    .event-details h3,
+    .event-info h3 {
+      margin-bottom: 1rem;
+      color: #fff
+    }
+    
+    /* Optionally stack the text blocks vertically */
+    /* .event-info {
+      margin-bottom: 1rem;
+    } */
   }
+  

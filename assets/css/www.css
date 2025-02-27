@@ -56,3 +56,11 @@
     background-color: var(--accent2);
     color: var(--light1);
   }
+
+  @media (max-width: 768px) {
+    .www-section {
+      flex-direction: column;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+  }
