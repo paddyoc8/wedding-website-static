@@ -58,9 +58,15 @@
   }
 
   @media (max-width: 768px) {
-    .www-section {
+    .www-grid {
       flex-direction: column;
-      height: auto;
-      margin-bottom: 1rem;
+      align-items: center; /* Center boxes if desired */
+    }
+    .www-box {
+      min-width: 90%;
+      max-width: 90%;
+      margin-bottom: 1rem; /* Optional spacing between boxes */
+      padding: 0.5rem;
     }
   }
+  
