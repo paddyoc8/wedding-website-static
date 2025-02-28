@@ -12,6 +12,7 @@
     padding: 4rem 0rem;
     background: var(--light1);
     width: 100%;  
+    margin-bottom: 4rem;
   }
 
   .schedule h2 {
@@ -28,7 +29,7 @@
     padding: 2rem 2rem;
     margin: 0 auto;
     max-width: 70%;
-    height: 100%;
+    min-height: auto;
     background: var(--light1);
     /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.082); */
   
@@ -41,6 +42,7 @@
   .event-content {
     display: none;
     animation: fadeIn 0.3s ease-in forwards;
+    height: 30vh;
   }
   .event-content.active {
     position: relative;
@@ -50,10 +52,17 @@
     margin-bottom: 0rem; /* space above the timeline */
   }
 
+  .event-content .schedule-button {
+    bottom: 10px;  /* Adjust spacing as needed */
+    right: 10px;
+    /* Optional: override width/max-width if necessary */
+    width: auto;
+    max-width: none;
+  }
+
   .event-image {
-    width: 40%;
     justify-content: center;
-    flex: 1;
+    flex: 1 20%;
   }
   .event-image img {
     width: 100%;
@@ -62,7 +71,7 @@
   }
 
   .event-info {
-    flex: 3;
+    flex: 3 40%;
     text-align: left;
   }
   .event-info h3 {
@@ -74,16 +83,20 @@
     color: var(--dark1);
   }
   .event-details {
-    flex: 2;
+    flex: 2 40%;
     text-align: left;
+    border-left: 1px solid #ccc;  /* the vertical line */
+    margin-left: 1rem;           /* spacing so the text isn’t flush against the line */
+    padding-left: 2rem;
+    position: relative;
   }
-  .event-details h4 {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
+  .event-details h3 {
+    margin-bottom: 1rem;
     color: var(--dark1);
   }
   .event-details p {
     margin-bottom: 0.5rem;
+    color: var(--dark1);
   }
 
   .btn {
@@ -163,45 +176,109 @@
     font-weight: 600;
   }
 
-  .schedule-button {
-    display: inline-block;
-    background-color: var(--accent1);
-    color: #FFF;
-    padding: 0.8rem 2rem;
-    border-radius: 0.25rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.3s ease;
-    width: 100%;
-    max-width: 70%;
-  }
-  .schedule-button:hover {
-    background-color: var(--accent2);
-  }
-  
+  /* Existing schedule-button styling */
+.schedule-button {
+  display: inline-block;
+  background-color: var(--accent1);
+  color: #FFF;
+  padding: 0.8rem 2rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+.schedule-button:hover {
+  background-color: var(--accent2);
+}
+
+/* New modifier for mini-schedule */
+.schedule-button.schedule-button--mini {
+  justify-items: center;
+  margin-top: auto;
+  width: 100%;
+  text-align: center;
+}
+
   /* Fade-in animation */
   @keyframes fadeIn {
     from {opacity: 0; transform: translateY(5px);}
     to   {opacity: 1; transform: translateY(0);}
   }
   
-  /* Responsive adjustments */
+
+
   @media (max-width: 768px) {
-    .event-content.active {
-      flex-direction: column;
-    }
-    .timeline {
-      position: static; /* Let it flow normally if you'd like on mobile */
+    /* Make the event container position relative */
+    .schedule-container {
+      position: relative;
+      padding: 0rem;
+      /* Remove fixed height so the container expands with content */
       height: auto;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 2rem 0;
+      display: block;
     }
-    .event-dot {
-      margin-bottom: 1rem;
+
+    .event-content.active {
+      position: relative;
+      padding: 1rem;
+      /* Remove fixed height so the container expands with content */
+      height: auto;
+      display: block;
     }
-    .event-dot::before {
-      bottom: auto;
+    
+    /* Position the image behind everything */
+    .event-image {
+      position: absolute;
       top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
     }
+    .event-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* Create a transparent grey overlay using a pseudo-element */
+    .event-content.active::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4); /* adjust opacity/color as needed */
+      z-index: 2;
+    }
+    
+    /* Bring the text on top of the overlay */
+    .event-info,
+    .event-details {
+      position: relative;
+      z-index: 3;
+      padding: 1rem;
+      color: #fff;  /* adjust text color for readability */
+      text-align: center;
+      border-left: none;
+      padding-left: none;
+      margin-left: 0;
+    }
+
+    .event-details p,
+    .event-info p {
+      margin-bottom: 1rem;
+      color: #fff
+    }
+    .event-details h3,
+    .event-info h3 {
+      margin-bottom: 1rem;
+      color: #fff
+    }
+    
+    /* Optionally stack the text blocks vertically */
+    /* .event-info {
+      margin-bottom: 1rem;
+    } */
   }
+  
