@@ -8,13 +8,6 @@
     margin-top: 2rem;
 }
 
-.hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 2rem;
-    width: 70%;
-}
-
 .contact-card {
     background-color: rgba(255, 255, 255, 0.1); /* A semi-transparent overlay for style */
     padding: 2rem;
@@ -51,3 +44,12 @@
     /* Optionally adjust stroke-width or color if needed: */
     stroke-width: 2;
   }
+
+@media (max-width: 768px) {
+    .contact-card {
+        flex: 1 1 100%; /* Each card takes up the full width */
+    }
+    .hero-content {
+        width: 80%;
+    }
+}
