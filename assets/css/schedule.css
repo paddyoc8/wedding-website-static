@@ -27,7 +27,7 @@
     left: 50%;
     top: 0;
     transform: translateX(-50%);
-    width: 4px;
+    width: 2px;
     height: 100%;
     background-color: var(--accent1);
     z-index: 0;
@@ -39,12 +39,17 @@
     margin-bottom: 3rem;
     z-index: 1;
   }
+  .schedule-row.alt .schedule-content {
+    flex-direction: row-reverse; /* Swap the two columns */
+  }
   
   /* Date headings (e.g. FRIDAY 1ST AUGUST) */
   .schedule-date {
     margin: 2rem 0 1rem;
+    /* background-color: var(--light1); */
     background-color: var(--accent1);
     color: #fff;
+    /* color: var(--dark1); */
     padding: 1rem;
     border-radius: 8px;
   }
@@ -56,14 +61,18 @@
   
   /* Row header: white text + accent background */
   .schedule-header {
-    background-color: var(--light1);
-    color: var(--accent1);
+    background-color: transparent;
+    /* color: var(--accent1); */
     padding: 1rem;
-    margin-bottom: 1rem;
     border-radius: 8px;
-    border: 1px solid var(--accent1);
+    /* border: 1px solid var(--accent1); */
     position: relative;
+    width: 47%;
   }
+  .schedule-header.alt {
+    left: 50%; /* Swap the two columns */
+  }
+
   .schedule-header h2 {
     font-family: var(--titleFont);
     font-size: 1.8rem;
@@ -101,10 +110,10 @@
   
   /* Collapsible details in the right column */
   .schedule-right details {
-    margin-bottom: 1rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--accent1);
     border-radius: 4px;
     padding: 0.5rem;
+    margin: 1rem;
   }
   .schedule-right summary {
     cursor: pointer;
@@ -121,6 +130,38 @@
     .schedule-right {
       max-width: 100%;
       border: 1px solid var(--accent1);
+    }
+    .schedule-timeline::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 100%;
+      background-color: var(--accent1);
+      z-index: 0;
+    }
+    /* Row header: white text + accent background */
+    .schedule-header {
+      background-color: var(--light1);
+      /* color: var(--accent1); */
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--accent1);
+      position: relative;
+      max-width: 300px;
+      margin-bottom: 1rem;
+    }
+    .schedule-header.alt {
+      background-color: var(--light1);
+      /* color: var(--accent1); */
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--accent1);
+      position: relative;
+      width: auto;
+      left: auto;
     }
   }
   
