@@ -1,93 +1,109 @@
 /* Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    color: #333;
-    line-height: 1.5;
-    background-color: #fff;
-  }
-  
-  /* --------------------- */
-  /* HERO SECTION (TOP)    */
-  /* --------------------- */
-  .details-split {
-    display: flex;
-    align-items: center;
-    height: 80vh
-  }
-  
-  .details-text {
-    flex: 0 0 55%;
-    padding: 4rem 4rem;
-    box-sizing: border-box;
-    overflow: visible;
-    letter-spacing: 0ch;
-    white-space: nowrap;
-    justify-content: left;
-    max-width: 55%;
-    z-index: 3;
-  }
-  .details-text h1 {
-    font-size: 4rem;
-    font-weight: 100;
-    margin-bottom: 1rem;
-    letter-spacing: 0.2ch;
-  }
-  .details-text h2 {
-    font-size: 2rem;
-    font-weight: 100;
-    display: inline;
-    letter-spacing: 0.2ch;
-  }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  .details-text p {
-    font-size: 1.5rem;
-    display: inline;
-    white-space: pre;
-    margin-bottom: 1rem;
-    letter-spacing: 0.2ch;
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  color: #333;
+  background-color: #fff;
+  line-height: 1.5;
+}
+
+/* --------------------- */
+/* DETAILS SECTION       */
+/* --------------------- */
+.details-split {
+  position: relative;
+  height: 80vh;
+  overflow: hidden;
+}
+
+/* Full-width container for text */
+.details-text {
+  position: relative;
+  width: 100%;
+  z-index: 2;
+}
+
+/* Inner wrapper restricts the text to 55% on desktop */
+.details-text-inner {
+  max-width: 100%;
+  padding: 4rem;
+  text-align: left;
+}
+
+/* Text styles */
+.details-text-inner h1 {
+  font-size: 4rem;
+  font-weight: 100;
+  margin-bottom: 1rem;
+  letter-spacing: 0.2ch;
+}
+
+.details-text-inner h2 {
+  font-size: 2rem;
+  font-weight: 100;
+  margin-bottom: 1rem;
+  letter-spacing: 0.2ch;
+}
+
+.details-text-inner p {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.2ch;
+}
+
+/* --------------------- */
+/* Background Image (45%)*/
+/* --------------------- */
+.details-image {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.details-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --------------------- */
+/* Responsive Adjustments */
+/* --------------------- */
+
+/* Mobile (max-width: 768px): Use overlay */
+@media (max-width: 768px) {
+  .details-split {
+    height: 100vh;
   }
-  
+  /* Text container becomes overlay */
+  .details-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    color: #fff;
+  }
+  /* Inner text wrapper fills full width on mobile */
+  .details-text-inner {
+    max-width: 100%;
+    padding: 1rem;
+  }
+  /* Make image container relative on mobile */
   .details-image {
-    flex: 0 0 45%;
     position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 100%;
     height: 100%;
-  }  
-  
-  .details-image img {
-    max-height: 700px;
-    object-fit: cover;
   }
-
-  /* Each line of text */
-.line {
-    margin: 0;
-    margin-bottom: 0.4em;  /* Adjust spacing between lines as needed */
-  }
-  
-  /* Indented lines */
-  .indent {
-    margin-left: 2em;      /* Adjust the indentation amount as you prefer */
-  }
-
-  @media (max-width: 768px) {
-    .details-image {
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-    } 
 }
