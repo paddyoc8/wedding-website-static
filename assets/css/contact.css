@@ -50,6 +50,6 @@
         flex: 1 1 100%; /* Each card takes up the full width */
     }
     .hero-content {
-        width: 80%;
+        width: 90%;
     }
 }
