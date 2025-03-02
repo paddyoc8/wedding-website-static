@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emma & Patrick</title>
-    <link rel="stylesheet" href="../assets/css/core.css">
-    <link rel="stylesheet" href="../assets/css/schedule.css">
-    <script>
-        function toggleDrawer() {
-            const drawer = document.querySelector('.drawer');
-            drawer.classList.toggle('open');
-        }
-    </script>
-    <script>
-        document.querySelector('.scroll-down').addEventListener('click', function (e) {
-            e.preventDefault(); // Prevent the default jump
-            const target = document.querySelector(this.getAttribute('href'));
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emma & Patrick - Schedule</title>
+  <link rel="stylesheet" href="../assets/css/core.css">
+  <link rel="stylesheet" href="../assets/css/schedule.css">
+  <script>
+    function toggleDrawer() {
+        const drawer = document.querySelector('.drawer');
+        drawer.classList.toggle('open');
+    }
+</script>
+<script>
+    document.querySelector('.scroll-down').addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent the default jump
+        const target = document.querySelector(this.getAttribute('href'));
+        target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
         });
-    </script>
-    
-    
+    });
+</script>
+
 </head>
 <body>
     <header>
@@ -78,71 +77,260 @@
         </div>
     </section>
 
-    <!-- Schedule Section -->
-    <section class="schedule">
-        <div class="container", id="next-section">
+  <section class="schedule">
+    <div class="schedule-timeline">
+        <div class="container">
+        
+        <!-- Example Date Heading -->
+        <div class="schedule-date">
+            <h3>FRIDAY 1ST AUGUST</h3>
+        </div>
 
-            <div class="schedule-timeline">
-                <div class="schedule-item left">
-                    <div class="content">
-                        <h3>FRIDAY 1ST AUGUST</h3>
-                    </div>
-                </div>
-                
-                <div class="schedule-item left">
-                    <div class="content">
-                        <div class="marker"></div>
-                        <h2>CEREMONY</h2>
-                        <h4>1:30pm - 2:00pm</h4>
-                        <p>Guests are able to arrive at the Maynard from 12:30pm and may head the main bar on arrival. Guests will be called to the Chatsworth Suite from 1:15pm, ready for the ceremony to begin at 1:30pm.</p>
-                    </div>
-                </div>
+        <!-- ROW 1 -->
+        <div class="schedule-row">
+            <!-- Row Header (full width) -->
+            <div class="schedule-header">
+                <h2>Wedding Ceremony</h2>
+                <h4>📍 Chatsworth Suite, The Maynard &nbsp;·&nbsp; 1:30 PM - 2:00 PM</h4>
+            </div>
 
-                <div class="schedule-item right">
-                    <div class="marker"></div>
-                    <div class="content">
-                        <h2>DRINKS RECEPTION</h2>
-                        <h4>2:00pm - 4:00pm</h4>
-                        <p>A welcome drink and canapes will be served in the garden or main bar (weather dependent!) after the service. If you are staying in the hotel, you will be able to check into your room during this time.</p>
-                    </div>
-                </div>
-
-                <div class="schedule-item left">
-                    <div class="marker"></div>
-                    <div class="content">
-                        <h2>WEDDING BREAKFAST</h2>
-                        <h4>4:00pm - 6:00pm</h4>
-                        <p>Eat. Drink. While the Chatsworth Suite is being turned around for the reception, we will go to the main bar or to the patio.</p>
-                        <p>Menu options (repeat from RSVP)</p>
-                    </div>
-                </div>
-
-                <div class="schedule-item right">
-                    <div class="marker"></div>
-                    <div class="content">
-                        <h2>WEDDING RECEPTION</h2>
-                        <h4>7:15pm - 12:00am</h4>
-                        <p>Cake cutting and dancing. Evening food of bacon butties and mushroom melts will be served at 8:30pm. Last orders are at 11:30pm and carriages are at 12:00am.</p>
-                    </div>
-                </div>
-
-                <div class="schedule-item left">
-                    <div class="content">
-                        <h3>SATURDAY 2ND AUGUST</h3>
-                    </div>
-                </div>
-
-                <div class="schedule-item left">
-                    <div class="marker"></div>
-                    <div class="content">
-                        <h2>PARKRUN</h2>
-                        <h4>9am</h4>
-                        <p>We plan to do the Monsal Trail parkrun the morning after the wedding. Anyone is welcome to join us or simply meet us for a coffee in the cafe before we head off on our honeymoon!</p>
-                    </div>
-                </div>
-
+            <!-- Row Content: Two columns -->
+            <div class="schedule-content">
+            <div class="schedule-left">
+                <p>
+                You’re welcome to arrive at The Maynard from <strong>12:30 PM</strong> and relax at the main bar.
+                </p>
+                <p> 
+                At <strong>1:15 PM</strong>, you’ll be invited upstairs to take your seats in the 
+                <strong>Chatsworth Suite</strong>, with the ceremony beginning promptly at <strong>1:30 PM</strong>.
+                Any guests arriving after this time will be asked to wait until the ceremony has ended before joining. 
+                The ceremony lasts about 30 minutes, after which we’ll head to the drinks reception.
+                </p>
+            </div>
+            <div class="schedule-right">
+                <!-- <details>
+                <summary><strong>🕰️ Timings</strong></summary>
+                <p>
+                    · 12:30 PM<strong> Arrive & relax at the bar</strong> 
+                    · 1:15 PM<strong> Take your seats in the Chatsworth Suite</strong> 
+                    · 1:30 PM<strong> Ceremony begins</strong> 
+                    · 2:00 PM<strong> Confetti throw & photos outside</strong>
+                </p>
+                </details> -->
+                <details>
+                    <summary>🚗 <strong>Parking</strong></summary>
+                    <p>
+                        On-site parking is available at The Maynard. Please remember to register your car at reception upon arrival.<br>
+                        💡 If the car park is full, street parking is available nearby.
+                    </p>
+                </details>
+                <details>
+                    <summary>🛗 <strong>Accessibility</strong></summary>
+                    <p>A lift is available between the main bar and the Chatsworth Suite.</p>
+                </details>
+                <details>
+                    <summary>⏳ <strong>Late Arrivals</strong></summary>
+                    <p>Doors to the Chatsworth Suite will close prior to the ceremony. Please arrive no later than 1:15 PM to take your seats in the Chatsworth Suite.</p>
+                </details>
+                <details>
+                    <summary>💐 <strong>After the Ceremony</strong></summary>
+                    <p>We’ll head straight to the drinks reception to celebrate!</p>
+                </details>
+            </div>
             </div>
         </div>
-    </section>
+
+        <!-- ROW 2 (Example) -->
+        <div class="schedule-row alt">
+            <!-- Row Header (full width) -->
+            <div class="schedule-header alt">
+                <h2>Drinks Reception</h2>
+                <h4>📍 Garden ⏳ 2:00 PM - 4:00 PM</h4>
+            </div>
+
+            <!-- Row Content: Two columns -->
+            <div class="schedule-content">
+            <div class="schedule-left">
+                <p>After the ceremony, we’ll celebrate with a confetti throw before making our way to 
+                    the <strong>garden</strong> for a drinks reception (<strong>or the main bar if the weather isn’t on our side</strong>). <br>
+                </p>
+                <p>Enjoy a welcome drink and canapés while the Chatsworth Suite is being turned 
+                    around for the wedding breakfast. 
+                </p>
+                <p><em>At <strong>3:45 PM</strong>, you will be invited back in to the Chatsworth Suite to take your seats.</em></p>
+            </div>
+            <div class="schedule-right">
+                <details>
+                    <summary>🍾 <strong>Drinks</strong></summary>
+                    <p>
+                        Sparkling wine will be served as a welcome drink. If you would prefer non-alcoholic options throughout 
+                        the wedding, please let us know in your RSVP.
+                    </p>
+                </details>
+
+                <details>
+                    <summary>🍸 <strong>Bars</strong></summary>
+                        <p>Drinks can be purchased from the bars in the <strong>garden</strong>, <strong>Chatsworth Suite</strong>, and <strong>main bar</strong>.
+                    </p>
+                </details>
+
+                <details>
+                    <summary>🥂 <strong>Canapés</strong></summary>
+                        <p>A selection of canapés will be served alongside welcome drinks,
+                             <strong>with vegan and other dietary alternatives provided as needed</strong>. 
+                             Please specify any dietary requirements in your RSVP.
+                    </p>
+                    </details>
+
+                <details>
+                    <summary>🏨 <strong>Check-in for Guests Staying at The Maynard</strong></summary>
+                        <p>Rooms will be available from <strong>3 PM</strong>.
+                    </p>
+                </details>
+            </div>
+            </div>
+        </div>
+
+        <!-- ROW 3 (Example) -->
+        <div class="schedule-row">
+            <div class="schedule-header">
+                <h2>Wedding Breakfast</h2>
+                <h4>📍 Chatsworth Suite ⏳ 4:00 PM - 6:30 PM</h4>
+            </div>
+            <div class="schedule-content">
+                <div class="schedule-left">
+                    <p>
+                        At <strong>3:45 PM</strong>, we’ll return to the Chatsworth Suite to find our seats for the wedding breakfast. 
+                        <strong>A three-course meal</strong> will be served, accompanied by wine at the tables and a <strong>toast drink</strong> for the speeches. 
+                    </p>
+                    <p>After the meal and speeches, we’ll leave the Chatsworth Suite while it is prepared for the evening reception.</p>
+                </div>
+                <div class="schedule-right">
+                    <details>
+                        <summary>🍽️ <strong>Meal Selection</strong></summary>
+                        <p>
+                            Choose between the <strong>standard</strong> and <strong>vegetarian</strong> menu in your RSVP.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>⚠️ <strong>Dietary Requirements</strong></summary>
+                        <p>
+                            See the RSVP page for additional information, and let us know any additional dietary requirements in your response.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>👶 <strong>Children’s Menu</strong></summary>
+                        <p>
+                            Guests aged 13-18 may choose between the <strong>children’s menu</strong> and the <strong>adult’s menu</strong>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>🍾 <strong>Drinks</strong></summary>
+                        <p>
+                            Non-alcoholic drinks options will be available for guests who indicate this preference in their RSVP.
+                        </p>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROW 4 (Example) -->
+        <div class="schedule-row alt">
+            <div class="schedule-header alt">
+                <h2>Evening Reception</h2>
+                <h4>📍 Chatsworth Suite ⏳ 7:15 PM - Midnight</h4>
+            </div>
+            <div class="schedule-content">
+                <div class="schedule-left">
+                    <p>
+                        After the wedding breakfast, we will head to the <strong>patio or main bar</strong> while the room is turned around for the evening reception. 
+                        We will return to the Chatsworth Suite for cake <strong>cutting</strong>, followed by an evening of <strong>dancing</strong>. 
+                    </p>
+                    <p>Last orders will be 11:30pm with carriages at midnight. If you plan on getting a taxi, please ensure you have booked in advance.</p>
+                </div>
+                <div class="schedule-right">
+                    <details>
+                        <summary>🎶 <strong>Music</strong></summary>
+                        <p>
+                            Expect...
+                        </p>
+                    </details>
+                    <details>
+                        <summary>🍽️ <strong>Evening Food</strong></summary>
+                        <p>
+                            Bacon butties and mushroom melts will be served at <strong>8:30 PM</strong>, with <strong>vegan and other dietary alternatives provided</strong> as needed.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>🌿 <strong>Outdoor Space</strong></summary>
+                        <p>
+                            The patio will remain open until <strong>9:00 PM</strong>.
+                        </p>
+                    </details>
+                    <details>
+                        <summary>🍷 <strong>Bars</strong></summary>
+                        <p>
+                            Drinks can be purchased from the <strong>Chatsworth Suite bar and main bar</strong> throughout the night.
+                        </p>
+                    </details>
+                    <!-- <details>
+                        <summary>🌙 <strong>End of the Night</strong></summary>
+                        <p>
+                            🍻 Last orders - 11:30 PM 🚖 Carriages - Midnight
+                        </p>
+                    </details>
+                    <details>
+                        <summary>🚖 <strong>Taxis</strong></summary>
+                        <p>
+                            Please ensure you have booked a taxi in advance.
+                        </p>
+                    </details> -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Another date heading, etc. -->
+        <div class="schedule-date">
+            <h3>SATURDAY 2ND AUGUST</h3>
+        </div>
+        <div class="schedule-row">
+            <div class="schedule-header">
+            <h2>Parkrun</h2>
+            <h4>📍 Monsal Trail, Hassop Station  ⏳ 9:00 AM</h4>
+            </div>
+            <div class="schedule-content">
+            <div class="schedule-left">
+                <p>
+                    We plan to do the Monsal Trail parkrun the morning after the wedding. Anyone is welcome to join us or simply meet us
+                     for a hot drink in the café afterwards.
+                </p>
+                <p>Find out more on our FAQs page!</p>
+            </div>
+            <div class="schedule-right">
+                <details>
+                    <summary>🏃‍♂️ <strong>parkrun</strong></summary>
+                    <p>
+                        5km run or walk starting at <strong>9:00 AM</strong>.
+                    </p>
+                </details>
+                <details>
+                    <summary>☕ <strong>Hassop Café</strong></summary>
+                    <p>
+                        Open for breakfast and hot drinks from <strong>9:00 AM</strong>.
+                    </p>
+                </details>
+                <details>
+                    <summary><svg width=12px height= 12px version="1.0" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path fill="#231F20" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24 C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24 C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z"></path> </g></svg> <strong>Location</strong></summary>
+                    <p>
+                        Monsal Trail, Hassop Station, Hassop Rd, Bakewell, DE45 1NW
+                    </p>
+                </details>
+            </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+  </section>
 </body>
 </html>

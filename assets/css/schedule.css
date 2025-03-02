@@ -1,151 +1,144 @@
-/* Timeline Styling */
-
-.schedule {
-    padding: 0rem 0rem;
-    font-family: var(--bodyFont);
+/* -------------------------------------------------
+   SCHEDULE SECTION
+   ------------------------------------------------- */
+   .schedule {
     background-color: var(--light1);
-    text-align: center;
+    padding: 2rem 0;
     color: var(--dark1);
-}
-
-.schedule h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: var(--dark1);
-    font-family: var(--titleFont);
-}
-
-.schedule p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    color: var(--dark1);
-    line-height: 1.5rem;
-}
-
-.schedule-timeline {
-    position: relative;
+    font-family: var(--bodyFont);
+    text-align: center; /* Center headings/date headings */
+  }
+  
+  /* Container for each set of rows */
+  .schedule .container {
     max-width: 80%;
     margin: 0 auto;
-    padding: 1rem 1rem;
-}
-
-.schedule-timeline::before {
-    content: '';
+    position: relative;
+  }
+  
+  /* Vertical accent line behind all rows */
+  .schedule-timeline {
+    position: relative;
+  }
+  
+  .schedule-timeline::before {
+    content: "";
     position: absolute;
     left: 50%;
     top: 0;
     transform: translateX(-50%);
-    width: 4px;
+    width: 2px;
     height: 100%;
     background-color: var(--accent1);
     z-index: 0;
-}
-
-.schedule-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+  }
+  
+  /* Each row sits above the line */
+  .schedule-row {
     position: relative;
-}
-
-.schedule-item h3 {
-    font-size: 1.2rem;
-    margin: 1rem;
-    color: var(--dark1);
-    font-family: var(--titleFont);
-    text-align: right;
-}
-
-/* Marker styling (the “dot” on the timeline) */
-.schedule-item .marker {
-    width: 2%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--accent1);
-    position: absolute;
-    top: 0%;
-    left: 49%;
-    margin: 0.45rem 0rem;
-    z-index: 1; /* to appear above the line */
-}
-
-.schedule-item .date h3{
-    font-size: 1.2rem;
-    color: var(--dark1);
-    font-family: var(--titleFont);
-}
-
-.schedule-item .content {
-    background: transparent;
+    margin-bottom: 3rem;
+    z-index: 1;
+    border: 1px solid var(--accent1);
     border-radius: 8px;
-    max-width: 50%;
-    width: 100%;
-}
+    background: var(--light1);
+    padding: 1rem;
+  }
 
-.schedule-item .content h2 {
+  
+  /* Date headings (e.g. FRIDAY 1ST AUGUST) */
+  .schedule-date {
+    margin: 2rem 0 1rem;
+    /* background-color: var(--light1); */
+    background-color: var(--accent1);
+    color: #fff;
+    /* color: var(--dark1); */
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  .schedule-date h3 {
     font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    color: var(--dark1);
     font-family: var(--titleFont);
-    margin: 0rem 2rem;
-}
+    margin: 0;
+  }
+  
+  /* Row header: white text + accent background */
+  .schedule-header {
+    background-color: var(--light1);
+    /* color: var(--accent1); */
+    padding: 1rem;
+    border-radius: 8px;
+    /* border: 1px solid var(--accent1); */
+    position: relative;
+  }
 
-.schedule-item .content h3 {
-    font-size: 1.2rem;
-    margin: 0rem 2rem;
-    color: var(--dark1);
+  .schedule-header h2 {
     font-family: var(--titleFont);
-    text-align: right;
-}
-
-.schedule-item .content h4 {
+    font-size: 1.8rem;
+    margin: 0.5rem 0;
+    justify-content: center;
+  }
+  .schedule-header h4 {
+    font-family: var(--titleFont);
     font-size: 1rem;
-    margin: 1rem 2rem;
-    color: var(--dark1);
-    font-family: var(--titleFont);
-}
-
-.schedule-item .content p {
-    font-size: 1rem;
-    color: var(--dark1);
-    margin: 1rem 2rem;
-}
-
-.schedule-item.left {
-    text-align: right;
-    flex-direction: row;        /* content to the right of marker */
-    width: 100%;
-}
-
-.schedule-item.right {
+    margin: 0.5rem 0;
+  }
+  
+  /* Two-column content beneath the header */
+  .schedule-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
     text-align: left;
-    flex-direction: row-reverse; /* content to the left of marker */
-    width: 100%;
-}
-
-/* Responsive Design for Small Screens */
-@media screen and (max-width: 768px) {
+  }
+  .schedule-left,
+  .schedule-right {
+    flex: 1 1 300px;  /* Each column can shrink to 300px */
+    background: #fff; /* Optional white box behind text */
+    border-radius: 4px;
+    padding: 1rem;
+    align-content: center;
+  }
+  
+  /* Paragraph styling */
+  .schedule-left p {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  
+  /* Collapsible details in the right column */
+  .schedule-right details {
+    border: 1px solid var(--accent2);
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin: 1rem;
+  }
+  .schedule-right summary {
+    cursor: pointer;
+    font-weight: bold;
+    outline: none;
+  }
+  
+  /* Responsive: stack columns vertically under 768px */
+  @media (max-width: 768px) {
+    .schedule-content {
+      flex-direction: column;
+    }
+    .schedule-left,
+    .schedule-right {
+      max-width: 100%;
+      border: 1px solid var(--accent1);
+    }
     .schedule-timeline::before {
-        left: 5%; /* Move the central line to the left side */
-        transform: none;
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 100%;
+      background-color: var(--accent1);
+      z-index: 0;
     }
-
-    .schedule-item {
-        flex-direction: row; /* Stack items horizontally */
-        align-items: flex-start; /* Align content to the left */
-    }
-
-    .schedule-item .content {
-        max-width: 80%; /* Allow content to stretch fully */
-        text-align: left; /* Align text to the left */
-        margin: 0 auto 1rem; /* Center content with spacing */
-    }
-
-    .schedule-item .marker {
-        width: 4%;
-        aspect-ratio: 1;
-        top: 17%; /* Move the marker to the top */
-        left: -0.5%; /* Move the marker to the left */
-    }
-}
+  }
+  

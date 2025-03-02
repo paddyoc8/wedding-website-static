@@ -25,6 +25,7 @@
 
 .contact-card p {
     margin: 0.5rem 0;   
+    font-size: 1rem;
 }
 
 .contact-card a {
@@ -35,7 +36,6 @@
 .contact-card a:hover {
     text-decoration: underline;
 }
-  
 
 .icon {
     display: inline-block;   /* Make sure the SVG acts like an inline element */
@@ -44,3 +44,16 @@
     /* Optionally adjust stroke-width or color if needed: */
     stroke-width: 2;
   }
+
+@media (max-width: 768px) {
+    .contact-card {
+        flex: 1 1 100%; /* Each card takes up the full width */
+    }
+    .hero-content {
+        width: 100%;
+    }
+    .contact-card p {
+        margin: 0.5rem 0;   
+        font-size: 1rem;
+    }
+}
