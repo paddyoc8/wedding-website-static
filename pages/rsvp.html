@@ -403,6 +403,8 @@
                 let standard = '';
                 let vegetarian = '';
                 let child = '';
+                // For dietary checkboxes:
+                let dietaryRequirements = [];
                 if (previous && previous.Submitted) {
                     prefillMessage = `<p class="prefill-message">You have previously submitted an RSVP for ${member.Forename} ${member.Surname}. Submitting again will overwrite your previous selections.</p>`;
                     if (previous.Attending === "Yes") {
@@ -413,6 +415,10 @@
                     if (previous.Menu === "Standard") standard = 'checked';
                     if (previous.Menu === "Vegetarian") vegetarian = 'checked';
                     if (previous.Menu === "Child") child = 'checked';
+                    // Prepopulate dietary checkboxes if Dietary data exists.
+                    if (previous.Dietary) {
+                        dietaryRequirements = previous.Dietary.split(',').map(item => item.trim());
+                    }
                 } else {
                     attendingYes = 'selected';
                 }
@@ -475,8 +481,8 @@
                         </div>
                         <h4>Specify any dietary requirements below</h4>
                         <div class="dietary-requirements" style="display: flex; gap: 10px; align-items: center; justify-content:center;">
-                            <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
-                            <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br> 
+                            <label><input type="checkbox" data-key="${member.key}" value="Vegan" ${dietaryRequirements.includes("Vegan") ? "checked" : ""}> Vegan</label><br>
+                            <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free" ${dietaryRequirements.includes("Gluten-Free") ? "checked" : ""}> Gluten-Free</label><br> 
                         </div>
                         <div class="more-requirements">
                             <label for="other-${member.key}">Other dietary requirements (if any):</label><br>
@@ -485,12 +491,12 @@
 
                         <div class="alcohol-free">
                             <h4>Please flag below if you would prefer the alcohol free package.</h4>
-                            <label><input type="checkbox" name="non-drinker-${member.key}" value="Yes"> Alcohol free</label>
+                            <label><input type="checkbox" name="non-drinker-${member.key}" value="Yes" ${previous && previous.NonDrinker === "Yes" ? "checked" : ""}> Alcohol free</label>
                         </div>
 
                         <div class="leave-message" data-key="${member.key}">
                             <h4>Leave a message for us (optional):</h4>
-                            <input style="width:50%; justify-content:center;" type="text" id="other-${member.key}" data-key="${member.key}" class="message-text" placeholder="Enter message">
+                            <input style="width:50%; justify-content:center; height:4rem;" type="text" id="other-${member.key}" data-key="${member.key}" class="message-text" placeholder="Enter message">
                         </div>
 
                         <div class="non-attending-message hidden" data-key="${member.key}">
