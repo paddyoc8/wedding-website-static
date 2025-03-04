@@ -102,7 +102,10 @@
     padding: clamp(0.5rem, 2vw, 1rem);
     text-align: center;
   }
-  .details-text h1,
+  .details-text h1 {
+    color: var(--dark1);
+    margin-bottom: 6rem;
+  }
   .details-text h2 {
     color: var(--dark1);
   }
