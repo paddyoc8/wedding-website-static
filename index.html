@@ -20,6 +20,7 @@
             drawer.classList.toggle('open');
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 </head>
 <body>
     <header>
@@ -498,40 +499,56 @@
       </script>
 
       <script>
-        // Set your target date here (adjust as needed)
-        const targetDate = new Date("Aug 1, 2025 13:30:00").getTime();
-        
+        // Set your target date/time using day.js (this example uses local time)
+        const targetDate = dayjs("2025-08-01 13:30:00");
+
         function updateCountdown() {
-          const now = new Date().getTime();
-          let diff = targetDate - now;
-        
-          // If the countdown is over, stop updating
-          if (diff < 0) {
-            diff = 0;
-            clearInterval(timerInterval);
+          let now = dayjs();
+
+          // If the target date is reached or passed, set all values to zero.
+          if (targetDate.diff(now) <= 0) {
+            document.getElementById("months").textContent = "00";
+            document.getElementById("days").textContent = "00";
+            document.getElementById("hours").textContent = "00";
+            document.getElementById("minutes").textContent = "00";
+            document.getElementById("seconds").textContent = "00";
+            return;
           }
-        
-          // Approximate calculation: 1 month ≈ 30.44 days
-          const msPerMonth = 1000 * 60 * 60 * 24 * 30.44;
-          const months = Math.floor(diff / msPerMonth);
-          const remainderAfterMonths = diff % msPerMonth;
-        
-          const days = Math.floor(remainderAfterMonths / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((remainderAfterMonths % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((remainderAfterMonths % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((remainderAfterMonths % (1000 * 60)) / 1000);
-        
+
+          // Calculate the exact breakdown:
+
+          // 1. Calculate whole months difference
+          let months = targetDate.diff(now, 'month');
+          now = now.add(months, 'month');  // shift now by those months
+
+          // 2. Calculate whole days difference remaining
+          let days = targetDate.diff(now, 'day');
+          now = now.add(days, 'day');
+
+          // 3. Calculate whole hours difference remaining
+          let hours = targetDate.diff(now, 'hour');
+          now = now.add(hours, 'hour');
+
+          // 4. Calculate whole minutes difference remaining
+          let minutes = targetDate.diff(now, 'minute');
+          now = now.add(minutes, 'minute');
+
+          // 5. Calculate remaining seconds difference
+          let seconds = targetDate.diff(now, 'second');
+
+          // Update HTML elements with zero-padded values
           document.getElementById("months").textContent = String(months).padStart(2, '0');
           document.getElementById("days").textContent = String(days).padStart(2, '0');
           document.getElementById("hours").textContent = String(hours).padStart(2, '0');
           document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
           document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
         }
-        
-        // Initial call and update every second
+
+        // Initial call to update the countdown immediately
         updateCountdown();
-        const timerInterval = setInterval(updateCountdown, 1000);
-        </script>
+        // Update the countdown every second
+        setInterval(updateCountdown, 1000);
+      </script>
 
 </body>
 </html>
