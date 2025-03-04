@@ -69,17 +69,17 @@
     </section>
     
     <div class="rsvp-container" id="next-section">
-        
         <!-- RSVP Closed Message (displayed after deadline) -->
         <div id="rsvpClosedMessage" class="hidden">
             <p>The RSVP window has closed. Please get in touch with us if you need further assistance.</p>
         </div>
         
         <!-- Search Form -->
-        <form id="searchForm">
-            <h1>RSVP to Our Wedding</h1>
-            <label for="search">Search for your name:</label>
-            <input type="text" id="search" placeholder="Enter your name" required>
+        <form id="searchForm" style="max-width: 50vw; display: inline-block;">
+            <h1>Will you attend our wedding?</h1>
+            <p style="text-align: center; width: 60%; display: inline-block; line-height: 1.6;">Please let us know by <strong>Saturday, 31st May</strong> whether you’ll be attending our wedding, as we need to provide final numbers and dietary requirements to the venue. We hope you can join us!</p>
+            <p style="text-align: center; width: 60%; display: inline-block; line-height: 1.6; margin-bottom:2.5rem;">Search your name below to bring up you and your group’s RSVP.</p><br>
+            <input type="text" id="search" placeholder="Enter your name" required><br>
             <button type="submit">Search</button>
         </form>
 
@@ -98,55 +98,28 @@
             <div id="primaryGuestContainer"></div>
             <p>Other related guests you might like to RSVP for:</p>
             <div id="relatedGuestsContainer"></div>
-            <button id="confirmSelection">Confirm selection</button>
             <!-- Button to perform another search; initially hidden -->
-            <button id="searchAgain" class="hidden">Search for another guest</button>
+            <button id="searchAgain" class="hidden" style="background:var(--light1); border: 1px solid var(--accent1); color:var(--dark1)">Search for another guest</button>
+            <button id="confirmSelection">Confirm selection</button>
           </div>
 
         <!-- New/Editing RSVP Forms -->
         <div id="rsvpForms" class="hidden">
             <h2>Please complete each RSVP form below.</h2>
+            <p style="font-size:1.2rem">Let us know who will be attending and any dietary requirements.</p>
             <div id="individualRSVPForms"></div>
             <button id="submitAllRSVPs">Submit all RSVPs</button>
         </div>
 
-        <!-- Thank You / Submission Message -->
-        <div id="thankYouStepYes" class="hidden">
-            <p>Thank you for submitting your RSVP. If you need to make any changes you have until 31st May 2025.</p>
-            <button id="editAfterSubmission">Edit RSVP</button>
-            <button id="searchAgain">Search for another guest</button>
-        </div>
-
-        <div id="thankYouStepNo" class="hidden">
-            <h2>Thank you!</h2>
-            <p>We're sorry you can't join us. We'll miss you on the big day!</p>
-        </div>
-
-        <!-- Submission Table (for additional display after submission)
-        <div id="submissionTable" class="hidden">
-            <h2>RSVP Submissions</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Attending</th>
-                        <th>Menu</th>
-                        <th>Dietary requirements</th>
-                        <th>Alcohol free</th>
-                    </tr>
-                </thead>
-                <tbody id="submissionTableBody"></tbody>
-            </table>
-        </div> -->
-
-        <!-- Final Submission / Confirmation Page -->
         <!-- Final Submission / Confirmation Page -->
         <div id="finalSubmission" class="hidden">
             <div id="finalMessage">
             <h2>Thank You!</h2>
-            <p>Your RSVP has been submitted successfully.</p>
-            <p>If you need to make any changes, please click the button below to edit your submission.</p>
+            <p>You are able to edit your choices up until Saturday 31st May.</p>
+            <p>Please use this website to find further information about the day.</p>
             <button id="editAfterSubmission">Edit RSVP</button>
+            <button id="finalSearchAgain" class="searchAgain" style="background:var(--light1); border: 1px solid var(--accent1); color:var(--dark1)">Search for another guest</button>
+            <button id="homeButton">Return to Home</button>
             </div>
             <div id="finalSummary">
             <h2>Submission Summary</h2>
@@ -155,9 +128,9 @@
             </div>
             </div>
         </div>  
-    </div>
 
-    <div class="menu-container" id="menus">
+
+    <div class="menu-container; hidden" id="menus">
         <h1>Please see menu options below.</h1>
         <div class="menu-item" id="standard-menu" class="hidden">
             <button class="menu-question">Standard menu <span class="arrow">&#9656;</span></button>
@@ -171,7 +144,7 @@
             <button class="menu-question">Vegetarian menu <span class="arrow">&#9656;</span></button>
             <div class="menu-answer">
                 <p>Roasted tomato & roasted red pepper soup (GF)(VE)</p>
-                <p>Root vegetable & mushroom cottage pie served with green beans (VE)(GF)</p>
+                <p>Vegan wellington with maple-glazed carrots and parsnips, braised red cabbage, roasted potatoes, Yorkshire pudding and homemade gravy (v) (VE without Yorkshire)</p>
                 <p>Traditional bread & butter pudding, with crème anglaise and vanilla ice cream (V)</p>
             </div>
         </div>
@@ -184,6 +157,7 @@
             </div>
         </div>
     </div>
+</div>
 
     <script>
         // Deadline check for RSVP window (after 31 May 2025, hide forms and show closed message)
@@ -197,6 +171,7 @@
             document.getElementById("thankYouStepYes").classList.add("hidden");
             document.getElementById("thankYouStepNo").classList.add("hidden");
             document.getElementById("submissionTable").classList.add("hidden");
+            document.getElementById("menus").classList.add("hidden");
         }
 
         // Firebase configuration
@@ -222,7 +197,8 @@
                 "existingRSVP",
                 "thankYouStepYes",
                 "thankYouStepNo",
-                // "submissionTable"
+                "menus",
+                "finalSubmission"
             ];
             steps.forEach(id => {
                 const el = document.getElementById(id);
@@ -252,6 +228,7 @@
         const submissionTable = document.getElementById('submissionTable');
         const submissionTableBody = document.getElementById('submissionTableBody');
         const existingRSVP = document.getElementById('existingRSVP');
+        const menus = document.getElementById('menus');
 
         const standardMenuContent = `
             <p>Chicken liver parfait, red wine poached pear, red onion marmalade and toasted sourdough (GFa)</p>
@@ -260,7 +237,7 @@
         `;
         const vegetarianMenuContent = `
             <p>Roasted tomato &amp; roasted red pepper soup (GF)(VE)</p>
-            <p>Root vegetable &amp; mushroom cottage pie served with green beans (VE)(GF)</p>
+            <p>Vegan wellington with maple-glazed carrots and parsnips, braised red cabbage, roasted potatoes, Yorkshire pudding and homemade gravy (v) (VE without Yorkshire)</p>
             <p>Traditional bread &amp; butter pudding, with crème anglaise and vanilla ice cream (V)</p>
         `;
         const childMenuContent = `
@@ -285,6 +262,7 @@
                         <th>Menu</th>
                         <th>Dietary</th>
                         <th>Alcohol Free</th>
+                        <th>Message</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -298,6 +276,7 @@
                         <td>${member.Menu || '-'}</td>
                         <td>${member.Dietary || '-'}</td>
                         <td>${member.NonDrinker || '-'}</td>
+                        <td>${member.Message || '-'}</td>
                     </tr>
                 `;
             });
@@ -308,7 +287,7 @@
         // Clear UI result elements without wiping out the search input value
         function clearResults() {
             // Hide result sections
-            const sections = ["existingRSVP", "confirmationStep", "rsvpForms", "thankYouStepYes", "thankYouStepNo", "submissionTable"];
+            const sections = ["existingRSVP", "confirmationStep", "rsvpForms", "thankYouStepYes", "thankYouStepNo", "submissionTable", "menus"];
             sections.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.classList.add('hidden');
@@ -412,6 +391,7 @@
             selectedGroup = currentGroup;
             createRSVPForms();
             rsvpForms.classList.remove('hidden');
+            menus.classList.remove("hidden");
         });
 
         function createIndividualForm(member) {
@@ -423,16 +403,22 @@
                 let standard = '';
                 let vegetarian = '';
                 let child = '';
+                // For dietary checkboxes:
+                let dietaryRequirements = [];
                 if (previous && previous.Submitted) {
                     prefillMessage = `<p class="prefill-message">You have previously submitted an RSVP for ${member.Forename} ${member.Surname}. Submitting again will overwrite your previous selections.</p>`;
                     if (previous.Attending === "Yes") {
-                        attendingYes = 'selected';
+                        attendingYes = 'checked';
                     } else {
-                        attendingNo = 'selected';
+                        attendingNo = 'checked';
                     }
                     if (previous.Menu === "Standard") standard = 'checked';
                     if (previous.Menu === "Vegetarian") vegetarian = 'checked';
                     if (previous.Menu === "Child") child = 'checked';
+                    // Prepopulate dietary checkboxes if Dietary data exists.
+                    if (previous.Dietary) {
+                        dietaryRequirements = previous.Dietary.split(',').map(item => item.trim());
+                    }
                 } else {
                     attendingYes = 'selected';
                 }
@@ -443,49 +429,74 @@
                         <h3>${member.Forename} ${member.Surname}</h3>
                         ${prefillMessage}
 
-                        <label>Attending:</label>
-                        <select data-key="${member.key}" class="attending">
-                            <option value="Yes" ${attendingYes}>Yes</option>
-                            <option value="No" ${attendingNo}>No</option>
-                        </select>
+                        <label><h4>Will you be joining us?</h4></label>
+                        <div style="display: flex; gap: 10px; align-items: center; justify-content:center;">
+                        <label>
+                            <input 
+                            type="radio" 
+                            name="attending_${member.key}" 
+                            data-key="${member.key}" 
+                            value="Yes" 
+                            ${attendingYes}>
+                            Attending
+                        </label>
+                        <label>
+                            <input 
+                            type="radio" 
+                            name="attending_${member.key}" 
+                            data-key="${member.key}" 
+                            value="No" 
+                            ${attendingNo}>
+                            Not Attending
+                        </label>
+                        </div>
 
                         <!-- Meal choices -->
                         <div class="meal-section" data-key="${member.key}">
-                            <h4>Menu choice</h4>
-                            <p>Please select your menu below. Full menus are set out at the bottom of the page.</p>
-                            <label>
-                                <input type="radio" name="main-${member.key}" value="Standard" ${standard} required> Standard
-                                <span class="info-container">
-                                    <span class="info-icon">i</span>
-                                    <div class="tooltip">${standardMenuContent}</div>
-                                </span>
-                                </label><br>
+                            <h4>Which menu would you like?</h4>
+                            <div class="menu-choice" style="display: flex; gap: 10px; align-items: center; justify-content:center;">
                                 <label>
-                                <input type="radio" name="main-${member.key}" value="Vegetarian" ${vegetarian} required> Vegetarian
-                                <span class="info-container">
-                                    <span class="info-icon">i</span>
-                                    <div class="tooltip">${vegetarianMenuContent}</div>
-                                </span>
-                                </label><br>
-                                <label>
-                                <input type="radio" name="main-${member.key}" value="Child" ${child} required> Children's
-                                <span class="info-container">
-                                    <span class="info-icon">i</span>
-                                    <div class="tooltip">${childMenuContent}</div>
-                                </span>
-                                </label><br>
-                            
+                                    <input type="radio" name="main-${member.key}" value="Standard" ${standard} required> Standard
+                                    <span class="info-container">
+                                        <span class="info-icon">i</span>
+                                        <div class="tooltip">${standardMenuContent}</div>
+                                    </span>
+                                    </label><br>
+                                    <label>
+                                    <input type="radio" name="main-${member.key}" value="Vegetarian" ${vegetarian} required> Vegetarian
+                                    <span class="info-container">
+                                        <span class="info-icon">i</span>
+                                        <div class="tooltip">${vegetarianMenuContent}</div>
+                                    </span>
+                                    </label><br>
+                                    <label>
+                                    <input type="radio" name="main-${member.key}" value="Child" ${child} required> Children's
+                                    <span class="info-container">
+                                        <span class="info-icon">i</span>
+                                        <div class="tooltip">${childMenuContent}</div>
+                                    </span>
+                                    </label><br>
+                            </div>
                                 <button type="button" class="menu-info-button"><a href="#menus">Menu info</a></button>
+                        </div>
+                        <h4>Specify any dietary requirements below</h4>
+                        <div class="dietary-requirements" style="display: flex; gap: 10px; align-items: center; justify-content:center;">
+                            <label><input type="checkbox" data-key="${member.key}" value="Vegan" ${dietaryRequirements.includes("Vegan") ? "checked" : ""}> Vegan</label><br>
+                            <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free" ${dietaryRequirements.includes("Gluten-Free") ? "checked" : ""}> Gluten-Free</label><br> 
+                        </div>
+                        <div class="more-requirements">
+                            <label for="other-${member.key}">Other dietary requirements (if any):</label><br>
+                            <input style="width:50%; justify-content:center;" type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify">
+                        </div>
 
-                            <h4>Specify any dietary requirements below</h4>
-                            <label><input type="checkbox" data-key="${member.key}" value="Vegan"> Vegan</label><br>
-                            <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free"> Gluten-Free</label><br>
-                            <label><input type="checkbox" data-key="${member.key}" value="Nut Allergy"> Nut Allergy</label><br>
-                            <label for="other-${member.key}">Other dietary requirements (if any):</label>
-                            <input type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify"><br>
-
+                        <div class="alcohol-free">
                             <h4>Please flag below if you would prefer the alcohol free package.</h4>
-                            <label><input type="checkbox" name="non-drinker-${member.key}" value="Yes"> Alcohol free</label><br>
+                            <label><input type="checkbox" name="non-drinker-${member.key}" value="Yes" ${previous && previous.NonDrinker === "Yes" ? "checked" : ""}> Alcohol free</label>
+                        </div>
+
+                        <div class="leave-message" data-key="${member.key}">
+                            <h4>Leave a message for us (optional):</h4>
+                            <input style="width:50%; justify-content:center; height:4rem;" type="text" id="other-${member.key}" data-key="${member.key}" class="message-text" placeholder="Enter message">
                         </div>
 
                         <div class="non-attending-message hidden" data-key="${member.key}">
@@ -497,180 +508,189 @@
                 });
         }
 
-        confirmSelection.addEventListener('click', () => {
-            // Hide all previous steps.
-            hideAllSteps();
-
-            // Gather selected guests (including disabled primary guest).
-            const checkboxes = document.querySelectorAll('.groupMember');
-            selectedGroup = [];
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked || checkbox.disabled) {
-                let selectedMember = currentGroup.find(member => member.key === checkbox.value);
-                if (selectedMember) {
-                    selectedGroup.push(selectedMember);
-                }
-                }
-            });
-
-            if (selectedGroup.length === 0) {
-                alert('Please select at least one person to RSVP for.');
-                return;
-            }
-
-            // Split the selected group:
-            const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
-            const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
-
-            if (alreadySubmittedGroup.length > 0) {
-                // Display their previous submission summary and an edit option.
-                // (Assumes the container existingRSVP and the element existingSubmissionsMessage exist.)
-                let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
-                if (!existingSubmissionsMessage) {
-                existingSubmissionsMessage = document.createElement("div");
-                existingSubmissionsMessage.id = "existingSubmissionsMessage";
-                document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
-                }
-                // existingSubmissionsMessage.innerHTML = "<p>The following guests have already submitted their RSVP. You can edit their details if needed.</p>";
-                displayExistingRSVP(alreadySubmittedGroup);
-                document.getElementById("existingRSVP").classList.remove("hidden");
-            }
-
-            if (notSubmittedGroup.length > 0) {
-                // Build new submission forms for those who haven't submitted.
-                selectedGroup = notSubmittedGroup;
-                createRSVPForms();
-                document.getElementById("rsvpForms").classList.remove("hidden");
-            }
-            });
-
-        function createRSVPForms() {
-            individualRSVPForms.innerHTML = '';
-            Promise.all(
-                selectedGroup.map(member => {
-                    return createIndividualForm(member).then(formHTML => {
-                        individualRSVPForms.insertAdjacentHTML('beforeend', formHTML);
-                    });
-                })
-            ).then(() => {
-                attachAttendingChangeListeners();
-            });
+        // Confirm guest selection and build forms.
+    document.getElementById("confirmSelection").addEventListener('click', () => {
+      hideAllSteps();
+      const checkboxes = document.querySelectorAll('.groupMember');
+      selectedGroup = [];
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked || checkbox.disabled) {
+          let selectedMember = currentGroup.find(member => member.key === checkbox.value);
+          if (selectedMember) {
+            selectedGroup.push(selectedMember);
+          }
         }
+      });
+      if (selectedGroup.length === 0) {
+        alert('Please select at least one person to RSVP for.');
+        return;
+      }
+      const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
+      const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
 
-        function attachAttendingChangeListeners() {
-            document.querySelectorAll('.attending').forEach(select => {
-                select.addEventListener('change', event => {
-                    const key = event.target.getAttribute('data-key');
-                    const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
-                    const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
-                    if (event.target.value === "No") {
-                        mealSection.classList.add('hidden');
-                        nonAttendingMessage.classList.remove('hidden');
-                    } else {
-                        mealSection.classList.remove('hidden');
-                        nonAttendingMessage.classList.add('hidden');
-                    }
-                });
-            });
+      if (alreadySubmittedGroup.length > 0) {
+        let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
+        if (!existingSubmissionsMessage) {
+          existingSubmissionsMessage = document.createElement("div");
+          existingSubmissionsMessage.id = "existingSubmissionsMessage";
+          document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
         }
+        displayExistingRSVP(alreadySubmittedGroup);
+        document.getElementById("existingRSVP").classList.remove("hidden");
+      }
 
-        submitAllRSVPs.addEventListener('click', () => {
-            let valid = true;
-            selectedGroup.forEach(member => {
-                const key = member.key;
-                const attending = document.querySelector(`.attending[data-key="${key}"]`).value;
-                if (attending === "Yes") {
-                    const menu = document.querySelector(`input[name="main-${key}"]:checked`);
-                    if (!menu) {
-                        valid = false;
-                        alert(`Please complete meal selections for ${member.Forename} ${member.Surname}.`);
-                    }
-                }
-            });
-            if (!valid) return;
+      if (notSubmittedGroup.length > 0) {
+        selectedGroup = notSubmittedGroup;
+        createRSVPForms();
+        document.getElementById("rsvpForms").classList.remove("hidden");
+        document.getElementById("menus").classList.remove("hidden");
+      }
+    });
 
-            selectedGroup.forEach(member => {
-                const key = member.key;
-                const attending = document.querySelector(`.attending[data-key="${key}"]`).value;
-                const menu = document.querySelector(`input[name="main-${key}"]:checked`)?.value || '';
-                const dietaryCheckboxes = document.querySelectorAll(`input[type="checkbox"][data-key="${key}"]:checked`);
-                const dietaryPreferences = Array.from(dietaryCheckboxes).map(checkbox => checkbox.value);
-                const otherDietaryText = document.querySelector(`.other-dietary-text[data-key="${key}"]`)?.value || '';
-                const nonDrinker = document.querySelector(`input[name="non-drinker-${key}"]:checked`)?.value || '';
-                if (otherDietaryText) {
-                    dietaryPreferences.push(otherDietaryText);
-                }
-                const submissionDate = new Date().toISOString();
-                let rsvpData = {
-                    Attending: attending,
-                    Dietary: dietaryPreferences.join(', '),
-                    Submitted: true,
-                    SubmissionDate: submissionDate
-                };
-                if (attending === "Yes") {
-                    rsvpData.Menu = menu;
-                    rsvpData.NonDrinker = nonDrinker;
-                } else {
-                    rsvpData.Menu = "";
-                    rsvpData.NonDrinker = "";
-                }
-                db.ref(`rsvps/${key}`).update(rsvpData);
-            });
+    function createRSVPForms() {
+      individualRSVPForms.innerHTML = '';
+      Promise.all(
+        selectedGroup.map(member => {
+          return createIndividualForm(member).then(formHTML => {
+            individualRSVPForms.insertAdjacentHTML('beforeend', formHTML);
+          });
+        })
+      ).then(() => {
+        attachAttendingChangeListeners();
+      });
+    }
 
-            let selectedKeys = selectedGroup.map(member => member.key);
-            // After updating Firebase and fetching the latest RSVP data...
-            Promise.all(
-                selectedKeys.map(key => db.ref(`rsvps/${key}`).once('value'))
-            ).then(snapshots => {
-                let latestRSVPs = {};
-                snapshots.forEach(snapshot => {
-                    if (snapshot.exists()) {
-                        let guest = snapshot.val();
-                        let fullName = `${guest.Forename} ${guest.Surname}`;
-                        if (!latestRSVPs[fullName] || new Date(guest.SubmissionDate) > new Date(latestRSVPs[fullName].SubmissionDate)) {
-                            latestRSVPs[fullName] = guest;
-                        }
-                    }
-                });
-                // Build the summary using order-item cards
-                const summaryContainer = document.querySelector('#finalSummary .order-summary');
-                summaryContainer.innerHTML = ""; // clear previous items
-                Object.values(latestRSVPs).forEach(member => {
-                    let itemHTML = `
-                        <div class="order-item">
-                        <p><strong>Name:</strong> ${member.Forename} ${member.Surname}</p>
-                        <p><strong>Attending:</strong> ${member.Attending}</p>
-                        <p><strong>Menu:</strong> ${member.Attending.toLowerCase() === "no" ? '-' : (member.Menu || '-')}</p>
-                        <p><strong>Dietary:</strong> ${member.Dietary || '-'}</p>
-                        <p><strong>Alcohol Free:</strong> ${member.NonDrinker || '-'}</p>
-                        </div>
-                    `;
-                    summaryContainer.insertAdjacentHTML('beforeend', itemHTML);
-                });
-                // Hide other steps and show finalSubmission
-                hideAllSteps();
-                document.getElementById("finalSubmission").classList.remove('hidden');
-            });
+    function attachAttendingChangeListeners() {
+      document.querySelectorAll('.attending').forEach(select => {
+        select.addEventListener('change', event => {
+          const key = event.target.getAttribute('data-key');
+          const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
+          const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
+          if (event.target.value === "No") {
+            mealSection.classList.add('hidden');
+            nonAttendingMessage.classList.remove('hidden');
+          } else {
+            mealSection.classList.remove('hidden');
+            nonAttendingMessage.classList.add('hidden');
+          }
+        });
+      });
+    }
+
+    submitAllRSVPs.addEventListener('click', () => {
+      let valid = true;
+      selectedGroup.forEach(member => {
+        const key = member.key;
+        const attendingElement = document.querySelector(`input[name="attending_${key}"]:checked`);
+        const attending = attendingElement ? attendingElement.value : "";
+        if (attending === "Yes") {
+          const menu = document.querySelector(`input[name="main-${key}"]:checked`);
+          if (!menu) {
+            valid = false;
+            alert(`Please complete meal selections for ${member.Forename} ${member.Surname}.`);
+          }
+        }
+      });
+      if (!valid) return;
+
+      selectedGroup.forEach(member => {
+        const key = member.key;
+        const attendingElement = document.querySelector(`input[name="attending_${key}"]:checked`);
+        const attending = attendingElement ? attendingElement.value : "";
+        const menu = document.querySelector(`input[name="main-${key}"]:checked`)?.value || '';
+        const dietaryCheckboxes = document.querySelectorAll(`input[type="checkbox"][data-key="${key}"]:checked`);
+        const dietaryPreferences = Array.from(dietaryCheckboxes).map(checkbox => checkbox.value);
+        const otherDietaryText = document.querySelector(`.other-dietary-text[data-key="${key}"]`)?.value || '';
+        const nonDrinker = document.querySelector(`input[name="non-drinker-${key}"]:checked`)?.value || '';
+        const message = document.querySelector(`.message-text[data-key="${key}"]`)?.value || '';
+        if (otherDietaryText) {
+          dietaryPreferences.push(otherDietaryText);
+        }
+        const submissionDate = new Date().toISOString();
+        let rsvpData = {
+          Attending: attending,
+          Dietary: dietaryPreferences.join(', '),
+          Submitted: true,
+          SubmissionDate: submissionDate,
+          Message: message
+        };
+        if (attending === "Yes") {
+          rsvpData.Menu = menu;
+          rsvpData.NonDrinker = nonDrinker;
+        } else {
+          rsvpData.Menu = "";
+          rsvpData.NonDrinker = "";
+        }
+        db.ref(`rsvps/${key}`).update(rsvpData);
+      });
+
+      let selectedKeys = selectedGroup.map(member => member.key);
+      Promise.all(
+        selectedKeys.map(key => db.ref(`rsvps/${key}`).once('value'))
+      ).then(snapshots => {
+        let latestRSVPs = {};
+        snapshots.forEach(snapshot => {
+          if (snapshot.exists()) {
+            let guest = snapshot.val();
+            let fullName = `${guest.Forename} ${guest.Surname}`;
+            if (!latestRSVPs[fullName] || new Date(guest.SubmissionDate) > new Date(latestRSVPs[fullName].SubmissionDate)) {
+              latestRSVPs[fullName] = guest;
+            }
+          }
+        });
+        const summaryContainer = document.querySelector('#finalSummary .order-summary');
+        summaryContainer.innerHTML = "";
+        Object.values(latestRSVPs).forEach(member => {
+          let itemHTML = `
+            <div class="order-item">
+              <p><strong>Name:</strong> ${member.Forename} ${member.Surname}</p>
+              <p><strong>Attending:</strong> ${member.Attending}</p>
+              <p><strong>Menu:</strong> ${member.Attending.toLowerCase() === "no" ? '-' : (member.Menu || '-')}</p>
+              <p><strong>Dietary:</strong> ${member.Dietary || '-'}</p>
+              <p><strong>Alcohol Free:</strong> ${member.NonDrinker || '-'}</p>
+              <p><strong>Message:</strong> ${member.Message || '-'}</p>
+            </div>
+          `;
+          summaryContainer.insertAdjacentHTML('beforeend', itemHTML);
+        });
+        hideAllSteps();
+        document.getElementById("finalSubmission").classList.remove('hidden');
+      });
+    });
+
+    document.getElementById("editAfterSubmission").addEventListener('click', () => {
+        // Editing after a new/updated submission from the final confirmation page
+        hideAllSteps();
+        selectedGroup = currentGroup;
+        createRSVPForms();
+        document.getElementById("rsvpForms").classList.remove("hidden");
+        menus.classList.remove("hidden");
+        finalSubmission.classList.add("hidden");
         });
 
-        document.getElementById("editAfterSubmission").addEventListener('click', () => {
-            hideAllSteps();
-            selectedGroup = currentGroup;
-            createRSVPForms();
-            document.getElementById("rsvpForms").classList.remove("hidden");
-        });
+    // Attach event listeners to all "Search for another guest" buttons (using class)
+    document.querySelectorAll(".searchAgain").forEach(button => {
+      button.addEventListener('click', () => {
+        resetSearch();
+        hideAllSteps();
+        document.getElementById("searchForm").classList.remove("hidden");
+      });
+    });
 
-    </script>
-    <script>
-        // Collapsible menu FAQ logic
-        document.querySelectorAll('.menu-question').forEach(button => {
-            button.addEventListener('click', () => {
-                const answer = button.nextElementSibling;
-                const arrow = button.querySelector('.arrow');
-                answer.classList.toggle('open');
-                arrow.textContent = answer.classList.contains('open') ? '▼' : '▶';
-            });
-        });
-    </script>
+    document.getElementById("homeButton").addEventListener("click", function(){
+        window.location.href = "../index.html";
+    });
+  </script>
+  <script>
+    // Collapsible menu FAQ logic
+    document.querySelectorAll('.menu-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const answer = button.nextElementSibling;
+        const arrow = button.querySelector('.arrow');
+        answer.classList.toggle('open');
+        arrow.textContent = answer.classList.contains('open') ? '▼' : '▶';
+      });
+    });
+  </script>
 </body>
 </html>

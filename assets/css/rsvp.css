@@ -1,12 +1,16 @@
 /* RSVP Page Styling */
 
 .rsvp-container {
-    margin: 100px auto;
+    margin: 5vh auto;
     max-width: 90vw;
-    padding: 1rem;
+    padding: 2rem;
     background: var(--light1);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: block;
+    text-align: center;
+    align-content: center;
+    max-width: 60vw;
 }
 .rsvp-container h1 {
     font-size: 2rem;
@@ -31,6 +35,7 @@
     margin-bottom: 1rem;
     border: 1px solid var(--dark2);
     border-radius: 5px;
+    background: #fff;
 }
 .rsvp-container button {
     background-color: var(--accent1);
@@ -92,7 +97,6 @@
 #submissionTable tr:nth-child(even) td {
     background-color: #f9f9fa; /* A very light shade; feel free to pick a new color */
 }
-
 /* 
    Make the table scroll horizontally on smaller screens 
    by wrapping the <table> in a container that can scroll
@@ -181,6 +185,13 @@
     padding: 1rem;
     background-color: #f9f9fa;
     /* etc. */
+  }
+
+  .individual-rsvp-form h4 {
+    margin: 0.5rem;
+  }
+  .individual-rsvp-form p {
+    margin: 0.4rem;
   }
 
 /* RSVP Closed Message Styling */
@@ -346,7 +357,6 @@
     display: flex;
     flex-wrap: nowrap;
     gap: 20px;
-    margin-top: 2rem;
     padding: 1rem;
     background: var(--light1);
     border-radius: 8px;
