@@ -75,13 +75,15 @@
         </div>
         
         <!-- Search Form -->
-        <form id="searchForm" style="max-width: 50vw; display: inline-block;">
-            <h1>Will you attend our wedding?</h1>
-            <p style="text-align: center; width: 60%; display: inline-block; line-height: 1.6;">Please let us know by <strong>Saturday, 31st May</strong> whether you’ll be attending our wedding, as we need to provide final numbers and dietary requirements to the venue. We hope you can join us!</p>
-            <p style="text-align: center; width: 60%; display: inline-block; line-height: 1.6; margin-bottom:2.5rem;">Search your name below to bring up you and your group’s RSVP.</p><br>
-            <input type="text" id="search" placeholder="Enter your name" required><br>
-            <button type="submit">Search</button>
-        </form>
+        <div class="searchFormCont">
+          <form id="searchForm">
+              <h1>Will you attend our wedding?</h1>
+              <p>Please let us know by <strong>Saturday, 31st May</strong> whether you’ll be attending our wedding, as we need to provide final numbers and dietary requirements to the venue. We hope you can join us!</p>
+              <p style="margin-bottom:2.5rem;">Search your unique guest ID (9-digit code) to bring up you and your group’s RSVP.</p><br>
+              <input type="text" id="search" placeholder="Enter your guest ID" required><br>
+              <button type="submit">Search</button>
+          </form>
+        </div>
 
         <!-- Existing RSVP Summary (if a guest has already submitted) -->
         <div id="existingRSVP" class="hidden">
@@ -94,10 +96,8 @@
         <!-- Confirmation Step (select group members if not already submitted) -->
         <div id="confirmationStep" class="hidden">
             <h2>Select guests</h2>
-            <p>Your search result:</p>
-            <div id="primaryGuestContainer"></div>
-            <p>Other related guests you might like to RSVP for:</p>
-            <div id="relatedGuestsContainer"></div>
+            <p>Select the guests you would like to RSVP for:</p>
+            <div id="guestsContainer"></div>
             <!-- Button to perform another search; initially hidden -->
             <button id="searchAgain" class="hidden" style="background:var(--light1); border: 1px solid var(--accent1); color:var(--dark1)">Search for another guest</button>
             <button id="confirmSelection">Confirm selection</button>
@@ -112,14 +112,14 @@
         </div>
 
         <!-- Final Submission / Confirmation Page -->
-        <div id="finalSubmission" class="hidden">
+        <div id="finalSubmission" class="finalSubmission; hidden">
             <div id="finalMessage">
             <h2>Thank You!</h2>
             <p>You are able to edit your choices up until Saturday 31st May.</p>
             <p>Please use this website to find further information about the day.</p>
-            <button id="editAfterSubmission">Edit RSVP</button>
-            <button id="finalSearchAgain" class="searchAgain" style="background:var(--light1); border: 1px solid var(--accent1); color:var(--dark1)">Search for another guest</button>
-            <button id="homeButton">Return to Home</button>
+              <button id="editAfterSubmission">Edit RSVP</button><br>
+              <button id="finalSearchAgain" class="searchAgain" style="background:var(--light1); border: 1px solid var(--accent1); color:var(--dark1)">Search for another guest</button><br>
+              <button id="homeButton">Return to Home</button>
             </div>
             <div id="finalSummary">
             <h2>Submission Summary</h2>
@@ -132,6 +132,7 @@
 
     <div class="menu-container; hidden" id="menus">
         <h1>Please see menu options below.</h1>
+        <p>Some menus can be adapted for dietary requirements. Please let us know any questions you have and we are happy to ask the venue. </p>
         <div class="menu-item" id="standard-menu" class="hidden">
             <button class="menu-question">Standard menu <span class="arrow">&#9656;</span></button>
             <div class="menu-answer">
@@ -156,6 +157,7 @@
                 <p>Warm chocolate brownie with vanilla ice cream (V)(GF)</p>
             </div>
         </div>
+        <p>GFa - gluten free adaptation available.</p>
     </div>
 </div>
 
@@ -294,7 +296,7 @@
             });
             
             // Clear result containers
-            const containers = ["primaryGuestContainer", "relatedGuestsContainer"];
+            const containers = ["guestContainer"];
             containers.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = "";
@@ -316,65 +318,49 @@
             // Hide all steps first
             hideAllSteps();
             
-            const searchValue = document.getElementById('search').value.toLowerCase();
+            const searchInput = document.getElementById('search').value.trim();
 
+            // Validate that the input is exactly 9 digits.
+            if (!/^\d{9}$/.test(searchInput)) {
+              alert('Please enter a valid 9-digit guest ID.');
+              document.getElementById("searchForm").classList.remove("hidden");
+              return;
+            }
+
+            let matchingGuests = [];
             db.ref('rsvps').once('value').then(snapshot => {
-                let matchingGuests = [];
-                snapshot.forEach(childSnapshot => {
+              snapshot.forEach(childSnapshot => {
                 const guest = childSnapshot.val();
-                const fullName = `${guest.Forename || ''} ${guest.Surname || ''}`.toLowerCase().trim();
-                if (fullName.includes(searchValue)) {
-                    matchingGuests.push({ key: childSnapshot.key, ...guest });
+                // Convert the Login field to a string to ensure proper comparison.
+                if (guest.Login && String(guest.Login).trim() === searchInput) {
+                  matchingGuests.push({ key: childSnapshot.key, ...guest });
                 }
-                });
+              });
 
-                if (matchingGuests.length > 0) {
-                // Choose the primary match and get the group via GroupID
-                const primaryMatch = matchingGuests[0];
-                const groupID = primaryMatch.GroupID || null;
-                let groupMembers = [];
-                snapshot.forEach(childSnapshot => {
-                    const guest = childSnapshot.val();
-                    if (guest.GroupID === groupID) {
-                    groupMembers.push({ key: childSnapshot.key, ...guest });
-                    }
-                });
-                currentGroup = groupMembers;
-
-                // Now update the UI:
-                // Hide the search form and show the "Search for another guest" button.
+              if (matchingGuests.length > 0) {
+                // Directly assign all matching guests to currentGroup
+                currentGroup = matchingGuests;
+                
+                // Hide the search form and show the "Search for another guest" button
                 searchForm.classList.add('hidden');
                 searchAgainButton.classList.remove('hidden');
 
-                // Build the confirmation UI for primary and related guests.
-                const primaryGuestContainer = document.getElementById('primaryGuestContainer');
-                const relatedGuestsContainer = document.getElementById('relatedGuestsContainer');
+                /// Use your single container—if you've renamed it to "guestsContainer"
+                const guestsContainer = document.getElementById('guestsContainer');
+                guestsContainer.innerHTML = matchingGuests.map(guest => `
+                  <label>
+                    <input type="checkbox" class="groupMember" value="${guest.key}" checked>
+                    ${guest.Forename} ${guest.Surname}
+                  </label>
+                `).join('<br>');
 
-                primaryGuestContainer.innerHTML = `
-                    <label>
-                    <input type="checkbox" class="groupMember" value="${primaryMatch.key}" checked disabled>
-                    ${primaryMatch.Forename} ${primaryMatch.Surname}
-                    </label>
-                `;
-
-                const relatedGuests = groupMembers.filter(member => member.key !== primaryMatch.key);
-                if (relatedGuests.length > 0) {
-                    relatedGuestsContainer.innerHTML = relatedGuests.map(member => `
-                    <label>
-                        <input type="checkbox" class="groupMember" value="${member.key}" checked>
-                        ${member.Forename} ${member.Surname}
-                    </label>
-                    `).join('<br>');
-                } else {
-                    relatedGuestsContainer.innerHTML = `<p>No additional related guests found.</p>`;
-                }
-
-                // Show the confirmation step.
+                // Show the confirmation step
                 document.getElementById("confirmationStep").classList.remove('hidden');
-
-                } else {
+              } else {
                 alert('No matching guests found.');
-                }
+                document.getElementById("searchForm").classList.remove("hidden");
+                return; // Exit the function early.
+              }
             });
             });
 
@@ -388,7 +374,6 @@
         // Edit RSVP button for existing submissions
         document.getElementById("editRSVPButton").addEventListener('click', () => {
             existingRSVP.classList.add('hidden');
-            selectedGroup = currentGroup;
             createRSVPForms();
             rsvpForms.classList.remove('hidden');
             menus.classList.remove("hidden");
@@ -420,7 +405,7 @@
                         dietaryRequirements = previous.Dietary.split(',').map(item => item.trim());
                     }
                 } else {
-                    attendingYes = 'selected';
+                    attendingYes = 'checked';
                 }
                 
                 // Build the form HTML string with pre-filled values:
@@ -479,24 +464,24 @@
                             </div>
                                 <button type="button" class="menu-info-button"><a href="#menus">Menu info</a></button>
                         </div>
-                        <h4>Specify any dietary requirements below</h4>
-                        <div class="dietary-requirements" style="display: flex; gap: 10px; align-items: center; justify-content:center;">
+                        <div class="dietary-requirements" data-key="${member.key}">
+                            <h4>Specify any dietary requirements below</h4>
                             <label><input type="checkbox" data-key="${member.key}" value="Vegan" ${dietaryRequirements.includes("Vegan") ? "checked" : ""}> Vegan</label><br>
                             <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free" ${dietaryRequirements.includes("Gluten-Free") ? "checked" : ""}> Gluten-Free</label><br> 
                         </div>
-                        <div class="more-requirements">
+                        <div class="more-requirements" data-key="${member.key}">
                             <label for="other-${member.key}">Other dietary requirements (if any):</label><br>
                             <input style="width:50%; justify-content:center;" type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify">
                         </div>
 
-                        <div class="alcohol-free">
+                        <div class="alcohol-free" data-key="${member.key}">
                             <h4>Please flag below if you would prefer the alcohol free package.</h4>
                             <label><input type="checkbox" name="non-drinker-${member.key}" value="Yes" ${previous && previous.NonDrinker === "Yes" ? "checked" : ""}> Alcohol free</label>
                         </div>
 
                         <div class="leave-message" data-key="${member.key}">
                             <h4>Leave a message for us (optional):</h4>
-                            <input style="width:50%; justify-content:center; height:4rem;" type="text" id="other-${member.key}" data-key="${member.key}" class="message-text" placeholder="Enter message">
+                            <textarea style="width:50%; justify-content:center; height:4rem;" id="other-${member.key}" data-key="${member.key}" class="message-text" placeholder="Enter message"></textarea>
                         </div>
 
                         <div class="non-attending-message hidden" data-key="${member.key}">
@@ -509,43 +494,56 @@
         }
 
         // Confirm guest selection and build forms.
-    document.getElementById("confirmSelection").addEventListener('click', () => {
-      hideAllSteps();
-      const checkboxes = document.querySelectorAll('.groupMember');
-      selectedGroup = [];
-      checkboxes.forEach(checkbox => {
-        if (checkbox.checked || checkbox.disabled) {
-          let selectedMember = currentGroup.find(member => member.key === checkbox.value);
-          if (selectedMember) {
-            selectedGroup.push(selectedMember);
+      document.getElementById("confirmSelection").addEventListener('click', () => {
+        hideAllSteps();
+        const checkboxes = document.querySelectorAll('.groupMember');
+        selectedGroup = [];
+        checkboxes.forEach(checkbox => {
+          if (checkbox.checked || checkbox.disabled) {
+            let selectedMember = currentGroup.find(member => member.key === checkbox.value);
+            if (selectedMember) {
+              selectedGroup.push(selectedMember);
+            }
           }
+        });
+        if (selectedGroup.length === 0) {
+          alert('Please select at least one person to RSVP for.');
+          return;
+        }
+        const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
+        const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
+
+        if (alreadySubmittedGroup.length > 0) {
+          let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
+          if (!existingSubmissionsMessage) {
+            existingSubmissionsMessage = document.createElement("div");
+            existingSubmissionsMessage.id = "existingSubmissionsMessage";
+            document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
+          }
+          displayExistingRSVP(alreadySubmittedGroup);
+          document.getElementById("existingRSVP").classList.remove("hidden");
+        }
+
+        if (notSubmittedGroup.length > 0) {
+          selectedGroup = notSubmittedGroup;
+          createRSVPForms();
+          document.getElementById("rsvpForms").classList.remove("hidden");
+          document.getElementById("menus").classList.remove("hidden");
         }
       });
-      if (selectedGroup.length === 0) {
-        alert('Please select at least one person to RSVP for.');
-        return;
-      }
-      const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
-      const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
 
-      if (alreadySubmittedGroup.length > 0) {
-        let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
-        if (!existingSubmissionsMessage) {
-          existingSubmissionsMessage = document.createElement("div");
-          existingSubmissionsMessage.id = "existingSubmissionsMessage";
-          document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
-        }
-        displayExistingRSVP(alreadySubmittedGroup);
-        document.getElementById("existingRSVP").classList.remove("hidden");
+      function initializeAttendanceState() {
+        document.querySelectorAll('input[name^="attending_"]').forEach(radio => {
+          const key = radio.getAttribute('data-key');
+          const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
+          const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
+          // If "Not Attending" is already checked, hide the meal section and show the message.
+          if (radio.checked && radio.value === "No") {
+            mealSection.classList.add('hidden');
+            nonAttendingMessage.classList.remove('hidden');
+          }
+        });
       }
-
-      if (notSubmittedGroup.length > 0) {
-        selectedGroup = notSubmittedGroup;
-        createRSVPForms();
-        document.getElementById("rsvpForms").classList.remove("hidden");
-        document.getElementById("menus").classList.remove("hidden");
-      }
-    });
 
     function createRSVPForms() {
       individualRSVPForms.innerHTML = '';
@@ -557,20 +555,30 @@
         })
       ).then(() => {
         attachAttendingChangeListeners();
+        initializeAttendanceState();
       });
     }
 
     function attachAttendingChangeListeners() {
-      document.querySelectorAll('.attending').forEach(select => {
+      document.querySelectorAll('input[name^="attending_"]').forEach(select => {
         select.addEventListener('change', event => {
           const key = event.target.getAttribute('data-key');
           const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
+          const dietarySection = document.querySelector(`.dietary-requirements[data-key="${key}"]`);
+          const otherDietSection = document.querySelector(`.more-requirements[data-key="${key}"]`);
+          const alcFreeSection = document.querySelector(`.alcohol-free[data-key="${key}"]`);
           const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
           if (event.target.value === "No") {
             mealSection.classList.add('hidden');
+            dietarySection.classList.add('hidden');
+            otherDietSection.classList.add('hidden');
+            alcFreeSection.classList.add('hidden');
             nonAttendingMessage.classList.remove('hidden');
           } else {
             mealSection.classList.remove('hidden');
+            dietarySection.classList.remove('hidden');
+            otherDietSection.classList.remove('hidden');
+            alcFreeSection.classList.remove('hidden');
             nonAttendingMessage.classList.add('hidden');
           }
         });

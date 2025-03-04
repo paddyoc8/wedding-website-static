@@ -20,6 +20,7 @@
             drawer.classList.toggle('open');
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 </head>
 <body>
     <header>
@@ -69,7 +70,7 @@
             </svg>
         </a>
         </div>
-        <div class="hero-content" style="text-align: center;">
+        <div class="hero-content">
             <h1>Emma & Patrick</h1>
             <p>Friday 1st August, 2025 · The Maynard, Grindleford</p>
             <a href="pages/rsvp.html" class="rsvp-button">RSVP</a><br><br>
@@ -118,25 +119,37 @@
 
   <section id="details" class="details-split">
     <div class="details-text">
-      <div class="details-text-inner">
-        <!-- Each line is in its own paragraph to control spacing/indentation precisely -->
-        <h2>You’re invited to</h2>
-        <h1>our wedding in the <strong>Peak District</strong></h1><br>
-  
-        <p>   on   <h2>Friday 1st August 2025</h2></p>
-        <br>
-        <p><span style="color:#fff">   on   </span>Ceremony begins at 1:30pm</p><br><br>
-    
-        <p>   at   
-        <h2>The Maynard</h2><br></p>
-        <p><span style="color:#fff">   at   </span>Grindleford, Hope Valley</p><br><br><br>
-    
-        <p>Dinner and dancing to follow</p><br><br>
-        <p>Please RSVP by 31st May.</p>
-      </div>
+        <div class="details-text-inner">
+          <div class="top-text">
+            <h2>You’re invited to</h2>
+            <h1>our wedding in the <strong>Peak District</strong></h1>
+          </div>
+          <div class="bottom-text">
+            <div class="text-line">
+              <p>on</p>
+              <h2>Friday 1st August 2025</h2>
+            </div>
+            <div class="text-line">
+              <p><span class="hidden-text">on</span></p>
+              <p>Ceremony begins at 1:30pm</p>
+            </div>
+            <br>
+            <div class="text-line">
+              <p>at</p>
+              <h2>The Maynard</h2>
+            </div>
+            <div class="text-line">
+              <p><span class="hidden-text">at</span></p>
+              <p>Grindleford, Hope Valley</p>
+            </div>
+            <br><br>
+            <p>Dinner and dancing to follow</p>
+            <p>Please RSVP by 31st May</p>
+          </div>
+        </div>
     </div>
     <div class="details-image">
-      <img src="assets/images/heros/heatherSlantingRock.jpg" alt="Peak District landscape" />
+      <img src="assets/images/heros/heatherSlantingRock.jpg" alt="Peak District landscape">
       <div class="image-caption">
         <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
@@ -335,8 +348,8 @@
       
             <!-- Tabs -->
             <div class="faqs-tabs">
-              <button class="tab-btn active" data-tab="travel">TRAVEL</button><p> / </p>
-              <button class="tab-btn" data-tab="guestinfo">GUEST INFO</button><p> / </p>
+              <button class="tab-btn active" data-tab="travel">TRAVEL</button>
+              <button class="tab-btn" data-tab="guestinfo">GUEST INFO</button>
               <button class="tab-btn" data-tab="venue">VENUE</button>
             </div>
           </div>
@@ -490,40 +503,56 @@
       </script>
 
       <script>
-        // Set your target date here (adjust as needed)
-        const targetDate = new Date("Aug 1, 2025 13:30:00").getTime();
-        
+        // Set your target date/time using day.js (this example uses local time)
+        const targetDate = dayjs("2025-08-01 13:30:00");
+
         function updateCountdown() {
-          const now = new Date().getTime();
-          let diff = targetDate - now;
-        
-          // If the countdown is over, stop updating
-          if (diff < 0) {
-            diff = 0;
-            clearInterval(timerInterval);
+          let now = dayjs();
+
+          // If the target date is reached or passed, set all values to zero.
+          if (targetDate.diff(now) <= 0) {
+            document.getElementById("months").textContent = "00";
+            document.getElementById("days").textContent = "00";
+            document.getElementById("hours").textContent = "00";
+            document.getElementById("minutes").textContent = "00";
+            document.getElementById("seconds").textContent = "00";
+            return;
           }
-        
-          // Approximate calculation: 1 month ≈ 30.44 days
-          const msPerMonth = 1000 * 60 * 60 * 24 * 30.44;
-          const months = Math.floor(diff / msPerMonth);
-          const remainderAfterMonths = diff % msPerMonth;
-        
-          const days = Math.floor(remainderAfterMonths / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((remainderAfterMonths % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-          const minutes = Math.floor((remainderAfterMonths % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((remainderAfterMonths % (1000 * 60)) / 1000);
-        
+
+          // Calculate the exact breakdown:
+
+          // 1. Calculate whole months difference
+          let months = targetDate.diff(now, 'month');
+          now = now.add(months, 'month');  // shift now by those months
+
+          // 2. Calculate whole days difference remaining
+          let days = targetDate.diff(now, 'day');
+          now = now.add(days, 'day');
+
+          // 3. Calculate whole hours difference remaining
+          let hours = targetDate.diff(now, 'hour');
+          now = now.add(hours, 'hour');
+
+          // 4. Calculate whole minutes difference remaining
+          let minutes = targetDate.diff(now, 'minute');
+          now = now.add(minutes, 'minute');
+
+          // 5. Calculate remaining seconds difference
+          let seconds = targetDate.diff(now, 'second');
+
+          // Update HTML elements with zero-padded values
           document.getElementById("months").textContent = String(months).padStart(2, '0');
           document.getElementById("days").textContent = String(days).padStart(2, '0');
           document.getElementById("hours").textContent = String(hours).padStart(2, '0');
           document.getElementById("minutes").textContent = String(minutes).padStart(2, '0');
           document.getElementById("seconds").textContent = String(seconds).padStart(2, '0');
         }
-        
-        // Initial call and update every second
+
+        // Initial call to update the countdown immediately
         updateCountdown();
-        const timerInterval = setInterval(updateCountdown, 1000);
-        </script>
+        // Update the countdown every second
+        setInterval(updateCountdown, 1000);
+      </script>
 
 </body>
 </html>

@@ -1,12 +1,4 @@
-    /* Base styling for an elegant look */
-    body {
-        font-family: var(--bodyFont);
-        margin: 0;
-        padding: 0;
-        background: #f9f9f9;
-        color: var(--dark1);
-      }
-  
+ 
       /* Full-page overlay with a soft dark tint */
       #overlay {
         display: none;

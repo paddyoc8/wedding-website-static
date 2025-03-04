@@ -11,6 +11,7 @@
     text-align: center;
     align-content: center;
     max-width: 60vw;
+    justify-content: center;
 }
 .rsvp-container h1 {
     font-size: 2rem;
@@ -21,6 +22,7 @@
 .rsvp-container form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 .rsvp-container label {
     margin: 0.5rem 0 0.2rem;
@@ -36,6 +38,7 @@
     border: 1px solid var(--dark2);
     border-radius: 5px;
     background: #fff;
+    text-align: center;
 }
 .rsvp-container button {
     background-color: var(--accent1);
@@ -101,6 +104,26 @@
    Make the table scroll horizontally on smaller screens 
    by wrapping the <table> in a container that can scroll
 */
+
+.searchFormCont {
+    justify-content: center; 
+    display: flex;
+}
+.searchFormCont p {
+    width: 60%;
+    text-align: center; 
+    display: inline-block;
+    margin: 1rem auto;
+    line-height: 1.6;
+}
+
+.menu-choice {
+    display: flex; 
+    gap: 10px;
+    align-items: center; 
+    justify-content:center;
+}
+
 @media (max-width: 768px) {
     #submissionTable table {
         display: block;          /* Turn into a block for scrolling */
@@ -114,6 +137,15 @@
         padding: 0.5rem;
         font-size: 0.9rem;
         white-space: nowrap;     /* Keep table cells from wrapping awkwardly */
+    }
+    .menu-choice {
+        flex-direction: column;
+        align-items: center;
+        gap: 0px
+    }
+    #finalSubmission {
+        flex-direction: column;
+        flex-wrap: wrap;
     }
 }
 
@@ -288,6 +320,12 @@
         font-size: 0.9rem;
         white-space: nowrap;
     }
+    .searchFormCont p {
+        width: 100%;
+        text-align: center; 
+        display: inline-block;
+        line-height: 1.6;
+    }
 }
 
 /* Container for the info icon and tooltip */
@@ -355,7 +393,7 @@
 /* Final Submission Confirmation Layout */
 #finalSubmission {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: no-wrap;
     gap: 20px;
     padding: 1rem;
     background: var(--light1);

@@ -327,13 +327,16 @@ body {
     .drawer-toggle {
         display: block;
     }
+    .hero-content {
+        width: 80%;
+    }
 }
 
 /* Scroll Down Button */
 .scroll-down {
     position: absolute; /* Position relative to the hero */
     bottom: 5%; /* Move the arrow closer to the bottom of the image */
-    left: calc(50% - 35px);
+    left: calc(50% - 30px);
     translate: transformX(-35px);
     text-decoration: none;
     animation: bounce 2s infinite; /* Add the bounce effect */
@@ -347,6 +350,7 @@ body {
     color: var(--light1); /* Match your light color scheme */
     transition: transform 0.3s ease; /* Smooth hover effect */
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5)); /* Add subtle shadow for visibility */
+    justify-content: center;
 }
 
 /* Hover effect */
@@ -372,6 +376,7 @@ body {
 @media (max-width: 768px) {
     .scroll-down {
         bottom: 10%; /* Slightly higher for smaller screens */
+        left: calc(50% - 25px);
     }
     .scroll-down svg {
         width: 50px; /* Reduce arrow size for mobile */

@@ -38,9 +38,9 @@
     position: relative;
     margin-bottom: 3rem;
     z-index: 1;
-    border: 1px solid var(--accent1);
+    /* border: 1px solid var(--accent1); */
     border-radius: 8px;
-    background: var(--light1);
+    /* background: var(--light1); */
     padding: 1rem;
   }
 
@@ -123,11 +123,14 @@
   @media (max-width: 768px) {
     .schedule-content {
       flex-direction: column;
+      background: var(--light1);
+      height: auto;
     }
     .schedule-left,
     .schedule-right {
       max-width: 100%;
-      border: 1px solid var(--accent1);
+      flex: none;
+      padding: 0rem;
     }
     .schedule-timeline::before {
       content: "";
@@ -137,7 +140,6 @@
       transform: translateX(-50%);
       width: 4px;
       height: 100%;
-      background-color: var(--accent1);
       z-index: 0;
     }
   }
