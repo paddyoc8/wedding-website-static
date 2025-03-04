@@ -327,6 +327,9 @@ body {
     .drawer-toggle {
         display: block;
     }
+    .hero-content {
+        width: 80%;
+    }
 }
 
 /* Scroll Down Button */
