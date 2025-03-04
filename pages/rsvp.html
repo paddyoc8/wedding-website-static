@@ -75,13 +75,15 @@
         </div>
         
         <!-- Search Form -->
-        <form id="searchForm" style="max-width: 50vw; display: inline-block;">
-            <h1>Will you attend our wedding?</h1>
-            <p style="text-align: center; width: 60%; display: inline-block; line-height: 1.6;">Please let us know by <strong>Saturday, 31st May</strong> whether you’ll be attending our wedding, as we need to provide final numbers and dietary requirements to the venue. We hope you can join us!</p>
-            <p style="text-align: center; width: 60%; display: inline-block; line-height: 1.6; margin-bottom:2.5rem;">Search your name below to bring up you and your group’s RSVP.</p><br>
-            <input type="text" id="search" placeholder="Enter your name" required><br>
-            <button type="submit">Search</button>
-        </form>
+        <div class="searchFormCont">
+          <form id="searchForm">
+              <h1>Will you attend our wedding?</h1>
+              <p>Please let us know by <strong>Saturday, 31st May</strong> whether you’ll be attending our wedding, as we need to provide final numbers and dietary requirements to the venue. We hope you can join us!</p>
+              <p style="margin-bottom:2.5rem;">Search your name below to bring up you and your group’s RSVP.</p><br>
+              <input type="text" id="search" placeholder="Enter your name" required><br>
+              <button type="submit">Search</button>
+          </form>
+        </div>
 
         <!-- Existing RSVP Summary (if a guest has already submitted) -->
         <div id="existingRSVP" class="hidden">
@@ -132,6 +134,7 @@
 
     <div class="menu-container; hidden" id="menus">
         <h1>Please see menu options below.</h1>
+        <p>Some menus can be adapted for dietary requirements. Please let us know any questions you have and we are happy to ask the venue. </p>
         <div class="menu-item" id="standard-menu" class="hidden">
             <button class="menu-question">Standard menu <span class="arrow">&#9656;</span></button>
             <div class="menu-answer">
@@ -156,6 +159,7 @@
                 <p>Warm chocolate brownie with vanilla ice cream (V)(GF)</p>
             </div>
         </div>
+        <p>GFa - gluten free adaptation available.</p>
     </div>
 </div>
 

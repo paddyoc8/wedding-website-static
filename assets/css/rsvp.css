@@ -21,6 +21,7 @@
 .rsvp-container form {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 .rsvp-container label {
     margin: 0.5rem 0 0.2rem;
@@ -101,6 +102,19 @@
    Make the table scroll horizontally on smaller screens 
    by wrapping the <table> in a container that can scroll
 */
+
+.searchFormCont {
+    justify-content: center; 
+    display: flex;
+}
+.searchFormCont p {
+    width: 60%;
+    text-align: center; 
+    display: inline-block;
+    margin: 1rem auto;
+    line-height: 1.6;
+}
+
 @media (max-width: 768px) {
     #submissionTable table {
         display: block;          /* Turn into a block for scrolling */
@@ -287,6 +301,12 @@
         padding: 0.5rem;
         font-size: 0.9rem;
         white-space: nowrap;
+    }
+    .searchFormCont p {
+        width: 100%;
+        text-align: center; 
+        display: inline-block;
+        line-height: 1.6;
     }
 }
 
