@@ -79,8 +79,8 @@
           <form id="searchForm">
               <h1>Will you attend our wedding?</h1>
               <p>Please let us know by <strong>Saturday, 31st May</strong> whether you’ll be attending our wedding, as we need to provide final numbers and dietary requirements to the venue. We hope you can join us!</p>
-              <p style="margin-bottom:2.5rem;">Search your name below to bring up you and your group’s RSVP.</p><br>
-              <input type="text" id="search" placeholder="Enter your name" required><br>
+              <p style="margin-bottom:2.5rem;">Search your unique guest ID (9-digit code) to bring up you and your group’s RSVP.</p><br>
+              <input type="text" id="search" placeholder="Enter your guest ID" required><br>
               <button type="submit">Search</button>
           </form>
         </div>
@@ -320,17 +320,24 @@
             // Hide all steps first
             hideAllSteps();
             
-            const searchValue = document.getElementById('search').value.toLowerCase();
+            const searchInput = document.getElementById('search').value.trim();
 
+            // Validate that the input is exactly 9 digits.
+            if (!/^\d{9}$/.test(searchInput)) {
+              alert('Please enter a valid 9-digit guest ID.');
+              document.getElementById("searchForm").classList.remove("hidden");
+              return;
+            }
+
+            let matchingGuests = [];
             db.ref('rsvps').once('value').then(snapshot => {
-                let matchingGuests = [];
-                snapshot.forEach(childSnapshot => {
+              snapshot.forEach(childSnapshot => {
                 const guest = childSnapshot.val();
-                const fullName = `${guest.Forename || ''} ${guest.Surname || ''}`.toLowerCase().trim();
-                if (fullName.includes(searchValue)) {
-                    matchingGuests.push({ key: childSnapshot.key, ...guest });
+                // Convert the Login field to a string to ensure proper comparison.
+                if (guest.Login && String(guest.Login).trim() === searchInput) {
+                  matchingGuests.push({ key: childSnapshot.key, ...guest });
                 }
-                });
+              });
 
                 if (matchingGuests.length > 0) {
                 // Choose the primary match and get the group via GroupID
@@ -380,7 +387,6 @@
                     alert('No matching guests found.');
                     // Reset: show the search form so the user can try again.
                     document.getElementById("searchForm").classList.remove("hidden");
-                    // Optionally, you could also clear the search input or reset other UI elements here.
                     return; // Exit the function early.
                 }
             });
