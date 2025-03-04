@@ -141,6 +141,10 @@
         align-items: center;
         gap: 0px
     }
+    #finalSubmission {
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
 }
 
 .menu-container {
@@ -387,7 +391,7 @@
 /* Final Submission Confirmation Layout */
 #finalSubmission {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: no-wrap;
     gap: 20px;
     padding: 1rem;
     background: var(--light1);
