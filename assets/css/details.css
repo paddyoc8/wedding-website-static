@@ -101,6 +101,18 @@
 @media (max-width: 768px) {
   .details-split {
     height: 70vh;
+    position: relative;
+  }
+  /* Add a light transparent overlay */
+  .details-split::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    z-index: 2;
   }
   /* Text container becomes overlay */
   .details-text {
