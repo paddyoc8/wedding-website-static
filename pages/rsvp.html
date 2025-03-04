@@ -96,10 +96,8 @@
         <!-- Confirmation Step (select group members if not already submitted) -->
         <div id="confirmationStep" class="hidden">
             <h2>Select guests</h2>
-            <p>Your search result:</p>
-            <div id="primaryGuestContainer"></div>
-            <p>Other related guests you might like to RSVP for:</p>
-            <div id="relatedGuestsContainer"></div>
+            <p>Select the guests you would like to RSVP for:</p>
+            <div id="guestsContainer"></div>
             <!-- Button to perform another search; initially hidden -->
             <button id="searchAgain" class="hidden" style="background:var(--light1); border: 1px solid var(--accent1); color:var(--dark1)">Search for another guest</button>
             <button id="confirmSelection">Confirm selection</button>
@@ -298,7 +296,7 @@
             });
             
             // Clear result containers
-            const containers = ["primaryGuestContainer", "relatedGuestsContainer"];
+            const containers = ["guestContainer"];
             containers.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = "";
@@ -339,56 +337,30 @@
                 }
               });
 
-                if (matchingGuests.length > 0) {
-                // Choose the primary match and get the group via GroupID
-                const primaryMatch = matchingGuests[0];
-                const groupID = primaryMatch.GroupID || null;
-                let groupMembers = [];
-                snapshot.forEach(childSnapshot => {
-                    const guest = childSnapshot.val();
-                    if (guest.GroupID === groupID) {
-                    groupMembers.push({ key: childSnapshot.key, ...guest });
-                    }
-                });
-                currentGroup = groupMembers;
-
-                // Now update the UI:
-                // Hide the search form and show the "Search for another guest" button.
+              if (matchingGuests.length > 0) {
+                // Directly assign all matching guests to currentGroup
+                currentGroup = matchingGuests;
+                
+                // Hide the search form and show the "Search for another guest" button
                 searchForm.classList.add('hidden');
                 searchAgainButton.classList.remove('hidden');
 
-                // Build the confirmation UI for primary and related guests.
-                const primaryGuestContainer = document.getElementById('primaryGuestContainer');
-                const relatedGuestsContainer = document.getElementById('relatedGuestsContainer');
+                /// Use your single container—if you've renamed it to "guestsContainer"
+                const guestsContainer = document.getElementById('guestsContainer');
+                guestsContainer.innerHTML = matchingGuests.map(guest => `
+                  <label>
+                    <input type="checkbox" class="groupMember" value="${guest.key}" checked>
+                    ${guest.Forename} ${guest.Surname}
+                  </label>
+                `).join('<br>');
 
-                primaryGuestContainer.innerHTML = `
-                    <label>
-                    <input type="checkbox" class="groupMember" value="${primaryMatch.key}" checked disabled>
-                    ${primaryMatch.Forename} ${primaryMatch.Surname}
-                    </label>
-                `;
-
-                const relatedGuests = groupMembers.filter(member => member.key !== primaryMatch.key);
-                if (relatedGuests.length > 0) {
-                    relatedGuestsContainer.innerHTML = relatedGuests.map(member => `
-                    <label>
-                        <input type="checkbox" class="groupMember" value="${member.key}" checked>
-                        ${member.Forename} ${member.Surname}
-                    </label>
-                    `).join('<br>');
-                } else {
-                    relatedGuestsContainer.innerHTML = `<p>No additional related guests found.</p>`;
-                }
-
-                // Show the confirmation step.
+                // Show the confirmation step
                 document.getElementById("confirmationStep").classList.remove('hidden');
-
-                } else {
-                    alert('No matching guests found.');
-                    // Reset: show the search form so the user can try again.
-                    document.getElementById("searchForm").classList.remove("hidden");
-                    return; // Exit the function early.
-                }
+              } else {
+                alert('No matching guests found.');
+                document.getElementById("searchForm").classList.remove("hidden");
+                return; // Exit the function early.
+              }
             });
             });
 
@@ -402,7 +374,6 @@
         // Edit RSVP button for existing submissions
         document.getElementById("editRSVPButton").addEventListener('click', () => {
             existingRSVP.classList.add('hidden');
-            selectedGroup = currentGroup;
             createRSVPForms();
             rsvpForms.classList.remove('hidden');
             menus.classList.remove("hidden");
@@ -493,24 +464,24 @@
                             </div>
                                 <button type="button" class="menu-info-button"><a href="#menus">Menu info</a></button>
                         </div>
-                        <h4>Specify any dietary requirements below</h4>
-                        <div class="dietary-requirements" style="display: flex; gap: 10px; align-items: center; justify-content:center;">
+                        <div class="dietary-requirements" data-key="${member.key}">
+                            <h4>Specify any dietary requirements below</h4>
                             <label><input type="checkbox" data-key="${member.key}" value="Vegan" ${dietaryRequirements.includes("Vegan") ? "checked" : ""}> Vegan</label><br>
                             <label><input type="checkbox" data-key="${member.key}" value="Gluten-Free" ${dietaryRequirements.includes("Gluten-Free") ? "checked" : ""}> Gluten-Free</label><br> 
                         </div>
-                        <div class="more-requirements">
+                        <div class="more-requirements" data-key="${member.key}">
                             <label for="other-${member.key}">Other dietary requirements (if any):</label><br>
                             <input style="width:50%; justify-content:center;" type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify">
                         </div>
 
-                        <div class="alcohol-free">
+                        <div class="alcohol-free" data-key="${member.key}">
                             <h4>Please flag below if you would prefer the alcohol free package.</h4>
                             <label><input type="checkbox" name="non-drinker-${member.key}" value="Yes" ${previous && previous.NonDrinker === "Yes" ? "checked" : ""}> Alcohol free</label>
                         </div>
 
                         <div class="leave-message" data-key="${member.key}">
                             <h4>Leave a message for us (optional):</h4>
-                            <input style="width:50%; justify-content:center; height:4rem;" type="text" id="other-${member.key}" data-key="${member.key}" class="message-text" placeholder="Enter message">
+                            <textarea style="width:50%; justify-content:center; height:4rem;" id="other-${member.key}" data-key="${member.key}" class="message-text" placeholder="Enter message"></textarea>
                         </div>
 
                         <div class="non-attending-message hidden" data-key="${member.key}">
@@ -561,6 +532,19 @@
         }
       });
 
+      function initializeAttendanceState() {
+        document.querySelectorAll('input[name^="attending_"]').forEach(radio => {
+          const key = radio.getAttribute('data-key');
+          const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
+          const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
+          // If "Not Attending" is already checked, hide the meal section and show the message.
+          if (radio.checked && radio.value === "No") {
+            mealSection.classList.add('hidden');
+            nonAttendingMessage.classList.remove('hidden');
+          }
+        });
+      }
+
     function createRSVPForms() {
       individualRSVPForms.innerHTML = '';
       Promise.all(
@@ -571,20 +555,30 @@
         })
       ).then(() => {
         attachAttendingChangeListeners();
+        initializeAttendanceState();
       });
     }
 
     function attachAttendingChangeListeners() {
-      document.querySelectorAll('.attending').forEach(select => {
+      document.querySelectorAll('input[name^="attending_"]').forEach(select => {
         select.addEventListener('change', event => {
           const key = event.target.getAttribute('data-key');
           const mealSection = document.querySelector(`.meal-section[data-key="${key}"]`);
+          const dietarySection = document.querySelector(`.dietary-requirements[data-key="${key}"]`);
+          const otherDietSection = document.querySelector(`.more-requirements[data-key="${key}"]`);
+          const alcFreeSection = document.querySelector(`.alcohol-free[data-key="${key}"]`);
           const nonAttendingMessage = document.querySelector(`.non-attending-message[data-key="${key}"]`);
           if (event.target.value === "No") {
             mealSection.classList.add('hidden');
+            dietarySection.classList.add('hidden');
+            otherDietSection.classList.add('hidden');
+            alcFreeSection.classList.add('hidden');
             nonAttendingMessage.classList.remove('hidden');
           } else {
             mealSection.classList.remove('hidden');
+            dietarySection.classList.remove('hidden');
+            otherDietSection.classList.remove('hidden');
+            alcFreeSection.classList.remove('hidden');
             nonAttendingMessage.classList.add('hidden');
           }
         });
