@@ -428,7 +428,7 @@
                         dietaryRequirements = previous.Dietary.split(',').map(item => item.trim());
                     }
                 } else {
-                    attendingYes = 'selected';
+                    attendingYes = 'checked';
                 }
                 
                 // Build the form HTML string with pre-filled values:
@@ -517,43 +517,43 @@
         }
 
         // Confirm guest selection and build forms.
-    document.getElementById("confirmSelection").addEventListener('click', () => {
-      hideAllSteps();
-      const checkboxes = document.querySelectorAll('.groupMember');
-      selectedGroup = [];
-      checkboxes.forEach(checkbox => {
-        if (checkbox.checked || checkbox.disabled) {
-          let selectedMember = currentGroup.find(member => member.key === checkbox.value);
-          if (selectedMember) {
-            selectedGroup.push(selectedMember);
+      document.getElementById("confirmSelection").addEventListener('click', () => {
+        hideAllSteps();
+        const checkboxes = document.querySelectorAll('.groupMember');
+        selectedGroup = [];
+        checkboxes.forEach(checkbox => {
+          if (checkbox.checked || checkbox.disabled) {
+            let selectedMember = currentGroup.find(member => member.key === checkbox.value);
+            if (selectedMember) {
+              selectedGroup.push(selectedMember);
+            }
           }
+        });
+        if (selectedGroup.length === 0) {
+          alert('Please select at least one person to RSVP for.');
+          return;
+        }
+        const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
+        const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
+
+        if (alreadySubmittedGroup.length > 0) {
+          let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
+          if (!existingSubmissionsMessage) {
+            existingSubmissionsMessage = document.createElement("div");
+            existingSubmissionsMessage.id = "existingSubmissionsMessage";
+            document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
+          }
+          displayExistingRSVP(alreadySubmittedGroup);
+          document.getElementById("existingRSVP").classList.remove("hidden");
+        }
+
+        if (notSubmittedGroup.length > 0) {
+          selectedGroup = notSubmittedGroup;
+          createRSVPForms();
+          document.getElementById("rsvpForms").classList.remove("hidden");
+          document.getElementById("menus").classList.remove("hidden");
         }
       });
-      if (selectedGroup.length === 0) {
-        alert('Please select at least one person to RSVP for.');
-        return;
-      }
-      const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
-      const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
-
-      if (alreadySubmittedGroup.length > 0) {
-        let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
-        if (!existingSubmissionsMessage) {
-          existingSubmissionsMessage = document.createElement("div");
-          existingSubmissionsMessage.id = "existingSubmissionsMessage";
-          document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
-        }
-        displayExistingRSVP(alreadySubmittedGroup);
-        document.getElementById("existingRSVP").classList.remove("hidden");
-      }
-
-      if (notSubmittedGroup.length > 0) {
-        selectedGroup = notSubmittedGroup;
-        createRSVPForms();
-        document.getElementById("rsvpForms").classList.remove("hidden");
-        document.getElementById("menus").classList.remove("hidden");
-      }
-    });
 
     function createRSVPForms() {
       individualRSVPForms.innerHTML = '';
