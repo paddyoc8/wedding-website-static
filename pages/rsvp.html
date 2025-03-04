@@ -253,37 +253,21 @@
         let selectedGroup = [];
 
         function displayExistingRSVP(group) {
-            const container = document.getElementById("rsvpSummaryContainer");
-            let html = `
-            <div class="table-responsive">    
-            <table class="rsvp-summary-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Attending</th>
-                        <th>Menu</th>
-                        <th>Dietary</th>
-                        <th>Alcohol Free</th>
-                        <th>Message</th>
-                    </tr>
-                </thead>
-                <tbody>
-            </div>
-            `;
-            group.forEach(member => {
-                html += `
-                    <tr>
-                        <td>${member.Forename} ${member.Surname}</td>
-                        <td>${member.Attending || '-'}</td>
-                        <td>${member.Menu || '-'}</td>
-                        <td>${member.Dietary || '-'}</td>
-                        <td>${member.NonDrinker || '-'}</td>
-                        <td>${member.Message || '-'}</td>
-                    </tr>
-                `;
-            });
-            html += `</tbody></table>`;
-            container.innerHTML = html;
+          const container = document.getElementById("rsvpSummaryContainer");
+          let html = "";
+          group.forEach(member => {
+              html += `
+                <div class="order-item">
+                    <p><strong>Name:</strong> ${member.Forename} ${member.Surname}</p>
+                    <p><strong>Attending:</strong> ${member.Attending || '-'}</p>
+                    <p><strong>Menu:</strong> ${(member.Attending && member.Attending.toLowerCase() === "no") ? '-' : (member.Menu || '-')}</p>
+                    <p><strong>Dietary:</strong> ${member.Dietary || '-'}</p>
+                    <p><strong>Alcohol Free:</strong> ${member.NonDrinker || '-'}</p>
+                    <p><strong>Message:</strong> ${member.Message || '-'}</p>
+                </div>
+              `;
+          });
+          container.innerHTML = html;
         }
 
         // Clear UI result elements without wiping out the search input value
