@@ -89,7 +89,7 @@
 .top-text,
 .bottom-text {
   padding: clamp(0.5rem, 2vw, 1rem);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   margin-top: 1rem;
 }
 
@@ -140,5 +140,8 @@
   }
   .hidden-text {
     visibility: hidden;
+  }
+  .top-text {
+    margin-top: 4rem;
   }
 }
