@@ -101,7 +101,17 @@
     width: 100%;
     padding: clamp(0.5rem, 2vw, 1rem);
     text-align: center;
-    color: #fff;
+  }
+  .details-text h1,
+  .details-text h2 {
+    color: var(--dark1);
+  }
+  .text-line h2,
+  .text-line h2 {
+    color: var(--light1);
+  }
+  .details-text p {
+    color: var(--light1);
   }
   /* Inner text wrapper fills full width on mobile */
   .details-text-inner {
