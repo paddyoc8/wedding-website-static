@@ -377,7 +377,11 @@
                 document.getElementById("confirmationStep").classList.remove('hidden');
 
                 } else {
-                alert('No matching guests found.');
+                    alert('No matching guests found.');
+                    // Reset: show the search form so the user can try again.
+                    document.getElementById("searchForm").classList.remove("hidden");
+                    // Optionally, you could also clear the search input or reset other UI elements here.
+                    return; // Exit the function early.
                 }
             });
             });
