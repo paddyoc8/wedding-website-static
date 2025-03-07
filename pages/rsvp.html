@@ -381,6 +381,8 @@
                 let child = '';
                 // For dietary checkboxes:
                 let dietaryRequirements = [];
+                let otherDietaryText = '';
+
                 if (previous && previous.Submitted) {
                     prefillMessage = `<p class="prefill-message">You have previously submitted an RSVP for ${member.Forename} ${member.Surname}. Submitting again will overwrite your previous selections.</p>`;
                     if (previous.Attending === "Yes") {
@@ -391,10 +393,19 @@
                     if (previous.Menu === "Standard") standard = 'checked';
                     if (previous.Menu === "Vegetarian") vegetarian = 'checked';
                     if (previous.Menu === "Child") child = 'checked';
-                    // Prepopulate dietary checkboxes if Dietary data exists.
+                     // Prepopulate dietary checkboxes if Dietary data exists.
                     if (previous.Dietary) {
-                        dietaryRequirements = previous.Dietary.split(',').map(item => item.trim());
+                        const dietaryItems = previous.Dietary.split(',').map(item => item.trim());
+                        // Filter out known checkbox values
+                        const knownValues = ["Vegan", "Gluten-Free"];
+                        dietaryRequirements = dietaryItems.filter(item => knownValues.includes(item));
+                        
+                        // Any other dietary requirements go into the free text field
+                        const otherItems = dietaryItems.filter(item => !knownValues.includes(item));
+                        otherDietaryText = otherItems.join(', ');
                     }
+                    // If message exists, prepopulate the message field
+                    messageText = previous.Message || '';
                 } else {
                     attendingYes = 'checked';
                 }
@@ -462,7 +473,7 @@
                         </div>
                         <div class="more-requirements" data-key="${member.key}">
                             <label for="other-${member.key}">Other dietary requirements (if any):</label><br>
-                            <input style="width:50%; justify-content:center;" type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify">
+                            <input style="width:50%; justify-content:center;" type="text" id="other-${member.key}" data-key="${member.key}" class="other-dietary-text" placeholder="Please specify" value="${otherDietaryText}">
                         </div>
 
                         <div class="alcohol-free" data-key="${member.key}">
@@ -472,7 +483,7 @@
 
                         <div class="leave-message" data-key="${member.key}">
                             <h4>Leave a message for us (optional):</h4>
-                            <textarea style="width:50%; justify-content:center; height:4rem;" id="other-${member.key}" data-key="${member.key}" class="message-text" placeholder="Enter message"></textarea>
+                            <textarea style="width:50%; justify-content:center; height:4rem;" id="message-${member.key}" data-key="${member.key}" class="message-text" placeholder="Enter message">${messageText || ''}</textarea>
                         </div>
 
                         <div class="non-attending-message hidden" data-key="${member.key}">
