@@ -138,7 +138,7 @@ body {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background: url('../images/heros/motherCap.jpg') no-repeat center/cover; /* Background image */
+    background: url('../images/heros/heatherSlantingRock.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -154,7 +154,7 @@ body {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background: url('../images/heros/maynardEntrance.jpg') no-repeat center/cover; /* Background image */
+    background: url('../images/heros/mamTor.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -170,7 +170,7 @@ body {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background: url('../images/heros/maynardAbstract.jpg') no-repeat center/cover; /* Background image */
+    background: url('../images/heros/maynardEntrance.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -418,6 +418,7 @@ body {
     color: #fff;
     display: flex;
     align-items: center;
+    z-index: 999;
   }
   
   .image-caption .camera-icon {
