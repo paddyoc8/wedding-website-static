@@ -154,7 +154,7 @@ body {
     position: relative; /* Enables absolute positioning for child elements */
     width: 100%;
     min-height: 100vh; /* Full viewport height */
-    background: url('../images/heros/mamTor.jpg') no-repeat center/cover; /* Background image */
+    background: url('../images/registry.jpg') no-repeat center/cover; /* Background image */
     display: flex;
     justify-content: center;
     align-items: center;
