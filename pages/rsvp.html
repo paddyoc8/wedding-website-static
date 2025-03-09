@@ -382,6 +382,7 @@
                 // For dietary checkboxes:
                 let dietaryRequirements = [];
                 let otherDietaryText = '';
+                let messageText = ''; 
 
                 if (previous && previous.Submitted) {
                     prefillMessage = `<p class="prefill-message">You have previously submitted an RSVP for ${member.Forename} ${member.Surname}. Submitting again will overwrite your previous selections.</p>`;
