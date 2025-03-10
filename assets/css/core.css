@@ -41,6 +41,10 @@ body {
     box-sizing: border-box;
 }
 
+.svg {
+    vertical-align: middle;
+}
+
 .nav-bar .names {
     font-family: var(--titleFont);
     font-size: 1.2rem;
