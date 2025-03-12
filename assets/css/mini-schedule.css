@@ -223,95 +223,80 @@
 @keyframes fadeIn {
   from {opacity: 0; transform: translateY(5px);}
   to   {opacity: 1; transform: translateY(0);}
-}
+} 
 
-@media (max-width: 768px) {
-  /* Make the event container position relative */
-  .schedule-container {
-    position: relative;
-    padding: 0rem;
-    /* Remove fixed height so the container expands with content */
-    height: auto;
-    display: block;
-    /* Add some space at the bottom for the timeline */
-    padding-bottom: 4rem;
-    max-width: 90%; /* Increase width on smaller screens */
-  }
+  @media (max-width: 768px) {
+    /* Make the event container position relative */
+    .schedule-container {
+      position: relative;
+      padding: 0rem;
+      /* Remove fixed height so the container expands with content */
+      height: auto;
+      display: block;
+    }
 
-  .event-content.active {
-    position: relative;
-    padding: 1rem;
-    /* Remove fixed height so the container expands with content */
-    height: auto;
-    min-height: unset;
-    display: block;
-  }
-  
-  /* Position the image behind everything */
-  .event-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-  }
-  
-  .event-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Create a transparent grey overlay using a pseudo-element */
-  .event-content.active::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4); /* adjust opacity/color as needed */
-    z-index: 2;
-  }
-  
-  /* Bring the text on top of the overlay */
-  .event-info,
-  .event-details {
-    position: relative;
-    z-index: 3;
-    padding: 1rem;
-    color: #fff;  /* adjust text color for readability */
-    text-align: center;
-    border-left: none;
-    padding-left: 0;
-    margin-left: 0;
-  }
+    .event-content.active {
+      position: relative;
+      padding: 1rem;
+      /* Remove fixed height so the container expands with content */
+      height: auto;
+      display: block;
+    }
+    
+    /* Position the image behind everything */
+    .event-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .event-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    /* Create a transparent grey overlay using a pseudo-element */
+    .event-content.active::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4); /* adjust opacity/color as needed */
+      z-index: 2;
+    }
+    
+    /* Bring the text on top of the overlay */
+    .event-info,
+    .event-details {
+      position: relative;
+      z-index: 3;
+      padding: 1rem;
+      color: #fff;  /* adjust text color for readability */
+      text-align: center;
+      border-left: none;
+      padding-left: none;
+      margin-left: 0;
+    }
 
-  .event-details p,
-  .event-info p {
-    margin-bottom: 1rem;
-    color: #fff;
+    .event-details p,
+    .event-info p {
+      margin-bottom: 1rem;
+      color: #fff
+    }
+    .event-details h3,
+    .event-info h3 {
+      margin-bottom: 1rem;
+      color: #fff
+    }
+    
+    /* Optionally stack the text blocks vertically */
+    /* .event-info {
+      margin-bottom: 1rem;
+    } */
   }
   
-  .event-details h3,
-  .event-info h3 {
-    margin-bottom: 1rem;
-    color: #fff;
-  }
-  
-  /* Timeline adjustments for mobile */
-  .timeline {
-    bottom: -4.5rem; /* Move it down slightly for better spacing */
-  }
-
-  /* Make the dots a bit smaller on mobile */
-  .event-dot {
-    width: 80px;
-  }
-
-  .event-dot p {
-    font-size: 0.7rem; /* Smaller text */
-    margin-top: 1.2rem;
-  }
-}
