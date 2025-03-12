@@ -258,6 +258,7 @@
 
         let currentGroup = [];
         let selectedGroup = [];
+        let submittedGroup = [];
 
         function displayExistingRSVP(group) {
           const container = document.getElementById("rsvpSummaryContainer");
@@ -364,10 +365,11 @@
 
         // Edit RSVP button for existing submissions
         document.getElementById("editRSVPButton").addEventListener('click', () => {
-            existingRSVP.classList.add('hidden');
-            createRSVPForms();
-            rsvpForms.classList.remove('hidden');
-            menus.classList.remove("hidden");
+          existingRSVP.classList.add('hidden');
+          // Don't reset selectedGroup here, use what was already loaded
+          createRSVPForms();
+          rsvpForms.classList.remove('hidden');
+          menus.classList.remove("hidden");
         });
 
         function createIndividualForm(member) {
@@ -497,43 +499,48 @@
         }
 
         // Confirm guest selection and build forms.
-      document.getElementById("confirmSelection").addEventListener('click', () => {
-        hideAllSteps();
-        const checkboxes = document.querySelectorAll('.groupMember');
-        selectedGroup = [];
-        checkboxes.forEach(checkbox => {
-          if (checkbox.checked || checkbox.disabled) {
-            let selectedMember = currentGroup.find(member => member.key === checkbox.value);
-            if (selectedMember) {
-              selectedGroup.push(selectedMember);
+        document.getElementById("confirmSelection").addEventListener('click', () => {
+          hideAllSteps();
+          const checkboxes = document.querySelectorAll('.groupMember');
+          selectedGroup = [];
+          checkboxes.forEach(checkbox => {
+            if (checkbox.checked || checkbox.disabled) {
+              let selectedMember = currentGroup.find(member => member.key === checkbox.value);
+              if (selectedMember) {
+                selectedGroup.push(selectedMember);
+              }
             }
+          });
+          if (selectedGroup.length === 0) {
+            alert('Please select at least one person to RSVP for.');
+            return;
+          }
+          
+          // Store which members have already submitted RSVPs
+          const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
+          const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
+
+          if (alreadySubmittedGroup.length > 0) {
+            // Also save the submitted group for future edits
+            submittedGroup = [...alreadySubmittedGroup];
+            
+            let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
+            if (!existingSubmissionsMessage) {
+              existingSubmissionsMessage = document.createElement("div");
+              existingSubmissionsMessage.id = "existingSubmissionsMessage";
+              document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
+            }
+            displayExistingRSVP(alreadySubmittedGroup);
+            document.getElementById("existingRSVP").classList.remove("hidden");
+          }
+
+          if (notSubmittedGroup.length > 0) {
+            selectedGroup = notSubmittedGroup;
+            createRSVPForms();
+            document.getElementById("rsvpForms").classList.remove("hidden");
+            document.getElementById("menus").classList.remove("hidden");
           }
         });
-        if (selectedGroup.length === 0) {
-          alert('Please select at least one person to RSVP for.');
-          return;
-        }
-        const alreadySubmittedGroup = selectedGroup.filter(member => member.Submitted === true);
-        const notSubmittedGroup = selectedGroup.filter(member => !member.Submitted);
-
-        if (alreadySubmittedGroup.length > 0) {
-          let existingSubmissionsMessage = document.getElementById("existingSubmissionsMessage");
-          if (!existingSubmissionsMessage) {
-            existingSubmissionsMessage = document.createElement("div");
-            existingSubmissionsMessage.id = "existingSubmissionsMessage";
-            document.getElementById("existingRSVP").parentNode.insertBefore(existingSubmissionsMessage, document.getElementById("existingRSVP"));
-          }
-          displayExistingRSVP(alreadySubmittedGroup);
-          document.getElementById("existingRSVP").classList.remove("hidden");
-        }
-
-        if (notSubmittedGroup.length > 0) {
-          selectedGroup = notSubmittedGroup;
-          createRSVPForms();
-          document.getElementById("rsvpForms").classList.remove("hidden");
-          document.getElementById("menus").classList.remove("hidden");
-        }
-      });
 
       function initializeAttendanceState() {
         document.querySelectorAll('input[name^="attending_"]').forEach(radio => {
@@ -604,6 +611,8 @@
       });
       if (!valid) return;
 
+      submittedGroup = [...selectedGroup];
+
       selectedGroup.forEach(member => {
         const key = member.key;
         const attendingElement = document.querySelector(`input[name="attending_${key}"]:checked`);
@@ -670,14 +679,18 @@
     });
 
     document.getElementById("editAfterSubmission").addEventListener('click', () => {
-        // Editing after a new/updated submission from the final confirmation page
-        hideAllSteps();
-        selectedGroup = currentGroup;
-        createRSVPForms();
-        document.getElementById("rsvpForms").classList.remove("hidden");
-        menus.classList.remove("hidden");
-        finalSubmission.classList.add("hidden");
-        });
+      // Use the previously submitted group instead of the entire currentGroup
+      hideAllSteps();
+      // Only use submittedGroup if it exists and has members
+      if (submittedGroup && submittedGroup.length > 0) {
+        selectedGroup = submittedGroup;
+      }
+      // Otherwise it will continue to use the previously set selectedGroup
+      createRSVPForms();
+      document.getElementById("rsvpForms").classList.remove("hidden");
+      menus.classList.remove("hidden");
+      finalSubmission.classList.add("hidden");
+    });
 
     // Attach event listeners to all "Search for another guest" buttons (using class)
     document.querySelectorAll(".searchAgain").forEach(button => {
