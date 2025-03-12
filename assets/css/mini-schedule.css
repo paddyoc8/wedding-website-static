@@ -5,179 +5,197 @@
   align-items: center;
   margin: 0 4rem;
 }
-  /* Main section wrapper */
-  .schedule {
-    margin: 0 auto;
-    text-align: center;
-    padding: 4rem 0rem;
-    background: var(--light1);
-    width: 100%;  
-    margin-bottom: 4rem;
-  }
 
-  .schedule h2 {
-    font-family: var(--titleFont);
-    margin-bottom: 2rem;
-    color: var(--dark1);
-  }
-  
-  /* SCHEDULE CONTAINER */
-  .schedule-container {
-    position: relative;
-    border: 1px solid #e6e6e6;
-    border-radius: 4px;
-    padding: 2rem 2rem;
-    margin: 0 auto;
-    max-width: 70%;
-    min-height: auto;
-    background: var(--light1);
-    /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.082); */
-  
-    /* Make the bottom border thicker or more distinct if desired: */
-    border-bottom: 2px solid #e6e6e6;
-    /* If you want the line to be darker: border-bottom-color: #333; */
-  }
-  
-  /* EVENT CONTENT (only the .active one is visible) */
-  .event-content {
-    display: none;
-    animation: fadeIn 0.3s ease-in forwards;
-    height: 30vh;
-  }
-  .event-content.active {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    gap: 2rem;
-    margin-bottom: 0rem; /* space above the timeline */
-  }
+/* Main section wrapper */
+.schedule {
+  margin: 0 auto;
+  text-align: center;
+  padding: 4rem 0rem;
+  background: var(--light1);
+  width: 100%;  
+  margin-bottom: 4rem;
+  min-height: 100%;
+  block-size: fit-content;
+}
 
-  .event-content .schedule-button {
-    bottom: 10px;  /* Adjust spacing as needed */
-    right: 10px;
-    /* Optional: override width/max-width if necessary */
-    width: auto;
-    max-width: none;
-  }
+.schedule h2 {
+  font-family: var(--titleFont);
+  margin-bottom: 2rem;
+  color: var(--dark1);
+}
 
-  .event-image {
-    justify-content: center;
-    flex: 1 20%;
-  }
-  .event-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
+/* SCHEDULE CONTAINER */
+.schedule-container {
+  position: relative;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+  padding: 2rem 2rem;
+  margin: 0 auto;
+  max-width: 70%;
+  min-height: 100%;
+  background: var(--light1);
+  /* box-shadow: 0 8px 16px rgba(0, 0, 0, 0.082); */
 
-  .event-info {
-    flex: 3 40%;
-    text-align: left;
-  }
-  .event-info h3 {
-    margin-bottom: 1rem;
-    color: var(--dark1);
-  }
-  .event-info p {
-    margin-bottom: 1rem;
-    color: var(--dark1);
-  }
-  .event-details {
-    flex: 2 40%;
-    text-align: left;
-    border-left: 1px solid #ccc;  /* the vertical line */
-    margin-left: 1rem;           /* spacing so the text isn’t flush against the line */
-    padding-left: 2rem;
-    position: relative;
-    align-content: middle;
-  }
-  .event-details h3 {
-    margin-bottom: 1rem;
-    color: var(--dark1);
-  }
-  .event-details p {
-    margin-bottom: 0.5rem;
-    color: var(--dark1);
-  }
+  /* Make the bottom border thicker or more distinct if desired: */
+  border-bottom: 2px solid #e6e6e6;
+  /* If you want the line to be darker: border-bottom-color: #333; */
+}
 
-  .btn {
-    display: inline-block;
-    background-color: #333;
-    color: #fff;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    text-decoration: none;
-    margin-bottom: 0.5rem;
-  }
-  .attire {
-    font-size: 0.85rem;
-    font-style: italic;
-    color: #666;
-  }
-  
-  /* TIMELINE: absolutely pinned at the bottom edge of the container */
-  .timeline {
-    position: absolute;
-    bottom: -3.35rem;
-    left: 0;
-    right: 0;
-    height: 60px;  /* space for the circles & text */
-    display: flex;
-    justify-content: space-around;
-    align-items: top; /* circles at the container's bottom */
-  }
-  
-  /* Each dot with text above it */
-  .event-dot {
-    position: relative;
-    text-align: center;
-    cursor: pointer;
-    z-index: 1; /* Above the line */
-    width: 120px;  /* Or whatever you prefer */
-    /* The dot is at top, so no extra top padding needed */
-  }
-  
-  /* The label text sits *below* the dot */
-  .event-dot p {
-    margin-top: 1.5rem; /* gap so the text isn’t too close to the circle */
-    font-size: 0.85rem;
-    color: var(--dark1);
-  }
-  
-  .event-dot p:hover {
-    font-weight: 600;
-    color: var(--dark1);
-  }
-  
-  /* Circle “dot” pinned near the top */
-  .event-dot::before {
-    content: "";
-    position: absolute;
-    top: 0; /* Dot at the top of .event-dot */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 14px;
-    height: 14px;
-    background-color: #ccc;
-    border-radius: 50%;
-    transition: background 0.3s;
-  }
-  .event-dot:hover::before {
-    background-color: var(--dark1);
-  }
-  .event-dot.active::before {
-    background-color: var(--dark1);
-  }
-  .event-dot.active p {
-    color: var(--dark1);
-  }
+/* EVENT CONTENT (only the .active one is visible) */
+.event-content {
+  display: none;
+  animation: fadeIn 0.3s ease-in forwards;
+  /* Remove fixed height and use min-height instead */
+  min-height: 30vh;
+  height: auto;
+}
 
-  .event-dot.active p:hover{
-    color: var(--dark1);
-    font-weight: 600;
-  }
+.event-content.active {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 0rem; /* space above the timeline */
+  /* Ensure it has enough padding at the bottom for the timeline */
+  padding-bottom: 1rem;
+}
 
-  /* Existing schedule-button styling */
+.event-content .schedule-button {
+  bottom: 10px;  /* Adjust spacing as needed */
+  right: 10px;
+  /* Optional: override width/max-width if necessary */
+  width: auto;
+  max-width: none;
+}
+
+.event-image {
+  justify-content: center;
+  flex: 1 20%;
+}
+
+.event-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-info {
+  flex: 3 40%;
+  text-align: left;
+}
+
+.event-info h3 {
+  margin-bottom: 1rem;
+  color: var(--dark1);
+}
+
+.event-info p {
+  margin-bottom: 1rem;
+  color: var(--dark1);
+}
+
+.event-details {
+  flex: 2 40%;
+  text-align: left;
+  border-left: 1px solid #ccc;  /* the vertical line */
+  margin-left: 1rem;           /* spacing so the text isn't flush against the line */
+  padding-left: 2rem;
+  position: relative;
+  align-content: middle;
+}
+
+.event-details h3 {
+  margin-bottom: 1rem;
+  color: var(--dark1);
+}
+
+.event-details p {
+  margin-bottom: 0.5rem;
+  color: var(--dark1);
+}
+
+.btn {
+  display: inline-block;
+  background-color: #333;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+}
+
+.attire {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #666;
+}
+
+/* TIMELINE: absolutely pinned at the bottom edge of the container */
+.timeline {
+  position: absolute;
+  bottom: -3.35rem;
+  left: 0;
+  right: 0;
+  height: 60px;  /* space for the circles & text */
+  display: flex;
+  justify-content: space-around;
+  align-items: top; /* circles at the container's bottom */
+}
+
+/* Each dot with text above it */
+.event-dot {
+  position: relative;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1; /* Above the line */
+  width: 120px;  /* Or whatever you prefer */
+  /* The dot is at top, so no extra top padding needed */
+}
+
+/* The label text sits *below* the dot */
+.event-dot p {
+  margin-top: 1.5rem; /* gap so the text isn't too close to the circle */
+  font-size: 0.85rem;
+  color: var(--dark1);
+}
+
+.event-dot p:hover {
+  font-weight: 600;
+  color: var(--dark1);
+}
+
+/* Circle "dot" pinned near the top */
+.event-dot::before {
+  content: "";
+  position: absolute;
+  top: 0; /* Dot at the top of .event-dot */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background-color: #ccc;
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.event-dot:hover::before {
+  background-color: var(--dark1);
+}
+
+.event-dot.active::before {
+  background-color: var(--dark1);
+}
+
+.event-dot.active p {
+  color: var(--dark1);
+}
+
+.event-dot.active p:hover{
+  color: var(--dark1);
+  font-weight: 600;
+}
+
+/* Existing schedule-button styling */
 .schedule-button {
   display: inline-block;
   background-color: var(--accent1);
@@ -188,6 +206,7 @@
   text-decoration: none;
   transition: background 0.3s ease;
 }
+
 .schedule-button:hover {
   background-color: var(--accent2);
 }
@@ -200,86 +219,99 @@
   text-align: center;
 }
 
-  /* Fade-in animation */
-  @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(5px);}
-    to   {opacity: 1; transform: translateY(0);}
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(5px);}
+  to   {opacity: 1; transform: translateY(0);}
+}
+
+@media (max-width: 768px) {
+  /* Make the event container position relative */
+  .schedule-container {
+    position: relative;
+    padding: 0rem;
+    /* Remove fixed height so the container expands with content */
+    height: auto;
+    display: block;
+    /* Add some space at the bottom for the timeline */
+    padding-bottom: 4rem;
+    max-width: 90%; /* Increase width on smaller screens */
+  }
+
+  .event-content.active {
+    position: relative;
+    padding: 1rem;
+    /* Remove fixed height so the container expands with content */
+    height: auto;
+    min-height: unset;
+    display: block;
   }
   
-
-
-  @media (max-width: 768px) {
-    /* Make the event container position relative */
-    .schedule-container {
-      position: relative;
-      padding: 0rem;
-      /* Remove fixed height so the container expands with content */
-      height: auto;
-      display: block;
-    }
-
-    .event-content.active {
-      position: relative;
-      padding: 1rem;
-      /* Remove fixed height so the container expands with content */
-      height: auto;
-      display: block;
-    }
-    
-    /* Position the image behind everything */
-    .event-image {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-    .event-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    /* Create a transparent grey overlay using a pseudo-element */
-    .event-content.active::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.4); /* adjust opacity/color as needed */
-      z-index: 2;
-    }
-    
-    /* Bring the text on top of the overlay */
-    .event-info,
-    .event-details {
-      position: relative;
-      z-index: 3;
-      padding: 1rem;
-      color: #fff;  /* adjust text color for readability */
-      text-align: center;
-      border-left: none;
-      padding-left: none;
-      margin-left: 0;
-    }
-
-    .event-details p,
-    .event-info p {
-      margin-bottom: 1rem;
-      color: #fff
-    }
-    .event-details h3,
-    .event-info h3 {
-      margin-bottom: 1rem;
-      color: #fff
-    }
-    
-    /* Optionally stack the text blocks vertically */
-    /* .event-info {
-      margin-bottom: 1rem;
-    } */
+  /* Position the image behind everything */
+  .event-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
   }
   
+  .event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Create a transparent grey overlay using a pseudo-element */
+  .event-content.active::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); /* adjust opacity/color as needed */
+    z-index: 2;
+  }
+  
+  /* Bring the text on top of the overlay */
+  .event-info,
+  .event-details {
+    position: relative;
+    z-index: 3;
+    padding: 1rem;
+    color: #fff;  /* adjust text color for readability */
+    text-align: center;
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .event-details p,
+  .event-info p {
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+  
+  .event-details h3,
+  .event-info h3 {
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+  
+  /* Timeline adjustments for mobile */
+  .timeline {
+    bottom: -4.5rem; /* Move it down slightly for better spacing */
+  }
+
+  /* Make the dots a bit smaller on mobile */
+  .event-dot {
+    width: 80px;
+  }
+
+  .event-dot p {
+    font-size: 0.7rem; /* Smaller text */
+    margin-top: 1.2rem;
+  }
+}
