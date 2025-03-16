@@ -912,7 +912,8 @@
                 // Remove common stopwords
                 const stopwords = ['the', 'and', 'that', 'have', 'for', 'not', 'you', 'with', 'this', 'but',
                     'his', 'her', 'she', 'him', 'they', 'them', 'its', 'their', 'there', 'some',
-                    'what', 'who', 'whom', 'whose', 'which', 'where', 'when', 'why', 'how'];
+                    'what', 'who', 'whom', 'whose', 'which', 'where', 'when', 'why', 'how', 
+                    'are', 'too', 'can', 'off'];
                 const filteredWords = words.filter(word => !stopwords.includes(word));
                 
                 // Count word frequencies
