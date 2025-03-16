@@ -66,4 +66,135 @@
   .link-btn:hover {
     background-color: var(--accent2);
   }
+  /* --------
+     REGISTRY
+  -------- */
+  .registry {
+    background: url('../images/registry.jpg');
+    background-size: cover;        /* Scale the image to cover the container */
+    background-position: center;   /* Center the image */
+    background-repeat: no-repeat;  /* Prevent tiling */
+    padding: 4rem 2rem;
+    text-align: center;
+    min-height: 500px;
+    width: 100%;
+    position: relative;
+  }
+  .registry-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem 1rem;
+  }
+  .registry-content h2 {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem 1rem;
+  }
+  .registry-content p {
+    margin-bottom: 2rem;
+    color: #555;
+  }
+  .registry-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .btn {
+    background-color: #4C3F36;
+    color: #FFF;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background 0.3s ease;
+  }
+  .btn:hover {
+    background-color: #6A574B; /* Slightly lighter/darker hover effect */
+  }
+  .btn.outline {
+    background: transparent;
+    border: 2px solid #4C3F36;
+    color: #4C3F36;
+  }
+  .btn.outline:hover {
+    background: #4C3F36;
+    color: #FFF;
+  }
+  .link-btn {
+    display: inline-block;
+    background-color: var(--accent1);
+    color: #FFF;
+    padding: 0.8rem 2rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s ease;
+    width: 100%;
+    max-width: 60%;
+  }
+  .link-btn:hover {
+    background-color: var(--accent2);
+  }
+
+  /* Media queries for better readability on smaller screens */
+  @media screen and (max-width: 768px) {
+    .registry {
+      padding: 3rem 1rem;
+      position: relative;
+    }
+    
+    /* Grey overlay for entire registry container */
+    .registry:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5); /* Grey overlay */
+      z-index: 1;
+    }
+    
+    .registry-content {
+      position: relative;
+      z-index: 2;
+    }
+    
+    .registry-content h2,
+    .registry-content p {
+      color: #fff; /* White text for better contrast */
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    .registry-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .btn, .link-btn {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 0.8rem;
+    }
+  }
   
+  /* Additional improvements for very small screens */
+  @media screen and (max-width: 480px) {
+    .registry {
+      padding: 2rem 0.8rem;
+      min-height: 400px;
+    }
+    
+    .registry:before {
+      background-color: rgba(0, 0, 0, 0.3); /* Slightly darker overlay for very small screens */
+    }
+    
+    .registry-content h2 {
+      font-size: 1.5rem;
+      padding: 0.5rem;
+    }
+    
+    .registry-content p {
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+  }
