@@ -1,71 +1,3 @@
-/* --------
-     REGISTRY
-  -------- */
-  .registry {
-    background: url('../images/registry.jpg');
-    background-size: cover;        /* Scale the image to cover the container */
-    background-position: center;   /* Center the image */
-    background-repeat: no-repeat;  /* Prevent tiling */
-    padding: 4rem 2rem;
-    text-align: center;
-    min-height: 500px;
-    width: 100%;
-    position: relative;
-  }
-  .registry-content {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 1rem 1rem;
-  }
-  .registry-content h2 {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 1rem 1rem;
-  }
-  .registry-content p {
-    margin-bottom: 2rem;
-    color: #555;
-  }
-  .registry-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-  }
-  .btn {
-    background-color: #4C3F36;
-    color: #FFF;
-    padding: 0.8rem 1.5rem;
-    border-radius: 4px;
-    font-weight: 500;
-    transition: background 0.3s ease;
-  }
-  .btn:hover {
-    background-color: #6A574B; /* Slightly lighter/darker hover effect */
-  }
-  .btn.outline {
-    background: transparent;
-    border: 2px solid #4C3F36;
-    color: #4C3F36;
-  }
-  .btn.outline:hover {
-    background: #4C3F36;
-    color: #FFF;
-  }
-  .link-btn {
-    display: inline-block;
-    background-color: var(--accent1);
-    color: #FFF;
-    padding: 0.8rem 2rem;
-    border-radius: 2rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.3s ease;
-    width: 100%;
-    max-width: 60%;
-  }
-  .link-btn:hover {
-    background-color: var(--accent2);
-  }
   /* --------
      REGISTRY
   -------- */
@@ -99,26 +31,6 @@
     justify-content: center;
     gap: 1rem;
   }
-  .btn {
-    background-color: #4C3F36;
-    color: #FFF;
-    padding: 0.8rem 1.5rem;
-    border-radius: 4px;
-    font-weight: 500;
-    transition: background 0.3s ease;
-  }
-  .btn:hover {
-    background-color: #6A574B; /* Slightly lighter/darker hover effect */
-  }
-  .btn.outline {
-    background: transparent;
-    border: 2px solid #4C3F36;
-    color: #4C3F36;
-  }
-  .btn.outline:hover {
-    background: #4C3F36;
-    color: #FFF;
-  }
   .link-btn {
     display: inline-block;
     background-color: var(--accent1);
@@ -128,8 +40,6 @@
     font-weight: 600;
     text-decoration: none;
     transition: background 0.3s ease;
-    width: 100%;
-    max-width: 60%;
   }
   .link-btn:hover {
     background-color: var(--accent2);
