@@ -15,6 +15,10 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <!-- Dashboard JS -->
+    <script src="../assets/scripts/dashboard.js" defer></script>
+    <!--Style-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <div id="login" class="container login-container">
@@ -62,64 +66,159 @@
                 <p id="pending-count">0</p>
             </div>
             <div class="stat-box">
-                <h3>Groups Responded</h3>
-                <p id="groups-responded">0</p>
+                <h3>Non-Drinkers</h3>
+                <p id="non-drinkers-count">0</p>
             </div>
         </div>
         
-        <div class="filters">
-            <div class="search-box">
-                <input type="text" id="search" placeholder="Search by name..." />
+        <!-- View selection tabs -->
+        <div class="view-tabs">
+            <button id="responded-tab" class="tab-button active">Responded</button>
+            <button id="not-responded-tab" class="tab-button">Not Responded</button>
+            <button id="all-tab" class="tab-button">All Guests</button>
+        </div>
+        
+        <div id="responded-view" class="view-section">
+            <div class="filters">
+                <div class="search-box">
+                    <input type="text" id="search" placeholder="Search by name..." />
+                </div>
+                <div class="filter-dropdown">
+                    <select id="attendance-filter">
+                        <option value="all">All Responses</option>
+                        <option value="attending">Attending</option>
+                        <option value="not-attending">Not Attending</option>
+                    </select>
+                </div>
+                <div class="filter-dropdown">
+                    <select id="dietary-filter">
+                        <option value="all">All Dietary Needs</option>
+                        <option value="vegetarian">Vegetarian</option>
+                        <option value="vegan">Vegan</option>
+                        <option value="gluten-free">Gluten-Free</option>
+                        <option value="allergies">Allergies</option>
+                        <option value="other">Other Restrictions</option>
+                        <option value="none">No Restrictions</option>
+                    </select>
+                </div>
+                <div class="filter-dropdown">
+                    <select id="menu-filter">
+                        <option value="all">All Menu Options</option>
+                        <option value="Standard">Standard</option>
+                        <option value="Vegetarian">Vegetarian</option>
+                        <option value="Vegan">Vegan</option>
+                        <option value="Kids">Kids</option>
+                    </select>
+                </div>
+                <div class="filter-dropdown">
+                    <select id="drinking-filter">
+                        <option value="all">All Drinking Preferences</option>
+                        <option value="drinker">Drinkers</option>
+                        <option value="nondrinker">Non-Drinkers</option>
+                    </select>
+                </div>
             </div>
-            <div class="filter-dropdown">
-                <select id="attendance-filter">
-                    <option value="all">All Responses</option>
-                    <option value="attending">Attending</option>
-                    <option value="not-attending">Not Attending</option>
-                </select>
+
+            <div class="export-options">
+                <button class="export-btn" onclick="exportToCSV('responded')">Export Responses</button>
+                <button class="export-btn attending" onclick="exportToCSV('attending')">Export Attending Only</button>
             </div>
-            <div class="filter-dropdown">
-                <select id="dietary-filter">
-                    <option value="all">All Dietary Needs</option>
-                    <option value="vegetarian">Vegetarian</option>
-                    <option value="vegan">Vegan</option>
-                    <option value="gluten-free">Gluten-Free</option>
-                    <option value="allergies">Allergies</option>
-                    <option value="other">Other Restrictions</option>
-                    <option value="none">No Restrictions</option>
-                </select>
-            </div>
-            <div class="filter-dropdown">
-                <select id="menu-filter">
-                    <option value="all">All Menu Options</option>
-                    <option value="Standard">Standard</option>
-                    <option value="Vegetarian">Vegetarian</option>
-                    <option value="Vegan">Vegan</option>
-                    <option value="Kids">Kids</option>
-                </select>
+            
+            <div class="rsvp-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Group ID</th>
+                            <th>Attending</th>
+                            <th>Menu</th>
+                            <th>Dietary Restrictions</th>
+                            <th>Non-Drinker</th>
+                            <th>Message</th>
+                            <th>Submitted On</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rsvp-table-body">
+                        <!-- RSVP data will be populated here -->
+                    </tbody>
+                </table>
             </div>
         </div>
         
-        <div class="rsvp-list">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Group ID</th>
-                        <th>Attending</th>
-                        <th>Menu</th>
-                        <th>Dietary Restrictions</th>
-                        <th>Message</th>
-                        <th>Submitted On</th>
-                    </tr>
-                </thead>
-                <tbody id="rsvp-table-body">
-                    <!-- RSVP data will be populated here -->
-                </tbody>
-            </table>
+        <div id="not-responded-view" class="view-section" style="display: none;">
+            <div class="filters">
+                <div class="search-box">
+                    <input type="text" id="pending-search" placeholder="Search by name..." />
+                </div>
+                <div class="filter-dropdown">
+                    <select id="pending-group-filter">
+                        <option value="all">All Groups</option>
+                        <!-- Group options will be populated dynamically -->
+                    </select>
+                </div>
+            </div>
+            
+            <div class="export-options">
+                <button class="export-btn" onclick="exportToCSV('not-responded')">Export Pending List</button>
+                <button class="export-btn track" onclick="markAsContacted()">Mark Selected as Contacted</button>
+            </div>
+            
+            <div class="rsvp-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="select-all-pending" onchange="toggleAllPending()"></th>
+                            <th>Name</th>
+                            <th>Group ID</th>
+                            <th>Group Size</th>
+                            <th>Last Contacted</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pending-table-body">
+                        <!-- Pending RSVP data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
         </div>
         
-        <h2 class="section-title">Visualizations</h2>
+        <div id="all-guests-view" class="view-section" style="display: none;">
+            <div class="filters">
+                <div class="search-box">
+                    <input type="text" id="all-search" placeholder="Search by name..." />
+                </div>
+                <div class="filter-dropdown">
+                    <select id="all-status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="responded">Responded</option>
+                        <option value="pending">Not Responded</option>
+                        <option value="attending">Attending</option>
+                        <option value="not-attending">Not Attending</option>
+                    </select>
+                </div>
+            </div>
+            <div class="export-options">
+                <button class="export-btn" onclick="exportToCSV('all')">Export All Guests</button>
+            </div>
+            
+            <div class="rsvp-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Group ID</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="all-table-body">
+                        <!-- All guests data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <h2 class="section-title">Visualisations</h2>
         
         <div class="chart-container">
             <div class="chart-box">
@@ -142,838 +241,27 @@
             </div>
             <div class="chart-box">
                 <figure class="highcharts-figure">
-                    <div id="group-chart"></div>
+                    <div id="drinking-chart"></div>
                 </figure>
             </div>
         </div>
-        
-        <h2 class="section-title">Message Word Cloud</h2>
-        <div class="chart-box">
-            <figure class="highcharts-figure">
-                <div id="word-cloud"></div>
-            </figure>
+
+        <div class="chart-container">
+            <div class="chart-box">
+                <figure class="highcharts-figure">
+                    <div id="group-chart"></div>
+                </figure>
+            </div>
+            <div class="chart-box">
+                <figure class="highcharts-figure">
+                    <div id="word-cloud"></div>
+                </figure>
+            </div>
         </div>
         
         <div class="logout-container">
             <button id="logout-btn">Logout</button>
         </div>
     </div>
-    
-    <script>
-        // Error handling function
-        function handleError(error, context) {
-            console.error(`Error in ${context}:`, error);
-            const errorBox = document.createElement('div');
-            errorBox.style.color = 'red';
-            errorBox.style.padding = '10px';
-            errorBox.style.margin = '10px 0';
-            errorBox.style.border = '1px solid red';
-            errorBox.style.borderRadius = '4px';
-            errorBox.style.backgroundColor = '#fff8f8';
-            errorBox.textContent = `Error in ${context}: ${error.message}`;
-            document.body.prepend(errorBox);
-        }
-        
-        // Configuration - CHANGE THESE VALUES
-        const FIREBASE_CONFIG = {
-            apiKey: "AIzaSyBFDdRkTfXW9UQpEHI32Pd1RGXX8t_-s6Q",
-            authDomain: "wedding-db-994da.firebaseapp.com",
-            projectId: "wedding-db-994da",
-            storageBucket: "wedding-db-994da.firebasestorage.app",
-            messagingSenderId: "102632882630",
-            appId: "1:102632882630:web:cd1c96ff206b42652832c7"
-        };
-        
-        // The password to access the dashboard
-        const DASHBOARD_PASSWORD = "PeakChatsworth2025";
-        
-        // The path to your RSVPs in Firebase
-        const RSVP_PATH = "rsvps";
-        
-        // Initialize Firebase
-        firebase.initializeApp(FIREBASE_CONFIG);
-        const database = firebase.database();
-        
-        // DOM Elements
-        const loginContainer = document.getElementById('login');
-        const dashboardContainer = document.getElementById('dashboard');
-        const passwordInput = document.getElementById('password');
-        const loginBtn = document.getElementById('login-btn');
-        const loginError = document.getElementById('login-error');
-        const logoutBtn = document.getElementById('logout-btn');
-        const loader = document.getElementById('loader');
-        const totalCount = document.getElementById('total-count');
-        const attendingCount = document.getElementById('attending-count');
-        const notAttendingCount = document.getElementById('not-attending-count');
-        const totalGuests = document.getElementById('total-guests');
-        const responseRate = document.getElementById('response-rate');
-        const totalInvited = document.getElementById('total-invited');
-        const pendingCount = document.getElementById('pending-count');
-        const groupsResponded = document.getElementById('groups-responded');
-        const rsvpTableBody = document.getElementById('rsvp-table-body');
-        const searchInput = document.getElementById('search');
-        const attendanceFilter = document.getElementById('attendance-filter');
-        const dietaryFilter = document.getElementById('dietary-filter');
-        const menuFilter = document.getElementById('menu-filter');
-        
-        // Chart elements
-        const menuChartElement = document.getElementById('menu-chart');
-        const attendanceChartElement = document.getElementById('attendance-chart');
-        const dietaryChartElement = document.getElementById('dietary-chart');
-        const groupChartElement = document.getElementById('group-chart');
-        const wordCloudElement = document.getElementById('word-cloud');
-        
-        // Chart instances
-        let menuChart = null;
-        let attendanceChart = null;
-        let dietaryChart = null;
-        let groupChart = null;
-        let wordCloudChart = null;
-        
-        // Stored RSVP data
-        let allRsvps = [];
-        
-        // Initialize UI elements with safety checks
-        function initializeUI() {
-            try {
-                // Check that all required elements exist
-                const requiredElements = [
-                    { el: loginContainer, name: 'login container' },
-                    { el: dashboardContainer, name: 'dashboard container' },
-                    { el: passwordInput, name: 'password input' },
-                    { el: loginBtn, name: 'login button' },
-                    { el: rsvpTableBody, name: 'RSVP table body' }
-                ];
-                
-                for (const item of requiredElements) {
-                    if (!item.el) {
-                        throw new Error(`Required element not found: ${item.name}`);
-                    }
-                }
-                
-                // Add event listeners
-                loginBtn.addEventListener('click', () => {
-                    const password = passwordInput.value.trim();
-                    
-                    if (password === DASHBOARD_PASSWORD) {
-                        loginContainer.style.display = 'none';
-                        dashboardContainer.style.display = 'block';
-                        loadRsvpData();
-                        
-                        // Save login state
-                        localStorage.setItem('weddingRsvpLoggedIn', 'true');
-                    } else {
-                        loginError.textContent = 'Incorrect password. Please try again.';
-                    }
-                });
-                
-                // Allow pressing Enter to login
-                passwordInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        loginBtn.click();
-                    }
-                });
-                
-                // Logout functionality
-                if (logoutBtn) {
-                    logoutBtn.addEventListener('click', () => {
-                        localStorage.removeItem('weddingRsvpLoggedIn');
-                        dashboardContainer.style.display = 'none';
-                        loginContainer.style.display = 'block';
-                        passwordInput.value = '';
-                        if (loginError) loginError.textContent = '';
-                    });
-                }
-                
-                // Add filter event listeners
-                if (searchInput) searchInput.addEventListener('input', displayRsvps);
-                if (attendanceFilter) attendanceFilter.addEventListener('change', displayRsvps);
-                if (dietaryFilter) dietaryFilter.addEventListener('change', displayRsvps);
-                if (menuFilter) menuFilter.addEventListener('change', displayRsvps);
-                
-                // Check if already logged in
-                if (localStorage.getItem('weddingRsvpLoggedIn') === 'true') {
-                    loginContainer.style.display = 'none';
-                    dashboardContainer.style.display = 'block';
-                    loadRsvpData();
-                }
-            } catch (error) {
-                handleError(error, 'UI initialization');
-            }
-        }
-        
-        // Load RSVP data from Firebase
-        function loadRsvpData() {
-            try {
-                if (loader) {
-                    loader.style.display = 'block';
-                }
-                
-                database.ref(RSVP_PATH).once('value')
-                    .then((snapshot) => {
-                        try {
-                            const data = snapshot.val();
-                            allRsvps = [];
-                            
-                            if (data && Array.isArray(data)) {
-                                // Filter out null entries from the array
-                                data.forEach((rsvp, index) => {
-                                    if (rsvp) {  // Skip null entries
-                                        rsvp.id = index;
-                                        allRsvps.push(rsvp);
-                                    }
-                                });
-                            } else if (data && typeof data === 'object') {
-                                // Handle object format
-                                Object.keys(data).forEach(key => {
-                                    const rsvp = data[key];
-                                    if (rsvp) {  // Skip null entries
-                                        rsvp.id = key;
-                                        allRsvps.push(rsvp);
-                                    }
-                                });
-                            }
-                            
-                            updateStats();
-                            displayRsvps();
-                            updateCharts();
-                        } catch (innerError) {
-                            handleError(innerError, 'processing RSVP data');
-                        } finally {
-                            if (loader) {
-                                loader.style.display = 'none';
-                            }
-                        }
-                    })
-                    .catch((error) => {
-                        handleError(error, 'loading RSVP data');
-                        if (loader) {
-                            loader.style.display = 'none';
-                        }
-                    });
-            } catch (error) {
-                handleError(error, 'initializing data load');
-                if (loader) {
-                    loader.style.display = 'none';
-                }
-            }
-        }
-        
-        // Calculate and update statistics
-        function updateStats() {
-            try {
-                // Count all RSVPs
-                const totalInvitedCount = allRsvps.length;
-                const submitted = allRsvps.filter(rsvp => rsvp && rsvp.Submitted === true);
-                const attending = submitted.filter(rsvp => rsvp && rsvp.Attending === 'Yes');
-                const notAttending = submitted.filter(rsvp => rsvp && rsvp.Attending === 'No');
-                const pendingResponses = allRsvps.filter(rsvp => rsvp && rsvp.Submitted !== true);
-                
-                // Count unique groups that have responded
-                const respondedGroups = new Set();
-                submitted.forEach(rsvp => {
-                    if (rsvp && rsvp.GroupID) {
-                        respondedGroups.add(rsvp.GroupID);
-                    }
-                });
-                
-                // Calculate response rate
-                const responseRateValue = totalInvitedCount > 0 ? 
-                    (submitted.length / totalInvitedCount * 100).toFixed(1) : "0.0";
-                
-                // Count all attendees
-                const guestCount = attending.length;
-                
-                // Safely update DOM elements
-                if (totalCount) totalCount.textContent = submitted.length;
-                if (attendingCount) attendingCount.textContent = attending.length;
-                if (notAttendingCount) notAttendingCount.textContent = notAttending.length;
-                if (totalGuests) totalGuests.textContent = guestCount;
-                if (responseRate) responseRate.textContent = responseRateValue + '%';
-                if (totalInvited) totalInvited.textContent = totalInvitedCount;
-                if (pendingCount) pendingCount.textContent = pendingResponses.length;
-                if (groupsResponded) groupsResponded.textContent = respondedGroups.size;
-            } catch (error) {
-                handleError(error, 'updating statistics');
-            }
-        }
-        
-        // Display RSVPs in the table
-        function displayRsvps() {
-            if (!rsvpTableBody) {
-                console.error("Table body element not found");
-                return;
-            }
-            
-            rsvpTableBody.innerHTML = '';
-            
-            // Only show submitted RSVPs
-            let filteredRsvps = allRsvps.filter(rsvp => rsvp.Submitted === true);
-            
-            // Search filter
-            const searchTerm = searchInput.value.trim().toLowerCase();
-            if (searchTerm) {
-                filteredRsvps = filteredRsvps.filter(rsvp => 
-                    (rsvp.Forename && rsvp.Forename.toLowerCase().includes(searchTerm)) || 
-                    (rsvp.Surname && rsvp.Surname.toLowerCase().includes(searchTerm))
-                );
-            }
-            
-            // Attendance filter
-            const attendanceValue = attendanceFilter.value;
-            if (attendanceValue === 'attending') {
-                filteredRsvps = filteredRsvps.filter(rsvp => rsvp.Attending === 'Yes');
-            } else if (attendanceValue === 'not-attending') {
-                filteredRsvps = filteredRsvps.filter(rsvp => rsvp.Attending === 'No');
-            }
-            
-            // Dietary filter
-            const dietaryValue = dietaryFilter.value;
-            if (dietaryValue !== 'all') {
-                if (dietaryValue === 'none') {
-                    // Filter for no dietary restrictions
-                    filteredRsvps = filteredRsvps.filter(rsvp => 
-                        !rsvp.DietaryRequirements || 
-                        rsvp.DietaryRequirements === 'None' || 
-                        rsvp.DietaryRequirements === 'none' ||
-                        rsvp.DietaryRequirements.trim() === ''
-                    );
-                } else {
-                    // Filter for specific dietary restrictions
-                    filteredRsvps = filteredRsvps.filter(rsvp => 
-                        rsvp.DietaryRequirements && 
-                        rsvp.DietaryRequirements.toLowerCase().includes(dietaryValue.toLowerCase())
-                    );
-                }
-            }
-            
-            // Menu filter
-            if (menuFilter) {
-                const menuValue = menuFilter.value;
-                if (menuValue !== 'all') {
-                    filteredRsvps = filteredRsvps.filter(rsvp => rsvp.Menu === menuValue);
-                }
-            }
-            
-            // Sort by newest first (if SubmissionDate exists)
-            filteredRsvps.sort((a, b) => {
-                if (a.SubmissionDate && b.SubmissionDate) {
-                    return new Date(b.SubmissionDate) - new Date(a.SubmissionDate);
-                }
-                return 0;
-            });
-            
-            // Create table rows
-            filteredRsvps.forEach(rsvp => {
-                const row = document.createElement('tr');
-                
-                // Format attendance status
-                let attendingText = rsvp.Attending || 'Unknown';
-                let attendingClass = '';
-                
-                if (rsvp.Attending === 'Yes') {
-                    attendingClass = 'attending';
-                } else if (rsvp.Attending === 'No') {
-                    attendingClass = 'not-attending';
-                }
-                
-                // Format date if SubmissionDate exists
-                let dateDisplay = 'Unknown';
-                if (rsvp.SubmissionDate) {
-                    const date = new Date(rsvp.SubmissionDate);
-                    dateDisplay = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                }
-                
-                // Format dietary restrictions
-                let dietaryDisplay = '';
-                if (rsvp.DietaryRequirements) {
-                    // Split by commas if multiple restrictions
-                    const restrictions = rsvp.DietaryRequirements.split(',');
-                    dietaryDisplay = restrictions.map(r => 
-                        `<span class="dietaryRestriction">${r.trim()}</span>`
-                    ).join(' ');
-                } else {
-                    dietaryDisplay = '<span class="dietaryRestriction">None</span>';
-                }
-                
-                // Format name as "Firstname Surname"
-                const fullName = `${rsvp.Forename || ''} ${rsvp.Surname || ''}`.trim();
-                
-                // Safety check to avoid null references
-                try {
-                    row.innerHTML = `
-                        <td>${fullName || '-'}</td>
-                        <td>${rsvp.GroupID || '-'}</td>
-                        <td class="${attendingClass}">${attendingText}</td>
-                        <td>${rsvp.Menu || '-'}</td>
-                        <td>${dietaryDisplay}</td>
-                        <td>${rsvp.Message || '-'}</td>
-                        <td>${dateDisplay}</td>
-                    `;
-                } catch (error) {
-                    console.error("Error rendering row:", error, rsvp);
-                    row.innerHTML = `<td colspan="7">Error displaying this RSVP</td>`;
-                }
-                
-                rsvpTableBody.appendChild(row);
-            });
-            
-            // Show message if no results
-            if (filteredRsvps.length === 0) {
-                const emptyRow = document.createElement('tr');
-                emptyRow.innerHTML = `
-                    <td colspan="7" style="text-align: center;">No matching RSVPs found</td>
-                `;
-                rsvpTableBody.appendChild(emptyRow);
-            }
-        }
-        
-        // Update all charts with current data
-        function updateCharts() {
-            try {
-                // Set Highcharts global options to match website styling
-                Highcharts.setOptions({
-                    colors: ['#de9ca8', '#a7b788', '#496585', '#9E9E9E', '#90CAF9', '#FFCC80', '#CE93D8'],
-                    chart: {
-                        style: {
-                            fontFamily: "'Inter', sans-serif",
-                        },
-                        backgroundColor: 'transparent',
-                        reflow: true
-                    },
-                    title: {
-                        style: {
-                            color: '#496585',
-                            fontFamily: "'Playfair Display', serif"
-                        }
-                    },
-                    subtitle: {
-                        style: {
-                            color: '#496585',
-                            fontFamily: "'Inter', sans-serif"
-                        }
-                    },
-                    responsive: {
-                        rules: [{
-                            condition: {
-                                maxWidth: 500
-                            },
-                            chartOptions: {
-                                legend: {
-                                    enabled: false
-                                }
-                            }
-                        }]
-                    }
-                });
-                
-                updateMenuChart();
-                updateAttendanceChart();
-                updateDietaryChart();
-                updateGroupResponseChart();
-                generateWordCloud();
-            } catch (error) {
-                handleError(error, 'updating charts');
-            }
-        }
-        
-        // Create or update the menu choice chart
-        function updateMenuChart() {
-            if (!menuChartElement) return;
-            
-            // Get all submitted RSVPs that are attending
-            const attendingRsvps = allRsvps.filter(rsvp => 
-                rsvp && rsvp.Submitted === true && rsvp.Attending === 'Yes'
-            );
-            
-            // Count menu choices
-            const menuCounts = {};
-            attendingRsvps.forEach(rsvp => {
-                const menu = rsvp.Menu || 'Not Specified';
-                menuCounts[menu] = (menuCounts[menu] || 0) + 1;
-            });
-            
-            // Prepare data for Highcharts
-            const data = Object.keys(menuCounts).map(menu => ({
-                name: menu,
-                y: menuCounts[menu]
-            }));
-            
-            // Create or update chart
-            if (menuChart) {
-                menuChart.series[0].setData(data);
-            } else {
-                menuChart = Highcharts.chart(menuChartElement, {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'Menu Choices'
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
-                    },
-                    accessibility: {
-                        point: {
-                            valueSuffix: '%'
-                        }
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'Guests',
-                        colorByPoint: true,
-                        data: data
-                    }]
-                });
-            }
-        }
-        
-        // Create or update the attendance chart
-        function updateAttendanceChart() {
-            if (!attendanceChartElement) return;
-            
-            // Get submitted RSVPs
-            const submitted = allRsvps.filter(rsvp => rsvp && rsvp.Submitted === true);
-            
-            // Count attendance status
-            const attending = submitted.filter(rsvp => rsvp.Attending === 'Yes').length;
-            const notAttending = submitted.filter(rsvp => rsvp.Attending === 'No').length;
-            const pending = allRsvps.length - submitted.length;
-            
-            // Create or update chart
-            if (attendanceChart) {
-                attendanceChart.series[0].setData([
-                    { name: 'Attending', y: attending },
-                    { name: 'Not Attending', y: notAttending },
-                    { name: 'No Response', y: pending }
-                ]);
-            } else {
-                attendanceChart = Highcharts.chart(attendanceChartElement, {
-                    chart: {
-                        type: 'pie'
-                    },
-                    title: {
-                        text: 'Attendance Overview'
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.y}</b> ({point.percentage:.1f}%)'
-                    },
-                    plotOptions: {
-                        pie: {
-                            innerSize: '60%',
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.y}'
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'Guests',
-                        colorByPoint: true,
-                        data: [
-                            { name: 'Attending', y: attending },
-                            { name: 'Not Attending', y: notAttending },
-                            { name: 'No Response', y: pending }
-                        ]
-                    }]
-                });
-            }
-        }
-        
-        // Create or update the dietary requirements chart
-        function updateDietaryChart() {
-            if (!dietaryChartElement) return;
-            
-            // Get all attending RSVPs
-            const attendingRsvps = allRsvps.filter(rsvp => 
-                rsvp && rsvp.Submitted === true && rsvp.Attending === 'Yes'
-            );
-            
-            // Count dietary requirements
-            const dietaryCounts = {
-                'None': 0,
-                'Vegetarian': 0,
-                'Vegan': 0,
-                'Gluten-Free': 0,
-                'Allergies': 0,
-                'Other': 0
-            };
-            
-            attendingRsvps.forEach(rsvp => {
-                if (!rsvp.DietaryRequirements || rsvp.DietaryRequirements.trim() === '') {
-                    dietaryCounts['None']++;
-                } else {
-                    const dietary = rsvp.DietaryRequirements.toLowerCase();
-                    if (dietary.includes('vegetarian')) {
-                        dietaryCounts['Vegetarian']++;
-                    } else if (dietary.includes('vegan')) {
-                        dietaryCounts['Vegan']++;
-                    } else if (dietary.includes('gluten')) {
-                        dietaryCounts['Gluten-Free']++;
-                    } else if (dietary.includes('allerg')) {
-                        dietaryCounts['Allergies']++;
-                    } else {
-                        dietaryCounts['Other']++;
-                    }
-                }
-            });
-            
-            // Remove zero counts
-            Object.keys(dietaryCounts).forEach(key => {
-                if (dietaryCounts[key] === 0) {
-                    delete dietaryCounts[key];
-                }
-            });
-            
-            // Prepare data for Highcharts
-            const data = Object.keys(dietaryCounts).map(category => ({
-                name: category,
-                y: dietaryCounts[category]
-            }));
-            
-            // Create or update chart
-            if (dietaryChart) {
-                dietaryChart.series[0].setData(data);
-            } else {
-                dietaryChart = Highcharts.chart(dietaryChartElement, {
-                    chart: {
-                        type: 'bar'
-                    },
-                    title: {
-                        text: 'Dietary Requirements'
-                    },
-                    xAxis: {
-                        type: 'category'
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Number of Guests'
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    tooltip: {
-                        pointFormat: '<b>{point.y}</b> guests'
-                    },
-                    series: [{
-                        name: 'Dietary Requirements',
-                        colorByPoint: true,
-                        data: data
-                    }]
-                });
-            }
-        }
-        
-        // Create or update the group response chart
-        function updateGroupResponseChart() {
-            if (!groupChartElement) return;
-            
-            // Group RSVPs by GroupID
-            const groupData = {};
-            allRsvps.forEach(rsvp => {
-                if (rsvp && rsvp.GroupID) {
-                    if (!groupData[rsvp.GroupID]) {
-                        groupData[rsvp.GroupID] = {
-                            total: 0,
-                            responded: 0
-                        };
-                    }
-                    groupData[rsvp.GroupID].total++;
-                    if (rsvp.Submitted === true) {
-                        groupData[rsvp.GroupID].responded++;
-                    }
-                }
-            });
-            
-            // Count responses by group size
-            const groupSizes = {};
-            Object.values(groupData).forEach(group => {
-                const size = group.total;
-                if (!groupSizes[size]) {
-                    groupSizes[size] = { total: 0, responded: 0 };
-                }
-                groupSizes[size].total++;
-                if (group.responded > 0) {
-                    groupSizes[size].responded++;
-                }
-            });
-            
-            // Prepare data for Highcharts
-            const categories = Object.keys(groupSizes).sort((a, b) => parseInt(a) - parseInt(b))
-                .map(size => `${size} ${size === '1' ? 'Person' : 'People'}`);
-                
-            const respondedData = Object.keys(groupSizes).sort((a, b) => parseInt(a) - parseInt(b))
-                .map(size => groupSizes[size].responded);
-                
-            const pendingData = Object.keys(groupSizes).sort((a, b) => parseInt(a) - parseInt(b))
-                .map(size => groupSizes[size].total - groupSizes[size].responded);
-            
-            // Create or update chart
-            if (groupChart) {
-                groupChart.xAxis[0].setCategories(categories);
-                groupChart.series[0].setData(respondedData);
-                groupChart.series[1].setData(pendingData);
-            } else {
-                groupChart = Highcharts.chart(groupChartElement, {
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: 'Group Responses by Size'
-                    },
-                    xAxis: {
-                        categories: categories,
-                        title: {
-                            text: 'Group Size'
-                        }
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Number of Groups'
-                        },
-                        stackLabels: {
-                            enabled: true,
-                            style: {
-                                fontWeight: 'bold',
-                                color: 'gray'
-                            }
-                        }
-                    },
-                    legend: {
-                        align: 'right',
-                        verticalAlign: 'top',
-                        floating: false
-                    },
-                    tooltip: {
-                        headerFormat: '<b>{point.x}</b><br/>',
-                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-                    },
-                    plotOptions: {
-                        column: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: false
-                            }
-                        }
-                    },
-                    series: [{
-                        name: 'Responded',
-                        data: respondedData
-                    }, {
-                        name: 'Pending',
-                        data: pendingData
-                    }]
-                });
-            }
-        }
-        
-        // Generate word cloud from messages
-        function generateWordCloud() {
-            try {
-                if (!wordCloudElement) return;
-                
-                // Get messages from all submitted RSVPs
-                const messages = allRsvps
-                    .filter(rsvp => rsvp && rsvp.Submitted === true && rsvp.Message && rsvp.Message.trim() !== '')
-                    .map(rsvp => rsvp.Message);
-                
-                if (messages.length === 0) {
-                    // Display a message if no data
-                    wordCloudChart = Highcharts.chart(wordCloudElement, {
-                        chart: {
-                            type: 'wordcloud',
-                            height: '100%'
-                        },
-                        title: {
-                            text: 'No messages available'
-                        }
-                    });
-                    return;
-                }
-                
-                // Combine all messages and split into words
-                const text = messages.join(' ').toLowerCase();
-                const words = text.match(/\b\w{3,}\b/g) || [];
-                
-                // Remove common stopwords
-                const stopwords = ['the', 'and', 'that', 'have', 'for', 'not', 'you', 'with', 'this', 'but',
-                    'his', 'her', 'she', 'him', 'they', 'them', 'its', 'their', 'there', 'some',
-                    'what', 'who', 'whom', 'whose', 'which', 'where', 'when', 'why', 'how', 
-                    'are', 'too', 'can', 'off'];
-                const filteredWords = words.filter(word => !stopwords.includes(word));
-                
-                // Count word frequencies
-                const wordCounts = {};
-                filteredWords.forEach(word => {
-                    wordCounts[word] = (wordCounts[word] || 0) + 1;
-                });
-                
-                // Format data for Highcharts wordcloud
-                const data = Object.keys(wordCounts).map(word => ({
-                    name: word,
-                    weight: wordCounts[word]
-                }));
-                
-                // Create Highcharts word cloud
-                if (wordCloudChart) {
-                    wordCloudChart.series[0].setData(data);
-                } else {
-                    wordCloudChart = Highcharts.chart(wordCloudElement, {
-                        chart: {
-                            type: 'wordcloud',
-                            height: '50%'
-                        },
-                        title: {
-                            text: 'Guest Messages Word Cloud'
-                        },
-                        tooltip: {
-                            pointFormat: '<b>{point.name}</b>: {point.weight} occurrences'
-                        },
-                        plotOptions: {
-                            wordcloud: {
-                                // rotation: {
-                                //     from: -30,
-                                //     to: 30
-                                // },
-                                minFontSize: 5,
-                                maxFontSize: 25,
-                                spiral: 'rectangular', // Uses a more space-efficient layout
-                                placementStrategy: 'center',     
-                                style: {
-                                    fontFamily: "'Inter', sans-serif",
-                                    fontWeight: 'bold'
-                                },
-                                colors: ['#de9ca8', '#a7b788', '#496585']
-                            }
-                        },
-                        series: [{
-                            name: 'Word Frequency',
-                            data: data
-                        }]
-                    });
-                }
-                
-            } catch (error) {
-                handleError(error, 'generating word cloud');
-            }
-        }
-        
-        // Initialize the dashboard after all elements are loaded
-        document.addEventListener('DOMContentLoaded', initializeUI);
-    </script>
 </body>
 </html>
