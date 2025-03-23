@@ -336,7 +336,7 @@ function updateStats() {
         const pendingResponses = allRsvps.filter(rsvp => rsvp && rsvp.Submitted !== true);
         
         // Count non-drinkers
-        const nonDrinkers = attending.filter(rsvp => rsvp && rsvp.NonDrinker === true);
+        const nonDrinkers = attending.filter(rsvp => rsvp && rsvp.NonDrinker === 'Yes');
         
         // Count unique groups that have responded
         const respondedGroups = new Set();
@@ -489,9 +489,9 @@ function displayRespondedRsvps() {
     if (drinkingFilter) {
         const drinkingValue = drinkingFilter.value;
         if (drinkingValue === 'nondrinker') {
-            filteredRsvps = filteredRsvps.filter(rsvp => rsvp.NonDrinker === true);
+            filteredRsvps = filteredRsvps.filter(rsvp => rsvp.NonDrinker === 'Yes');
         } else if (drinkingValue === 'drinker') {
-            filteredRsvps = filteredRsvps.filter(rsvp => rsvp.NonDrinker !== true);
+            filteredRsvps = filteredRsvps.filter(rsvp => rsvp.NonDrinker !== 'Yes');
         }
     }
     
@@ -540,8 +540,8 @@ function displayRespondedRsvps() {
         const fullName = `${rsvp.Forename || ''} ${rsvp.Surname || ''}`.trim();
         
         // Format non-drinker status
-        const nonDrinkerClass = rsvp.NonDrinker === true ? 'non-drinker-yes' : '';
-        const nonDrinkerDisplay = rsvp.NonDrinker === true ? 'Yes' : 'No';
+        const nonDrinkerClass = rsvp.NonDrinker === 'Yes' ? 'non-drinker-yes' : '';
+        const nonDrinkerDisplay = rsvp.NonDrinker === 'Yes' ? 'Yes' : 'No';
         
         // Safety check to avoid null references
         try {
@@ -1443,7 +1443,7 @@ function exportToCSV(type) {
                 formatCSVField(status),
                 formatCSVField(rsvp.Menu),
                 formatCSVField(rsvp.DietaryRequirements),
-                formatCSVField(rsvp.NonDrinker === true ? 'Yes' : 'No'),
+                formatCSVField(rsvp.NonDrinker === 'Yes' ? 'Yes' : 'No'),
                 formatCSVField(rsvp.Email),
                 formatCSVField(rsvp.Phone),
                 formatCSVField(rsvp.Message),
@@ -1733,8 +1733,8 @@ function updateDrinkingChart() {
     );
     
     // Count drinkers vs non-drinkers
-    const drinkers = attendingRsvps.filter(rsvp => rsvp.NonDrinker !== true).length;
-    const nonDrinkers = attendingRsvps.filter(rsvp => rsvp.NonDrinker === true).length;
+    const drinkers = attendingRsvps.filter(rsvp => rsvp.NonDrinker !== 'Yes').length;
+    const nonDrinkers = attendingRsvps.filter(rsvp => rsvp.NonDrinker === 'Yes').length;
     
     // Create or update chart
     if (drinkingChart) {
