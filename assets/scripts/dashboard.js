@@ -462,16 +462,16 @@ function displayRespondedRsvps() {
             if (dietaryValue === 'none') {
                 // Filter for no dietary restrictions
                 filteredRsvps = filteredRsvps.filter(rsvp => 
-                    !rsvp.DietaryRequirements || 
-                    rsvp.DietaryRequirements === 'None' || 
-                    rsvp.DietaryRequirements === 'none' ||
-                    rsvp.DietaryRequirements.trim() === ''
+                    !rsvp.Dietary || 
+                    rsvp.Dietary === 'None' || 
+                    rsvp.Dietary === 'none' ||
+                    rsvp.Dietary.trim() === ''
                 );
             } else {
                 // Filter for specific dietary restrictions
                 filteredRsvps = filteredRsvps.filter(rsvp => 
-                    rsvp.DietaryRequirements && 
-                    rsvp.DietaryRequirements.toLowerCase().includes(dietaryValue.toLowerCase())
+                    rsvp.Dietary && 
+                    rsvp.Dietary.toLowerCase().includes(dietaryValue.toLowerCase())
                 );
             }
         }
@@ -526,9 +526,9 @@ function displayRespondedRsvps() {
         
         // Format dietary restrictions
         let dietaryDisplay = '';
-        if (rsvp.DietaryRequirements) {
+        if (rsvp.Dietary) {
             // Split by commas if multiple restrictions
-            const restrictions = rsvp.DietaryRequirements.split(',');
+            const restrictions = rsvp.Dietary.split(',');
             dietaryDisplay = restrictions.map(r => 
                 `<span class="dietaryRestriction">${r.trim()}</span>`
             ).join(' ');
@@ -1442,7 +1442,7 @@ function exportToCSV(type) {
                 formatCSVField(rsvp.GroupID),
                 formatCSVField(status),
                 formatCSVField(rsvp.Menu),
-                formatCSVField(rsvp.DietaryRequirements),
+                formatCSVField(rsvp.Dietary),
                 formatCSVField(rsvp.NonDrinker === 'Yes' ? 'Yes' : 'No'),
                 formatCSVField(rsvp.Email),
                 formatCSVField(rsvp.Phone),
@@ -1637,7 +1637,7 @@ function updateAttendanceChart() {
     }
 }
 
-// Create or update the dietary requirements chart
+// Create or update the dietary requirements chart - UPDATED to use 'Dietary' and handle more varied comments
 function updateDietaryChart() {
     if (!dietaryChartElement) return;
     
@@ -1646,30 +1646,65 @@ function updateDietaryChart() {
         rsvp && rsvp.Submitted === true && rsvp.Attending === 'Yes'
     );
     
-    // Count dietary requirements
+    // Count dietary requirements with more nuanced categories
     const dietaryCounts = {
         'None': 0,
         'Vegetarian': 0,
         'Vegan': 0,
         'Gluten-Free': 0,
         'Allergies': 0,
+        'Preferences': 0,
         'Other': 0
     };
     
     attendingRsvps.forEach(rsvp => {
-        if (!rsvp.DietaryRequirements || rsvp.DietaryRequirements.trim() === '') {
+        if (!rsvp.Dietary || rsvp.Dietary.trim() === '' || 
+            rsvp.Dietary.toLowerCase() === 'none' || 
+            rsvp.Dietary.toLowerCase() === 'no') {
             dietaryCounts['None']++;
         } else {
-            const dietary = rsvp.DietaryRequirements.toLowerCase();
-            if (dietary.includes('vegetarian')) {
+            const dietary = rsvp.Dietary.toLowerCase();
+            
+            // Check multiple conditions for better categorization
+            let categorized = false;
+            
+            // Check for vegetarian
+            if (dietary.includes('vegetarian') || dietary.includes('veggie')) {
                 dietaryCounts['Vegetarian']++;
-            } else if (dietary.includes('vegan')) {
+                categorized = true;
+            }
+            
+            // Check for vegan
+            if (dietary.includes('vegan')) {
                 dietaryCounts['Vegan']++;
-            } else if (dietary.includes('gluten')) {
+                categorized = true;
+            }
+            
+            // Check for gluten-free (more variations)
+            if (dietary.includes('gluten') || dietary.includes('coeliac') || 
+                dietary.includes('celiac') || dietary.includes('gf')) {
                 dietaryCounts['Gluten-Free']++;
-            } else if (dietary.includes('allerg')) {
+                categorized = true;
+            }
+            
+            // Check for allergies (more variations)
+            if (dietary.includes('allerg') || dietary.includes('intoleran') || 
+                dietary.includes('cannot eat') || dietary.includes('can\'t eat')) {
                 dietaryCounts['Allergies']++;
-            } else {
+                categorized = true;
+            }
+            
+            // Check for preferences
+            if (dietary.includes('prefer') || dietary.includes('don\'t like') || 
+                dietary.includes('do not like') || dietary.includes('no ') || 
+                dietary.includes('without') || dietary.includes('please') ||
+                dietary.includes('treat') || dietary.includes('fruit')) {
+                dietaryCounts['Preferences']++;
+                categorized = true;
+            }
+            
+            // If none of the above categories matched, count as Other
+            if (!categorized) {
                 dietaryCounts['Other']++;
             }
         }
