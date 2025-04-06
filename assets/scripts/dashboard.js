@@ -462,16 +462,16 @@ function displayRespondedRsvps() {
             if (dietaryValue === 'none') {
                 // Filter for no dietary restrictions
                 filteredRsvps = filteredRsvps.filter(rsvp => 
-                    !rsvp.DietaryRequirements || 
-                    rsvp.DietaryRequirements === 'None' || 
-                    rsvp.DietaryRequirements === 'none' ||
-                    rsvp.DietaryRequirements.trim() === ''
+                    !rsvp.Dietary || 
+                    rsvp.Dietary === 'None' || 
+                    rsvp.Dietary === 'none' ||
+                    rsvp.Dietary.trim() === ''
                 );
             } else {
                 // Filter for specific dietary restrictions
                 filteredRsvps = filteredRsvps.filter(rsvp => 
-                    rsvp.DietaryRequirements && 
-                    rsvp.DietaryRequirements.toLowerCase().includes(dietaryValue.toLowerCase())
+                    rsvp.Dietary && 
+                    rsvp.Dietary.toLowerCase().includes(dietaryValue.toLowerCase())
                 );
             }
         }
@@ -526,9 +526,9 @@ function displayRespondedRsvps() {
         
         // Format dietary restrictions
         let dietaryDisplay = '';
-        if (rsvp.DietaryRequirements) {
+        if (rsvp.Dietary) {
             // Split by commas if multiple restrictions
-            const restrictions = rsvp.DietaryRequirements.split(',');
+            const restrictions = rsvp.Dietary.split(',');
             dietaryDisplay = restrictions.map(r => 
                 `<span class="dietaryRestriction">${r.trim()}</span>`
             ).join(' ');
@@ -1442,7 +1442,7 @@ function exportToCSV(type) {
                 formatCSVField(rsvp.GroupID),
                 formatCSVField(status),
                 formatCSVField(rsvp.Menu),
-                formatCSVField(rsvp.DietaryRequirements),
+                formatCSVField(rsvp.Dietary),
                 formatCSVField(rsvp.NonDrinker === 'Yes' ? 'Yes' : 'No'),
                 formatCSVField(rsvp.Email),
                 formatCSVField(rsvp.Phone),
@@ -1657,10 +1657,10 @@ function updateDietaryChart() {
     };
     
     attendingRsvps.forEach(rsvp => {
-        if (!rsvp.DietaryRequirements || rsvp.DietaryRequirements.trim() === '') {
+        if (!rsvp.Dietary || rsvp.Dietary.trim() === '') {
             dietaryCounts['None']++;
         } else {
-            const dietary = rsvp.DietaryRequirements.toLowerCase();
+            const dietary = rsvp.Dietary.toLowerCase();
             if (dietary.includes('vegetarian')) {
                 dietaryCounts['Vegetarian']++;
             } else if (dietary.includes('vegan')) {
