@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emma & Patrick - Photos</title>
+    <link rel="stylesheet" href="../assets/css/core.css">
+    <link rel="stylesheet" href="../assets/css/photos.css">
+    <script>
+        function toggleDrawer() {
+            const drawer = document.querySelector('.drawer');
+            drawer.classList.toggle('open');
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <!-- Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="names">
+                <a href="../index.html">Emma & Patrick</a>
+            </div>
+            <button class="drawer-toggle" onclick="toggleDrawer()">☰</button>
+            <div class="nav-right">
+                <ul class="nav-list">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="photos.html">Photos</a></li>
+                    <li><a href="location.html">Location</a></li>
+                    <li><a href="registry.html">Gift Registry</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+                <a href="rsvp.html" class="rsvp-button">RSVP</a>
+            </div>
+        </nav>
+    
+        <!-- Drawer for Small Screens -->
+        <div class="drawer">
+            <span class="close-btn" onclick="toggleDrawer()">×</span>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="photos.html">Photos</a></li>
+                <li><a href="location.html">Location</a></li>
+                <li><a href="registry.html">Gift Registry</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="faq.html">FAQs</a></li>
+                <li><a href="rsvp.html" class="rsvp-button">RSVP</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-photos">
+        <div class="hero-overlay"></div>
+        <a href="#photos-container" class="scroll-down">
+          <svg width="60" height="30" viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg" fill="none">
+              <path d="M5 5C10 10 30 25 30 25C30 25 50 10 55 5" 
+                    stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+      </a>
+        <div class="hero-content">
+            <h1>Photos</h1>
+            <p>Capture every magical moment of our special day! We'd love to see the celebration through your eyes.</p>
+            <p> 
+                    Snap away and share your photos with us - and please make sure you get at least one picture with us both! 
+                    We want to have photos with everyone who celebrates with us.</p>
+        </div>
+        <div class="image-caption">
+          <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+          <span>Raven Crag, The Lake District</span>
+        </div>
+    </section>
+    <section id="photos-container" class="photos-container">
+            <div class="content-grid">
+                <!-- Combined QR Code and Link Section -->
+                <div class="link-section">
+                    <div class="album-link-card">
+                        <!-- QR Code - Desktop Only -->
+                        <div class="qr-code-container desktop-only">
+                            <img src="../assets/images/photosQrCode.png" alt="Photo Sharing QR Code" class="qr-code">
+                        </div>
+                        
+                        <h3>Shared Photo Album</h3>
+                        <p class="desktop-only">Scan the QR code above or click the link below to access our shared photo album</p>
+                        <p class="mobile-only">Click the link below to access our shared photo album and upload your pictures directly</p>
+                        <a href="https://photos.app.goo.gl/eSjkjwyWuPGLkbXA8" class="album-button" target="_blank">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                            Upload Photos Here
+                        </a>
+                    </div>
+                </div>
+
+                <div class="instructions-section">
+                    <div class="instruction-card">
+                        <svg class="instruction-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <div class="instruction-text">
+                            <strong>Snap Away!</strong><br>
+                            Take photos of everything - candid moments, the venue, your outfits, funny faces!
+                        </div>
+                    </div>
+
+                    <div class="instruction-card">
+                        <svg class="instruction-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        <div class="instruction-text">
+                            <strong>Access the Album</strong><br>
+                            Scan the QR code (desktop) or click the upload link to access our shared photo album
+                        </div>
+                    </div>
+
+                    <div class="instruction-card">
+                        <svg class="instruction-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <div class="instruction-text">
+                            <strong>Upload & Share</strong><br>
+                            Select your best shots and upload them to our shared album for everyone to enjoy
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+</body>
+</html>
