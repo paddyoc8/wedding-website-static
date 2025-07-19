@@ -29,6 +29,7 @@
                 <ul class="nav-list">
                     <li><a href="../index.html">Home</a></li>
                     <li><a href="schedule.html">Schedule</a></li>
+                    <li><a href="photos.html">Photos</a></li>
                     <li><a href="location.html">Location</a></li>
                     <li><a href="gifts.html">Gifts</a></li>
                     <li><a href="faq.html">FAQs</a></li>
@@ -44,6 +45,7 @@
             <ul>
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="photos.html">Photos</a></li>
                 <li><a href="location.html">Location</a></li>
                 <li><a href="gifts.html">Gifts</a></li>
                 <li><a href="contact.html">Contact</a></li>
@@ -64,7 +66,7 @@
         </a>
         <div class="hero-content">
             <h1>RSVP</h1>
-            <p>by Saturday 31st May</p>
+            <p id="hero-subtitle">by Saturday 31st May</p>
         </div>
         <div class="image-caption">
           <svg class="camera-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
@@ -78,15 +80,16 @@
     <div class="rsvp-container" id="next-section">
         <!-- RSVP Closed Message (displayed after deadline) -->
         <div id="rsvpClosedMessage" class="hidden">
-            <p>The RSVP window has closed. Please get in touch with us if you need further assistance.</p>
+            <h2>RSVP Check</h2>
+            <p>The RSVP window has closed, but you can still check your submission details below. If you need to make any changes, please contact us directly.</p>
         </div>
         
         <!-- Search Form -->
         <div class="searchFormCont">
           <form id="searchForm">
-              <h1>Will you be attending our wedding?</h1>
-              <p>Please let us know by <strong>Saturday 31st May</strong> whether you’ll be attending our wedding, as we need to provide final numbers and dietary requirements to the venue. We hope you can join us!</p>
-              <p style="margin-bottom:2.5rem;">Search your Unique Guest ID (9-digit code) to bring up up the RSVP for you/your group.</p><br>
+              <h1 id="search-title">Will you be attending our wedding?</h1>
+              <p id="search-description">Please let us know by <strong>Saturday 31st May</strong> whether you'll be attending our wedding, as we need to provide final numbers and dietary requirements to the venue. We hope you can join us!</p>
+              <p id="search-instructions" style="margin-bottom:2.5rem;">Search your Unique Guest ID (9-digit code) to bring up up the RSVP for you/your group.</p><br>
               <input type="text" id="search" placeholder="Enter your Guest ID" required><br>
               <button type="submit">Search</button>
           </form>
@@ -95,7 +98,7 @@
         <!-- Existing RSVP Summary (if a guest has already submitted) -->
         <div id="existingRSVP" class="hidden">
             <h2>Your RSVP Summary</h2>
-            <p>You have previously submitted an RSVP, see the summary below. Please click edit if you'd like to change your selections.</p>
+            <p id="existing-rsvp-description">You have previously submitted an RSVP, see the summary below. Please click edit if you'd like to change your selections.</p>
             <div id="rsvpSummaryContainer"></div>
             <button id="editRSVPButton">Edit RSVP</button>
         </div>
@@ -160,7 +163,7 @@
             <button class="menu-question">Children's menu <span class="arrow">&#9656;</span></button>
             <div class="menu-answer">
                 <p>Halloumi sticks and tomato dipping sauce</p>
-                <p>Kid’s beef burger with chips</p>
+                <p>Kid's beef burger with chips</p>
                 <p>Warm chocolate brownie with vanilla ice cream (V)(GF)</p>
             </div>
         </div>
@@ -169,18 +172,18 @@
 </div>
 
     <script>
-        // Deadline check for RSVP window (after 31 May 2025, hide forms and show closed message)
+        // Deadline check for RSVP window (after 31 May 2025, hide editing forms but allow viewing)
         const deadline = new Date("2025-05-31T23:59:59");
-        if (new Date() > deadline) {
+        const isAfterDeadline = new Date() > deadline;
+        
+        if (isAfterDeadline) {
+            // Update page content for view-only mode
             document.getElementById("rsvpClosedMessage").classList.remove("hidden");
-            document.getElementById("searchForm").classList.add("hidden");
-            document.getElementById("confirmationStep").classList.add("hidden");
-            document.getElementById("rsvpForms").classList.add("hidden");
-            document.getElementById("existingRSVP").classList.add("hidden");
-            document.getElementById("thankYouStepYes").classList.add("hidden");
-            document.getElementById("thankYouStepNo").classList.add("hidden");
-            document.getElementById("submissionTable").classList.add("hidden");
-            document.getElementById("menus").classList.add("hidden");
+            document.getElementById("hero-subtitle").textContent = "Check Your RSVP";
+            document.getElementById("search-title").textContent = "Check your RSVP status";
+            document.getElementById("search-description").innerHTML = "The RSVP deadline has passed. You can still check your submission details by entering your Guest ID below.";
+            document.getElementById("search-instructions").textContent = "Search your Unique Guest ID (9-digit code) to view your RSVP details.";
+            document.getElementById("existing-rsvp-description").textContent = "Here are your RSVP details. The deadline for changes has passed - please contact us directly if you need to make any modifications.";
         }
 
         // Firebase configuration
@@ -251,10 +254,9 @@
         `;
         const childMenuContent = `
             <p>Halloumi sticks and tomato dipping sauce</p>
-            <p>Kid’s beef burger with chips</p>
+            <p>Kid's beef burger with chips</p>
             <p>Warm chocolate brownie with vanilla ice cream (V)(GF)</p>
         `;
-
 
         let currentGroup = [];
         let selectedGroup = [];
@@ -337,34 +339,46 @@
                 searchForm.classList.add('hidden');
                 searchAgainButton.classList.remove('hidden');
 
-                /// Use your single container—if you've renamed it to "guestsContainer"
-                const guestsContainer = document.getElementById('guestsContainer');
-                guestsContainer.innerHTML = matchingGuests.map(guest => `
-                  <label>
-                    <input type="checkbox" class="groupMember" value="${guest.key}" checked>
-                    ${guest.Forename} ${guest.Surname}
-                  </label>
-                `).join('<br>');
+                // Check if after deadline - only show view mode
+                if (isAfterDeadline) {
+                    // Show existing RSVP in view-only mode
+                    displayExistingRSVP(matchingGuests);
+                    document.getElementById("existingRSVP").classList.remove('hidden');
+                    // Hide the edit button if after deadline
+                    document.getElementById("editRSVPButton").style.display = 'none';
+                } else {
+                    // Original functionality for before deadline
+                    const guestsContainer = document.getElementById('guestsContainer');
+                    guestsContainer.innerHTML = matchingGuests.map(guest => `
+                      <label>
+                        <input type="checkbox" class="groupMember" value="${guest.key}" checked>
+                        ${guest.Forename} ${guest.Surname}
+                      </label>
+                    `).join('<br>');
 
-                // Show the confirmation step
-                document.getElementById("confirmationStep").classList.remove('hidden');
+                    // Show the confirmation step
+                    document.getElementById("confirmationStep").classList.remove('hidden');
+                }
               } else {
                 alert('No matching guests found.');
                 document.getElementById("searchForm").classList.remove("hidden");
                 return; // Exit the function early.
               }
             });
-            });
+        });
 
-            searchAgainButton.addEventListener('click', () => {
-                resetSearch(); // This clears previous results and resets the search input.
-                hideAllSteps();
-                document.getElementById("searchForm").classList.remove("hidden");
-            });
+        searchAgainButton.addEventListener('click', () => {
+            resetSearch(); // This clears previous results and resets the search input.
+            hideAllSteps();
+            document.getElementById("searchForm").classList.remove("hidden");
+        });
 
-
-        // Edit RSVP button for existing submissions
+        // Edit RSVP button for existing submissions (only works before deadline)
         document.getElementById("editRSVPButton").addEventListener('click', () => {
+          if (isAfterDeadline) {
+            alert('The RSVP deadline has passed. Please contact us directly to make changes.');
+            return;
+          }
           existingRSVP.classList.add('hidden');
           // Don't reset selectedGroup here, use what was already loaded
           createRSVPForms();
@@ -498,8 +512,13 @@
                 });
         }
 
-        // Confirm guest selection and build forms.
+        // Confirm guest selection and build forms (only works before deadline).
         document.getElementById("confirmSelection").addEventListener('click', () => {
+          if (isAfterDeadline) {
+            alert('The RSVP deadline has passed. You can only view existing submissions.');
+            return;
+          }
+          
           hideAllSteps();
           const checkboxes = document.querySelectorAll('.groupMember');
           selectedGroup = [];
@@ -556,6 +575,11 @@
       }
 
     function createRSVPForms() {
+      if (isAfterDeadline) {
+        alert('The RSVP deadline has passed. Please contact us directly to make changes.');
+        return;
+      }
+      
       individualRSVPForms.innerHTML = '';
       Promise.all(
         selectedGroup.map(member => {
@@ -596,6 +620,11 @@
     }
 
     submitAllRSVPs.addEventListener('click', () => {
+      if (isAfterDeadline) {
+        alert('The RSVP deadline has passed. Please contact us directly to make changes.');
+        return;
+      }
+      
       let valid = true;
       selectedGroup.forEach(member => {
         const key = member.key;
@@ -679,6 +708,11 @@
     });
 
     document.getElementById("editAfterSubmission").addEventListener('click', () => {
+      if (isAfterDeadline) {
+        alert('The RSVP deadline has passed. Please contact us directly to make changes.');
+        return;
+      }
+      
       // Use the previously submitted group instead of the entire currentGroup
       hideAllSteps();
       // Only use submittedGroup if it exists and has members

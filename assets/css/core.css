@@ -214,6 +214,18 @@ body {
     color: var(--light1);
 }
 
+.hero-photos {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: url('../images/heros/ravenCragAbstract.jpg') no-repeat center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--light1);
+}
+
 .hero-overlay {
     position: absolute;
     top: 0;
